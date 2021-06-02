@@ -13,8 +13,12 @@
     <description>easy cloud components</description>
 
     <modules>
+        <module>easy-cloud-component-batch</module>
+        <module>easy-cloud-component-core</module>
         <module>easy-cloud-component-data</module>
         <module>easy-cloud-component-mongo</module>
+        <module>easy-cloud-component-mq</module>
+        <module>easy-cloud-component-security</module>
     </modules>
 
     <dependencies>
