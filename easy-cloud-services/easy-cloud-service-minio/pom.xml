@@ -4,19 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.easy.cloud.web</groupId>
-        <artifactId>easy-cloud-service</artifactId>
+        <artifactId>easy-cloud-services</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>easy-cloud-services</artifactId>
+    <artifactId>easy-cloud-service-minio</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>easy-cloud-services</name>
-    <description>easy cloud services</description>
-
-    <modules>
-        <module>easy-cloud-service-minio</module>
-        <module>easy-cloud-service-test</module>
-        <module>easy-cloud-service-upms</module>
-    </modules>
+    <name>easy-cloud-service-minio</name>
+    <description>Demo project for Spring Boot</description>
 
     <dependencies>
 
