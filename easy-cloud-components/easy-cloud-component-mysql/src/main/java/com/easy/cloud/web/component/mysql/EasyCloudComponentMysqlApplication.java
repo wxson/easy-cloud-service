@@ -1,13 +1,13 @@
-package com.easy.cloud.web.component.security;
+package com.easy.cloud.web.component.mysql;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EasyCloudComponentSecurityApplication {
+public class EasyCloudComponentMysqlApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EasyCloudComponentSecurityApplication.class, args);
+        SpringApplication.run(EasyCloudComponentMysqlApplication.class, args);
     }
 
 }

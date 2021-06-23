@@ -1,0 +1,28 @@
+package com.easy.cloud.web.component.security.exception;
+
+import com.easy.cloud.web.component.core.response.HttpResult;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/**
+ * @author GR
+ * @date 2021-4-14 14:41
+ */
+public class SecurityResourceAuthExceptionEntryPoint implements AuthenticationEntryPoint {
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        HttpResult<Object> httpResult = HttpResult.fail(HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
+        response.getWriter().append(new ObjectMapper().writeValueAsString(httpResult));
+    }
+}
