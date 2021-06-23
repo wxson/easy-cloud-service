@@ -1,10 +1,10 @@
-package com.easy.cloud.web.component.core;
+package com.easy.cloud.web.module.dict;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EasyCloudComponentCoreApplicationTests {
+class EasyCloudModuleDictApplicationTests {
 
     @Test
     void contextLoads() {
