@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "db.num",
+      "type": "java.lang.String",
+      "description": "Description for db.num."
+    },
+    {
+      "name": "nacos.naming.empty-service.auto-clean",
+      "type": "java.lang.String",
+      "description": "Description for nacos.naming.empty-service.auto-clean."
+    }
+  ]
+}
