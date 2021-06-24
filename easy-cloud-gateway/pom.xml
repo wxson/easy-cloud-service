@@ -10,6 +10,7 @@
     <artifactId>easy-cloud-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-gateway</name>
+    <packaging>pom</packaging>
     <description>easy cloud gateway</description>
 
     <dependencies>

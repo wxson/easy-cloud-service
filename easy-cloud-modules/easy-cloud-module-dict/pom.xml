@@ -4,20 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.easy.cloud.web</groupId>
-        <artifactId>easy-cloud-service</artifactId>
+        <artifactId>easy-cloud-modules</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>easy-cloud-modules</artifactId>
+    <artifactId>easy-cloud-module-dict</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>easy-cloud-modules</name>
+    <name>easy-cloud-module-dict</name>
     <packaging>pom</packaging>
-    <description>easy cloud modules</description>
-
-    <modules>
-        <module>easy-cloud-module-dict</module>
-        <module>easy-cloud-module-route</module>
-        <module>easy-cloud-module-log</module>
-    </modules>
+    <description>Demo project for Spring Boot</description>
 
     <dependencies>
 

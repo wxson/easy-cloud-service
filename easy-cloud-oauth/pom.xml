@@ -10,9 +10,28 @@
     <artifactId>easy-cloud-oauth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-oauth</name>
+    <packaging>pom</packaging>
     <description>easy cloud oauth</description>
 
     <dependencies>
+        <!--注册中心客户端-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!--配置中心客户端-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- 认证组件 -->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-security</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
     </dependencies>
 

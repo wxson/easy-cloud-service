@@ -12,10 +12,10 @@
     <artifactId>easy-cloud-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-service</name>
+    <packaging>pom</packaging>
     <description>An easy to develop microservice architecture</description>
 
     <modules>
-        <module>easy-cloud-components</module>
         <module>easy-cloud-services</module>
         <module>easy-cloud-visuals</module>
         <module>easy-cloud-gateway</module>
@@ -25,6 +25,7 @@
 
     <properties>
         <java.version>12</java.version>
+        <easy-cloud.version>0.0.1-SNAPSHOT</easy-cloud.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <spring-cloud-alibaba.version>2.2.5.RELEASE</spring-cloud-alibaba.version>
     </properties>
@@ -42,37 +43,18 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-            <version>2.1.3.RELEASE</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!--Hutool-->
+        <!-- 公共依赖 -->
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>5.4.5</version>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-core</artifactId>
+            <version>${easy-cloud.version}</version>
+            <scope>compile</scope>
         </dependency>
-
-        <!--Hutool-JSON-->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-json</artifactId>
-            <version>5.5.8</version>
-        </dependency>
-
-        <!--lombok-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
     </dependencies>
 
     <dependencyManagement>
