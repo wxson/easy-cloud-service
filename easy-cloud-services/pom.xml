@@ -14,6 +14,7 @@
     <description>easy cloud services</description>
 
     <modules>
+        <module>easy-cloud-service-charts</module>
         <module>easy-cloud-service-minio</module>
         <module>easy-cloud-service-test</module>
         <module>easy-cloud-service-upms</module>
