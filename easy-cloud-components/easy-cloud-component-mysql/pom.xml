@@ -10,6 +10,7 @@
     <artifactId>easy-cloud-component-mysql</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-component-mysql</name>
+    <packaging>pom</packaging>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>

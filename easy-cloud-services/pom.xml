@@ -33,6 +33,13 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
+        <!-- 核心组件 -->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- 认证组件 -->
         <dependency>
             <groupId>com.easy.cloud.web</groupId>

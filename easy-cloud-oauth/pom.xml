@@ -33,6 +33,14 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+
+        <!-- 核心组件 -->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 </project>

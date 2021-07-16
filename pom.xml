@@ -2,20 +2,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+    <!--    <parent>-->
+    <!--        <groupId>org.springframework.boot</groupId>-->
+    <!--        <artifactId>spring-boot-starter-parent</artifactId>-->
+    <!--        <version>2.3.2.RELEASE</version>-->
+    <!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+    <!--    </parent>-->
     <groupId>com.easy.cloud.web</groupId>
     <artifactId>easy-cloud-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-service</name>
     <packaging>pom</packaging>
     <description>An easy to develop microservice architecture</description>
+    <organization>
+        <name>easy-cloud</name>
+        <url>https://www.anseon.cn</url>
+    </organization>
 
     <modules>
+        <module>easy-cloud-components</module>
         <module>easy-cloud-services</module>
         <module>easy-cloud-visuals</module>
         <module>easy-cloud-gateway</module>
@@ -26,8 +31,94 @@
     <properties>
         <java.version>12</java.version>
         <easy-cloud.version>0.0.1-SNAPSHOT</easy-cloud.version>
+        <!--springboot版本号-->
+        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
+        <!--springcloud版本号-->
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+        <!--springcloud Alibaba版本号-->
         <spring-cloud-alibaba.version>2.2.5.RELEASE</spring-cloud-alibaba.version>
+
+        <!--编码-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!--JDK版本号-->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!--redisson分布式锁版本号-->
+        <redisson.version>3.12.5</redisson.version>
+
+        <!--fastjson版本号-->
+        <fastjson.version>1.2.69</fastjson.version>
+
+        <!--IJPay支付版本号-->
+        <IJPay.version>2.7</IJPay.version>
+
+        <!--Minio版本好-->
+        <minio.version>6.0.8</minio.version>
+
+        <!--oracle驱动包版本号-->
+        <oracle.version>11.2.0.3</oracle.version>
+
+        <!--Hutool工具类版本号-->
+        <hutool.version>5.4.4</hutool.version>
+
+        <!--监控平台版本号-->
+        <spring-boot-admin.version>2.3.0</spring-boot-admin.version>
+
+        <!--登录验证码依赖版本号-->
+        <captcha.version>1.2.4</captcha.version>
+
+        <!--xxl-job定时任务版本号-->
+        <xxl.job.version>2.2.0</xxl.job.version>
+
+        <!--LCN分布式事物版本号-->
+        <lcn.version>4.1.0</lcn.version>
+
+        <!--guava依赖版本号-->
+        <guava.version>29.0-jre</guava.version>
+
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <spring.checkstyle.version>0.0.23</spring.checkstyle.version>
+        <git.commit.version>2.2.5</git.commit.version>
+
+        <!--MongoDB版本号-->
+        <mongodb-plus.version>1.0.0.RELEASE</mongodb-plus.version>
+        <!--<spring-boot-data-mongodb.version>2.3.3.RELEASE</spring-boot-data-mongodb.version>-->
+        <spring-boot-data-mongodb.version>2.4.0</spring-boot-data-mongodb.version>
+
+        <!--commons-jexl3版本号--><!--布尔表达式解析运算-->
+        <commons-jexl3.version>3.1</commons-jexl3.version>
+
+        <!--springboot dubbo版本号-->
+        <dubbo.version>2.7.7</dubbo.version>
+        <!--zookeeper版本号-->
+        <zookeeper.version>3.3.0</zookeeper.version>
+
+
+        <!--swagger-api相关依赖版本号-->
+        <swagger.fox.version>2.9.2</swagger.fox.version>
+        <knife4j.version>2.0.4</knife4j.version>
+        <velocity.version>1.7</velocity.version>
+
+        <jasypt.version>2.1.1</jasypt.version>
+        <ttl.version>2.11.4</ttl.version>
+        <aws.version>1.11.543</aws.version>
+
+        <activiti.version>5.22.0</activiti.version>
+
+        <!--docker容器相关-->
+        <docker.registry>jiayou-docker</docker.registry>
+        <docker.host>http://jiayou-docker:2375</docker.host>
+        <docker.namespace>library</docker.namespace>
+        <docker.username>admin</docker.username>
+        <docker.password>Harbor12345</docker.password>
+        <docker.plugin.version>0.33.0</docker.plugin.version>
+
+        <!--  默认忽略docker构建 -->
+        <docker.skip>true</docker.skip>
+        <!-- 跳过测试 -->
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -48,17 +139,42 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- 公共依赖 -->
+        <!--lombok-->
         <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-core</artifactId>
-            <version>${easy-cloud.version}</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
             <scope>compile</scope>
         </dependency>
+
+        <!--        &lt;!&ndash; 公共依赖 &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.easy.cloud.web</groupId>-->
+        <!--            <artifactId>easy-cloud-component-core</artifactId>-->
+        <!--            <version>${easy-cloud.version}</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
+            <!--spring boot 公共版本定义-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--spring cloud 公共版本定义-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--spring cloud alibaba-->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -66,13 +182,18 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+            <!--web 模块-->
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+                <exclusions>
+                    <!--排除tomcat依赖-->
+                    <exclusion>
+                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                        <groupId>org.springframework.boot</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

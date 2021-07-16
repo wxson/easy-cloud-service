@@ -14,7 +14,18 @@
     <description>easy cloud gateway</description>
 
     <dependencies>
+        <!-- 网关 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
 
+        <!-- 核心组件 -->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
