@@ -10,7 +10,7 @@
     <artifactId>easy-cloud-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-gateway</name>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <description>easy cloud gateway</description>
 
     <dependencies>
@@ -18,6 +18,18 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+
+        <!--注册中心客户端-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!--配置中心客户端-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
         <!-- 核心组件 -->
