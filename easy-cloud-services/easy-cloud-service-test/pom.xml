@@ -10,7 +10,6 @@
     <artifactId>easy-cloud-service-test</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-service-test</name>
-    <packaging>pom</packaging>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>

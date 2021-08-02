@@ -21,6 +21,13 @@
     </modules>
 
     <dependencies>
+        <!-- easy-cloud-core包-->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!--注册中心客户端-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -31,13 +38,6 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
-
-        <!-- 核心组件 -->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- 认证组件 -->

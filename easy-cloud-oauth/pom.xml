@@ -10,7 +10,6 @@
     <artifactId>easy-cloud-oauth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-oauth</name>
-    <packaging>pom</packaging>
     <description>easy cloud oauth</description>
 
     <dependencies>
@@ -33,12 +32,11 @@
             <version>${project.parent.version}</version>
         </dependency>
 
-
-        <!-- 核心组件 -->
+        <!-- easy-cloud-core包-->
         <dependency>
             <groupId>com.easy.cloud.web</groupId>
             <artifactId>easy-cloud-component-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>

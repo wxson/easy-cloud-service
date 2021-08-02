@@ -18,7 +18,12 @@
     </modules>
 
     <dependencies>
-
+        <!-- easy-cloud-core包-->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

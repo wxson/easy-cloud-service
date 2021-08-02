@@ -15,18 +15,10 @@
 
     <modules>
         <module>easy-cloud-component-batch</module>
+        <module>easy-cloud-component-core</module>
         <module>easy-cloud-component-data</module>
         <module>easy-cloud-component-mongo</module>
         <module>easy-cloud-component-mq</module>
         <module>easy-cloud-component-security</module>
     </modules>
-
-    <dependencies>
-        <!-- 核心组件 -->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 </project>

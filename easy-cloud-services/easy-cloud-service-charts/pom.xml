@@ -10,7 +10,6 @@
     <artifactId>easy-cloud-service-charts</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-service-charts</name>
-    <packaging>pom</packaging>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
