@@ -1,4 +1,4 @@
-package com.easy.cloud.web.component.core.annotation;
+package com.easy.cloud.web.module.log.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

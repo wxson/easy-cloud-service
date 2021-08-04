@@ -1,4 +1,4 @@
-package com.easy.cloud.web.component.core.service;
+package com.easy.cloud.web.component.mongo.service;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;

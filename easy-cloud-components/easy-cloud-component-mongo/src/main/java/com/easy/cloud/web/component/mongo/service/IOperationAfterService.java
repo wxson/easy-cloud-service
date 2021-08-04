@@ -1,4 +1,4 @@
-package com.easy.cloud.web.component.core.service;
+package com.easy.cloud.web.component.mongo.service;
 
 import java.util.Collection;
 

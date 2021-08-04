@@ -19,6 +19,7 @@
         <module>easy-cloud-component-data</module>
         <module>easy-cloud-component-mongo</module>
         <module>easy-cloud-component-mq</module>
+        <module>easy-cloud-component-mysql</module>
         <module>easy-cloud-component-security</module>
     </modules>
 </project>

@@ -1,8 +1,8 @@
 package com.easy.cloud.web.component.mysql.controller;
 
-import com.easy.cloud.web.component.core.annotation.OperationRecord;
 import com.easy.cloud.web.component.core.response.HttpResult;
 import com.easy.cloud.web.component.core.service.IConverter;
+import com.easy.cloud.web.module.log.annotation.OperationRecord;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;

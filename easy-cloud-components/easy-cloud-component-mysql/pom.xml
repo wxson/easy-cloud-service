@@ -19,6 +19,38 @@
             <artifactId>easy-cloud-component-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!--mybatis-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.1.2</version>
+        </dependency>
+
+        <!-- druid 连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.18</version>
+        </dependency>
+
+        <!--数据库-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.22</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+
+        <!-- -->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-module-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

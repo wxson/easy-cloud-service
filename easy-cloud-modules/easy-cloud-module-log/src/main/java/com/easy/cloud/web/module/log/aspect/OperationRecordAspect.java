@@ -1,7 +1,7 @@
 package com.easy.cloud.web.module.log.aspect;
 
 import cn.hutool.json.JSONUtil;
-import com.easy.cloud.web.component.core.annotation.OperationRecord;
+import com.easy.cloud.web.module.log.annotation.OperationRecord;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
