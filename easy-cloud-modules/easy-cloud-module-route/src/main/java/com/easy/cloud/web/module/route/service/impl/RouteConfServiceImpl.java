@@ -28,9 +28,9 @@ public class RouteConfServiceImpl extends ServiceImpl<RouteConfMapper, RouteConf
     public void sendRouteConfChangeNotice(RouteConf routeConf) {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         if (Objects.nonNull(routeConf)) {
-            redisTemplate.opsForHash().put(GatewayRouteConfConstants.GATEWAY_ROUTE_CONF_CACHE_REDIS_KEY, routeConf.getId(), routeConf);
+            redisTemplate.opsForHash().put(GatewayRouteConfConstants.GATEWAY_ROUTE_CONF_CACHE_REDIS_KEY, routeConf.getRouteId(), routeConf);
         }
-        
+
         redisTemplate.convertAndSend(GatewayRouteConfConstants.ROUTE_CHANGE_NOTICE_REDIS_TOPIC, "路由信息发生改变,网关缓存更新");
     }
 }

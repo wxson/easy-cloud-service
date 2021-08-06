@@ -35,6 +35,12 @@
             <groupId>com.easy.cloud.web</groupId>
             <artifactId>easy-cloud-component-core</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

@@ -4,22 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.easy.cloud.web</groupId>
-        <artifactId>easy-cloud-service</artifactId>
+        <artifactId>easy-cloud-service-upms</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>easy-cloud-gateway</artifactId>
+    <artifactId>easy-cloud-service-upms-biz</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>easy-cloud-gateway</name>
-    <packaging>jar</packaging>
-    <description>easy cloud gateway</description>
-
+    <name>easy-cloud-service-upms-biz</name>
+    <description>Demo project for Spring Boot</description>
+    <properties>
+        <java.version>11</java.version>
+    </properties>
     <dependencies>
-        <!-- 网关 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
-        </dependency>
-
         <!--注册中心客户端-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -32,13 +27,23 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-        <!--Local Gateway-->
+
+        <!--Local Route-->
         <dependency>
             <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-gateway</artifactId>
+            <artifactId>easy-cloud-module-route</artifactId>
             <version>${project.version}</version>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
