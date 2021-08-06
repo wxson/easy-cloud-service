@@ -1,4 +1,4 @@
-package com.easy.cloud.web.gateway.configuration;
+package com.easy.cloud.web.component.gateway.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
