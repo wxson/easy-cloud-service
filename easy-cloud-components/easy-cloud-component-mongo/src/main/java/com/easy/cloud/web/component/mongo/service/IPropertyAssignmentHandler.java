@@ -1,9 +1,7 @@
 package com.easy.cloud.web.component.mongo.service;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.core.util.SnowflakeUtils;
-import com.easy.cloud.web.component.core.util.ThreadLocalUserUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -32,17 +30,6 @@ public interface IPropertyAssignmentHandler {
         // 设置默认属性值
         this.setPropertiesValue(entity, "id", SnowflakeUtils.next());
         this.setPropertiesValue(entity, "createAt", DateUtil.now());
-        String tenantId = ThreadLocalUserUtils.get("tenantId");
-        // 租户ID
-        if (StrUtil.isNotBlank(tenantId)) {
-            this.setPropertiesValue(entity, "tenantId", tenantId);
-        }
-
-        // 创建用户ID
-        String creatorAt = ThreadLocalUserUtils.get("id");
-        if (StrUtil.isNotBlank(creatorAt)) {
-            this.setPropertiesValue(entity, "creatorAt", creatorAt);
-        }
     }
 
     /**
