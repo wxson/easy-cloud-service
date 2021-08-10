@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.easy.cloud.web.component.gateway.configuration.GatewayAutoConfiguration,\
+  com.easy.cloud.web.component.gateway.configuration.GatewayIgnoreUrlsConfiguration

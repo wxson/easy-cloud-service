@@ -27,7 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RedisRouteDefinitionRepository implements RouteDefinitionRepository {
 
-    private final RedisTemplate<String, RouteDefinition> redisTemplate;
+    private final RedisTemplate redisTemplate;
 
     /**
      * 网关每隔30秒自动更新路由信息
@@ -45,7 +45,7 @@ public class RedisRouteDefinitionRepository implements RouteDefinitionRepository
         // 尝试从Redis缓存中读取
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(RouteDefinition.class));
-        List<RouteDefinition> routeDefinitionList = redisTemplate.<String, RouteDefinition>opsForHash().values(GatewayRouteConfConstants.GATEWAY_ROUTE_CONF_CACHE_REDIS_KEY);
+        List<RouteDefinition> routeDefinitionList = redisTemplate.opsForHash().values(GatewayRouteConfConstants.GATEWAY_ROUTE_CONF_CACHE_REDIS_KEY);
         log.debug("读取Redis中的路由数据： {}， {}", routeDefinitionList.size(), routeDefinitionList);
         // 写入本地缓存中
         DynamicRouteConfCacheHolder.setDynamicRouteConf(routeDefinitionList);
