@@ -51,7 +51,7 @@ public class RouteConf implements IConvertProxy {
     /**
      * 排序
      */
-    private Integer order;
+    private Integer sort;
 
     /**
      * 状态 0 启用 1 禁用
