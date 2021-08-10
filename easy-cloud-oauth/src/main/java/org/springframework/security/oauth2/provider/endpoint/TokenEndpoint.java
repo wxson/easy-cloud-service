@@ -1,6 +1,6 @@
 package org.springframework.security.oauth2.provider.endpoint;
 
-import org.apache.tomcat.util.net.AbstractEndpoint;
+import com.easy.cloud.web.component.core.response.HttpResult;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -151,7 +151,7 @@ public class TokenEndpoint extends AbstractEndpoint {
         headers.set("Cache-Control", "no-store");
         headers.set("Pragma", "no-cache");
         headers.set("Content-Type", "application/json;charset=UTF-8");
-        return new ResponseEntity(HttpResponse.buildResultOk(accessToken), headers, HttpStatus.OK);
+        return new ResponseEntity(HttpResult.ok(accessToken), headers, HttpStatus.OK);
     }
 
     private boolean isRefreshTokenRequest(Map<String, String> parameters) {

@@ -1,5 +1,7 @@
 package com.easy.cloud.web.oauth.configuration;
 
+import com.easy.cloud.web.component.security.constants.SecurityConstants;
+import com.easy.cloud.web.component.security.exception.SecurityWebResponseExceptionTranslator;
 import com.easy.cloud.web.component.security.service.ISecurityUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
