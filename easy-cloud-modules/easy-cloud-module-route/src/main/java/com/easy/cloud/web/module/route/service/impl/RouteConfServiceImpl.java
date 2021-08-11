@@ -28,6 +28,7 @@ public class RouteConfServiceImpl extends ServiceImpl<RouteConfMapper, RouteConf
     public void sendRouteConfChangeNotice(RouteConf routeConf) {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         if (Objects.nonNull(routeConf)) {
+            routeConf.setId(routeConf.getRouteId());
             redisTemplate.opsForHash().put(GatewayRouteConfConstants.GATEWAY_ROUTE_CONF_CACHE_REDIS_KEY, routeConf.getRouteId(), routeConf);
         }
 
