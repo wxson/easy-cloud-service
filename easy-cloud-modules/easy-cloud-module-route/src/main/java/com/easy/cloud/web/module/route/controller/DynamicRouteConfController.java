@@ -95,7 +95,7 @@ public class DynamicRouteConfController {
      *
      * @return reactor.core.publisher.Mono<com.jiayou.spd.common.core.entity.HttpResult>
      */
-    @PostMapping("base/list")
+    @GetMapping("base/list")
     @ApiOperation(value = "统一获取信息列表接口")
     public HttpResult<List<RouteConf>> list() {
         return HttpResult.ok(routeConfService.list());

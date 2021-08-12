@@ -14,6 +14,7 @@ import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -33,6 +34,7 @@ import java.net.URI;
 @RefreshScope
 @AllArgsConstructor
 @MapperScan("com.easy.cloud.web.module.route.mapper")
+@ComponentScan({"com.easy.cloud.web.module.route"})
 public class RouteAutoConfiguration {
 
     private final RedisTemplate redisTemplate;
