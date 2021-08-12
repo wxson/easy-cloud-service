@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2021-3-9 17:59
  */
 @Configuration
-@ComponentScan
+@ComponentScan({"com.easy.cloud.web.component.core"})
 public class CoreAutoConfiguration {
 
     @Bean

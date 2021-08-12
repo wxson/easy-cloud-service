@@ -14,6 +14,16 @@ public class CommonConstants {
     public static final String DEFAULT_TREE_PARENT_ID = "0";
 
     /**
+     * 租户字段
+     */
+    public static final String TENANT_ID = "tenant_id";
+
+    /**
+     * 默认租户ID
+     */
+    public static final Integer DEFAULT_TENANT_ID = 1;
+
+    /**
      * 常用整型
      */
     public static final int ZERO = 0;
