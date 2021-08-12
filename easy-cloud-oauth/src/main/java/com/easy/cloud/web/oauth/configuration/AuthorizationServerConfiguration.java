@@ -1,8 +1,8 @@
 package com.easy.cloud.web.oauth.configuration;
 
-import com.easy.cloud.web.component.security.constants.SecurityConstants;
 import com.easy.cloud.web.component.security.exception.SecurityWebResponseExceptionTranslator;
 import com.easy.cloud.web.component.security.service.ISecurityUserDetailsService;
+import com.easy.cloud.web.oauth.service.OauthClientDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,6 +44,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private final TokenEnhancer jwtTokenEnhancer;
 
     private final JwtAccessTokenConverter jwtAccessTokenConverter;
+
+    private final OauthClientDetailsService oauthClientDetailsService;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -87,29 +89,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients
-                // 本机内存
-                .inMemory()
-                // 客户端ID，即应用ID
-                .withClient("client")
-                // 密钥
-                .secret(passwordEncoder.encode(SecurityConstants.SECURITY_CLIENT_SECRET))
-                // 重定向地址,目的是为了获取授权码(仅授权码模式下使用)
-//                .redirectUris("http://localhost:8080")
-                // 授权范围
-                .scopes("server")
-                // 自动授权
-                .autoApprove(true)
-                // token过期时间 1天
-                .accessTokenValiditySeconds(24 * 60 * 60)
-                // 刷新token过期时间 7天
-                .refreshTokenValiditySeconds(7 * 24 * 60 * 60)
-                /*
-                 * 授权类型(支持同时配置)
-                 * authorization_code：授权码模式
-                 * password：密码模式
-                 * refresh_token: token刷新模式
-                 */
-                .authorizedGrantTypes("password", "refresh_token");
+        // JDBC客户端详情
+        clients.withClientDetails(oauthClientDetailsService);
     }
 }
