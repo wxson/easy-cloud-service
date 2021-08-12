@@ -97,7 +97,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 // 重定向地址,目的是为了获取授权码(仅授权码模式下使用)
 //                .redirectUris("http://localhost:8080")
                 // 授权范围
-                .scopes("all")
+                .scopes("server")
                 // 自动授权
                 .autoApprove(true)
                 // token过期时间 1天
@@ -110,6 +110,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                  * password：密码模式
                  * refresh_token: token刷新模式
                  */
-                .authorizedGrantTypes("authorization_code", "password", "refresh_token");
+                .authorizedGrantTypes("password", "refresh_token");
     }
 }

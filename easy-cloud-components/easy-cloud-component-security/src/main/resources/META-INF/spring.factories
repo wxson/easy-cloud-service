@@ -2,5 +2,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.easy.cloud.web.component.security.configuration.SecurityAutoConfiguration,\
   com.easy.cloud.web.component.security.configuration.WebSecurityConfiguration,\
   com.easy.cloud.web.component.security.configuration.JwtTokenStoreConfiguration,\
-  com.easy.cloud.web.component.security.configuration.ResourceServerConfiguration,\
-  com.easy.cloud.web.component.security.service.impl.SecurityUserDetailsServiceImpl
+  com.easy.cloud.web.component.security.configuration.ResourceServerConfiguration

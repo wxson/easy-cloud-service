@@ -3,6 +3,7 @@ package com.easy.cloud.web.component.security.configuration;
 import com.easy.cloud.web.component.security.service.ISecurityUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@ComponentScan({"com.easy.cloud.web.component.security"})
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final ISecurityUserDetailsService securityUserDetailsService;

@@ -15,7 +15,6 @@ import java.util.Objects;
  * @author GR
  * @date 2021-4-1 9:22
  */
-@Component
 @UtilityClass
 public class SecurityUtils {
     /**

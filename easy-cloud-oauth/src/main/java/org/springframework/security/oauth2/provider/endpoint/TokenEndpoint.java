@@ -31,7 +31,7 @@ public class TokenEndpoint extends AbstractEndpoint {
 
     private OAuth2RequestValidator oAuth2RequestValidator = new DefaultOAuth2RequestValidator();
 
-    private Set<HttpMethod> allowedRequestMethods = new HashSet<HttpMethod>(Arrays.asList(HttpMethod.POST));
+    private Set<HttpMethod> allowedRequestMethods = new HashSet<HttpMethod>(Collections.singletonList(HttpMethod.POST));
 
     @RequestMapping(value = "/oauth/token", method = RequestMethod.GET)
     public ResponseEntity<OAuth2AccessToken> getAccessToken(Principal principal, @RequestParam
