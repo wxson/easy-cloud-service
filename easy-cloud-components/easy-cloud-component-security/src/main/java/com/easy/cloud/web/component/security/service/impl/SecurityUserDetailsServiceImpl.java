@@ -1,13 +1,19 @@
 package com.easy.cloud.web.component.security.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.easy.cloud.web.component.core.response.HttpResult;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
 import com.easy.cloud.web.component.security.service.ISecurityUserDetailsService;
-import lombok.AllArgsConstructor;
+import com.easy.cloud.web.service.upms.api.domain.User;
+import com.easy.cloud.web.service.upms.api.feign.UpmsFeignClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 /**
  * 账号信息数据库校验配置
@@ -15,11 +21,14 @@ import org.springframework.stereotype.Component;
  * @author GR
  * @date 2021-3-26 17:07
  */
-@Component
-@AllArgsConstructor
 public class SecurityUserDetailsServiceImpl implements ISecurityUserDetailsService {
 
-    private final PasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private PasswordEncoder bCryptPasswordEncoder;
+
+    @Lazy
+    @Autowired
+    private UpmsFeignClientService upmsFeignClientService;
 
     /**
      * Security过滤器通过调用loadUserByUsername方法获取用户详情，
@@ -31,21 +40,36 @@ public class SecurityUserDetailsServiceImpl implements ISecurityUserDetailsServi
      */
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        // 模拟测试权限
-        if ("root".equals(userName)) {
-            String password = bCryptPasswordEncoder.encode(userName);
-            // Authority 即角色
-            return new AuthenticationUser("100001", userName, password, "0",
-                    true, true, true, true,
-                    AuthorityUtils.commaSeparatedStringToAuthorityList("admin"))
-                    .setTenantId("测试租户ID_01");
+        HttpResult<User> httpResult = upmsFeignClientService.loadUserByUsername(userName);
+        User user = httpResult.getData();
+        if (null == user) {
+            throw new UsernameNotFoundException("当前账号用户不存在");
         }
 
-        String password = bCryptPasswordEncoder.encode(userName);
         // Authority 即角色
-        return new AuthenticationUser("100002", userName, password, "1",
+        return new AuthenticationUser(user.getId(), user.getAccount(), user.getPassword(), user.getTenantId(),
                 true, true, true, true,
-                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"))
-                .setTenantId("测试租户ID_02");
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+    }
+
+    @Override
+    public UserDetails loadUserBySocial(String principal) {
+        // 解析requestBodyStr
+        JSONObject jsonObject = JSONUtil.parseObj(principal);
+        String type = jsonObject.getStr("type");
+        if (StrUtil.isBlank(type)) {
+            throw new UsernameNotFoundException("当前登录类型不能为空");
+        }
+
+        // 获取用户信息
+        User user = upmsFeignClientService.loadSocialUser(type, jsonObject).getData();
+        if (null == user) {
+            throw new UsernameNotFoundException("当前账号用户不存在");
+        }
+
+        // Authority 即角色
+        return new AuthenticationUser(user.getId(), user.getAccount(), "N/A", user.getTenantId(),
+                true, true, true, true,
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
 }

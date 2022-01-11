@@ -1,14 +1,14 @@
-package com.easy.cloud.web.component.security.configuration;
+package com.easy.cloud.web.oauth.configuration;
 
+import com.easy.cloud.web.component.security.configuration.MobileSecurityConfigurer;
 import com.easy.cloud.web.component.security.service.ISecurityUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -19,9 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @date 2021-3-26 17:04
  */
 @Configuration
-@EnableWebSecurity
 @AllArgsConstructor
-@ComponentScan({"com.easy.cloud.web.component.security"})
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final ISecurityUserDetailsService securityUserDetailsService;
@@ -30,23 +29,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests()
-                // 放行规则
-                .antMatchers("/oauth/**", "/login/**", "/logout/**")
-                .permitAll()
-                // 其他所有请求必须进行验证访问
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .permitAll()
-                .and()
+        httpSecurity
+                .authorizeRequests()
+                .anyRequest().authenticated()
                 // 支持跨域
-                .cors()
-                .and()
+                .and().cors()
                 // 关闭csrf,出于安全考虑，一般建议打开csrf，防止一些伪站点的攻击
-                .csrf()
-                .disable();
+                .and().csrf().disable()
+                .apply(mobileSecurityConfigurer());
     }
 
     /**
@@ -64,5 +54,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
+    }
+
+    @Bean
+    public MobileSecurityConfigurer mobileSecurityConfigurer() {
+        return new MobileSecurityConfigurer();
     }
 }
