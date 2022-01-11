@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller基类
@@ -25,20 +26,20 @@ import java.util.List;
  * @author GR
  * @date 2021-4-20 9:16
  */
-public abstract class BaseController<QueryCondition, Entity extends IConverter<?>> extends BaseQueryController<QueryCondition, Entity> {
+public abstract class BaseController<QueryCondition, DTO extends IConverter<Entity>, Entity> extends BaseQueryController<QueryCondition, Entity> {
 
     /**
      * 保存信息
      *
-     * @param entity 保存的实体信息
+     * @param dto 保存的实体信息
      * @return reactor.core.publisher.Mono<com.jiayou.spd.common.core.entity.HttpResult>
      */
     @PostMapping("base/save")
     @ApiOperation(value = "统一新增信息接口")
     @Transactional(rollbackFor = Exception.class)
     @OperationRecord(value = "执行统一新增信息接口", type = OperationRecord.Type.INFO, action = OperationRecord.Action.ADD)
-    public HttpResult<Boolean> save(@Validated @RequestBody Entity entity) {
-        boolean save = this.getService().save(entity);
+    public HttpResult<Boolean> save(@Validated @RequestBody DTO dto) {
+        boolean save = this.getService().save(dto.convert());
         return HttpResult.ok(save);
     }
 
@@ -53,23 +54,23 @@ public abstract class BaseController<QueryCondition, Entity extends IConverter<?
     @ApiOperation(value = "统一批量新增信息接口")
     @Transactional(rollbackFor = Exception.class)
     @OperationRecord(value = "执行统一批量新增信息接口", type = OperationRecord.Type.INFO, action = OperationRecord.Action.ADD)
-    public HttpResult<Boolean> batchSave(@Validated @RequestBody List<Entity> list) {
-        boolean saveBatch = this.getService().saveBatch(list);
+    public HttpResult<Boolean> batchSave(@Validated @RequestBody List<DTO> list) {
+        boolean saveBatch = this.getService().saveBatch(list.stream().map(DTO::convert).collect(Collectors.toList()));
         return HttpResult.ok(saveBatch);
     }
 
     /**
      * 更新信息
      *
-     * @param entity 更新的实体信息
+     * @param dto 更新的实体信息
      * @return reactor.core.publisher.Mono<com.jiayou.spd.common.core.entity.HttpResult>
      */
     @PostMapping("base/update")
     @ApiOperation(value = "统一修改信息接口")
     @Transactional(rollbackFor = Exception.class)
     @OperationRecord(value = "执行统一修改信息接口", type = OperationRecord.Type.INFO, action = OperationRecord.Action.UPDATE)
-    public HttpResult<Boolean> update(@Validated @RequestBody Entity entity) {
-        boolean update = this.getService().updateById(entity);
+    public HttpResult<Boolean> update(@Validated @RequestBody DTO dto) {
+        boolean update = this.getService().updateById(dto.convert());
         return HttpResult.ok(update);
     }
 

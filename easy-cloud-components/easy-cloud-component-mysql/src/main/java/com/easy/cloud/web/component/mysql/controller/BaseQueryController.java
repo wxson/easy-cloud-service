@@ -1,5 +1,6 @@
 package com.easy.cloud.web.component.mysql.controller;
 
+import cn.hutool.core.lang.ParameterizedTypeImpl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -7,18 +8,18 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.component.core.service.IConverter;
 import com.easy.cloud.web.component.mysql.utils.EntityPropertyUtils;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
+
+//import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 /**
  * Controller基类
@@ -32,7 +33,7 @@ import java.util.Optional;
  * @author GR
  * @date 2021-4-20 9:16
  */
-public abstract class BaseQueryController<QueryCondition, Entity extends IConverter<?>> implements IController<Entity> {
+public abstract class BaseQueryController<QueryCondition, Entity> implements IController<Entity> {
 
     /**
      * 新增默认排序方法
@@ -63,13 +64,13 @@ public abstract class BaseQueryController<QueryCondition, Entity extends IConver
      */
     private Class<Entity> recursionGenericSuperclass(Type genericSuperclass, Class<?> currentClass, Integer index) {
         ParameterizedTypeImpl parameterizedType = (ParameterizedTypeImpl) genericSuperclass;
-        if (parameterizedType.getRawType().getSimpleName().equals(currentClass.getSimpleName())) {
+        if (parameterizedType.getRawType().getTypeName().equals(currentClass.getSimpleName())) {
             if (parameterizedType.getActualTypeArguments().length > index - 1) {
                 return (Class<Entity>) parameterizedType.getActualTypeArguments()[index - 1];
             }
         }
 
-        return recursionGenericSuperclass(parameterizedType.getRawType().getGenericSuperclass(), currentClass, index);
+        return recursionGenericSuperclass(parameterizedType.getRawType().getClass().getSuperclass(), currentClass, index);
     }
 
     /**
@@ -106,13 +107,12 @@ public abstract class BaseQueryController<QueryCondition, Entity extends IConver
             if (value instanceof List) {
                 // 若为集合
                 if (((List) value).size() > 0) {
-                    query.notIn(key, ((List) value).toArray());
+                    query.in(key, ((List) value).toArray());
                 }
             } else {
                 query.eq(key, value);
             }
         });
-        EntityPropertyUtils.getTableLogicPropertyValue(getSupperClass()).forEach(query::eq);
         this.defaultOrder(query);
         return query;
     }
@@ -135,7 +135,6 @@ public abstract class BaseQueryController<QueryCondition, Entity extends IConver
                 query.ne(key, value);
             }
         });
-        EntityPropertyUtils.getTableLogicPropertyValue(getSupperClass()).forEach(query::eq);
         this.defaultOrder(query);
         return query;
     }
@@ -160,7 +159,6 @@ public abstract class BaseQueryController<QueryCondition, Entity extends IConver
                 query.eq(key, value);
             }
         });
-        EntityPropertyUtils.getTableLogicPropertyValue(getSupperClass()).forEach(query::eq);
         this.defaultOrder(query);
         return query;
     }
@@ -185,7 +183,6 @@ public abstract class BaseQueryController<QueryCondition, Entity extends IConver
                 query.ne(key, value);
             }
         });
-        EntityPropertyUtils.getTableLogicPropertyValue(getSupperClass()).forEach(query::eq);
         this.defaultOrder(query);
         return query;
     }

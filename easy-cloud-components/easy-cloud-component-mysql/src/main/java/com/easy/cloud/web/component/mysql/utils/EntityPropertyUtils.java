@@ -35,7 +35,7 @@ public class EntityPropertyUtils {
      * @return java.util.Map<java.lang.String, java.lang.Object>
      */
     public <Entity> Map<String, Object> getAllPropertyValue(Entity entity) {
-        HashMap<String, Object> propertyValueMap = CollUtil.newHashMap();
+        HashMap<String, Object> propertyValueMap = new HashMap<>();
         if (Objects.isNull(entity)) {
             return propertyValueMap;
         }
@@ -63,7 +63,7 @@ public class EntityPropertyUtils {
      * @return java.util.Map<java.lang.String, java.lang.Object>
      */
     public <Entity> Map<String, Object> getAllTableFieldPropertyValue(Entity entity) {
-        HashMap<String, Object> propertyValueMap = CollUtil.newHashMap();
+        HashMap<String, Object> propertyValueMap = new HashMap<>();
         if (Objects.isNull(entity)) {
             return propertyValueMap;
         }

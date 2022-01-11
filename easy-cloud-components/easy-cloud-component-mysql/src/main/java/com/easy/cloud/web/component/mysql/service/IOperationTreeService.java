@@ -1,7 +1,7 @@
 package com.easy.cloud.web.component.mysql.service;
 
 import cn.hutool.core.collection.CollUtil;
-import com.easy.cloud.web.component.core.constants.CommonConstants;
+import com.easy.cloud.web.component.core.constants.GlobalConstants;
 import com.easy.cloud.web.component.mysql.utils.EntityPropertyUtils;
 import org.springframework.beans.BeanUtils;
 
@@ -29,7 +29,7 @@ public interface IOperationTreeService<Entity> {
      * @return java.util.List<Entity>
      */
     default List<Entity> tree(List<Entity> list) {
-        return this.tree(list, CommonConstants.DEFAULT_TREE_PARENT_ID);
+        return this.tree(list, GlobalConstants.DEFAULT_TREE_PARENT_ID);
     }
 
     /**

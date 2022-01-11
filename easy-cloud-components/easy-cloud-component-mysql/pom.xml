@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.1.2</version>
+            <version>3.4.0</version>
         </dependency>
 
         <!-- druid 连接池 -->
@@ -49,6 +49,12 @@
         <dependency>
             <groupId>com.easy.cloud.web</groupId>
             <artifactId>easy-cloud-module-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-security</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

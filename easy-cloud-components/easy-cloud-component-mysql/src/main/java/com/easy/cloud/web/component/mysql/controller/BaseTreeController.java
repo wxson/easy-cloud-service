@@ -31,7 +31,7 @@ import java.util.Objects;
  * @author GR
  * @date 2021-4-20 9:16
  */
-public abstract class BaseTreeController<QueryCondition, Entity extends IConverter<?>> extends BaseController<QueryCondition, Entity> {
+public abstract class BaseTreeController<QueryCondition, DTO extends IConverter<Entity>, Entity> extends BaseController<QueryCondition, DTO, Entity> {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
