@@ -39,7 +39,7 @@ import java.time.ZoneId;
  */
 @Component
 @EnableScheduling
-@PropertySource("/application.properties")
+@PropertySource("/application-${spring.profiles.active:}.properties")
 public class ConsoleConfig {
     
     @Autowired
