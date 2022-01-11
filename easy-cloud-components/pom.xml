@@ -17,6 +17,7 @@
         <module>easy-cloud-component-batch</module>
         <module>easy-cloud-component-core</module>
         <module>easy-cloud-component-data</module>
+        <module>easy-cloud-component-extapi</module>
         <module>easy-cloud-component-gateway</module>
         <module>easy-cloud-component-mongo</module>
         <module>easy-cloud-component-mq</module>

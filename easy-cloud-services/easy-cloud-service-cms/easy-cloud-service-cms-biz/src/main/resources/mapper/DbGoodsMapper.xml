@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.cloud.web.service.cms.biz.mapper.DbGoodsMapper">
+
+    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.cms.biz.domain.db.GoodsDO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="no" column="no" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="picture" column="picture" jdbcType="VARCHAR"/>
+            <result property="goodsType" column="goods_type" jdbcType="INTEGER"/>
+            <result property="action" column="action" jdbcType="INTEGER"/>
+            <result property="currencyType" column="currency_type" jdbcType="INTEGER"/>
+            <result property="salesPrice" column="sales_price" jdbcType="DECIMAL"/>
+            <result property="purchasePrice" column="purchase_price" jdbcType="DECIMAL"/>
+            <result property="originalPrice" column="original_price" jdbcType="DECIMAL"/>
+            <result property="diamondNum" column="diamond_num" jdbcType="INTEGER"/>
+            <result property="goldCoinNum" column="gold_coin_num" jdbcType="INTEGER"/>
+            <result property="couponNum" column="coupon_num" jdbcType="INTEGER"/>
+            <result property="aliveness" column="aliveness" jdbcType="INTEGER"/>
+            <result property="dailyGoodsNo" column="daily_goods_no" jdbcType="VARCHAR"/>
+            <result property="triggerValue" column="trigger_value" jdbcType="INTEGER"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="sort" column="sort" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+            <result property="creatorAt" column="creator_at" jdbcType="VARCHAR"/>
+            <result property="createAt" column="create_at" jdbcType="VARCHAR"/>
+            <result property="updaterAt" column="updater_at" jdbcType="VARCHAR"/>
+            <result property="updateAt" column="update_at" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,no,name,
+        picture,goods_type,currency_type,action,
+        sales_price,purchase_price,original_price,
+        diamond_num,gold_coin_num,coupon_num,aliveness,
+        daily_goods_no,trigger_value,content,remark,sort,
+        status,deleted,creator_at,
+        create_at,updater_at,update_at
+    </sql>
+</mapper>

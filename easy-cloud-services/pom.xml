@@ -15,9 +15,13 @@
 
     <modules>
         <module>easy-cloud-service-charts</module>
+        <module>easy-cloud-service-member</module>
         <module>easy-cloud-service-minio</module>
-        <module>easy-cloud-service-test</module>
         <module>easy-cloud-service-upms</module>
+        <module>easy-cloud-service-cms</module>
+        <module>easy-cloud-service-order</module>
+        <module>easy-cloud-service-pay</module>
+        <module>easy-cloud-service-seata</module>
     </modules>
 
     <dependencies>
@@ -28,11 +32,17 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- 认证组件 -->
+        <!-- swagger https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter -->
         <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-security</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <!-- 参数校验框架 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
     </dependencies>
 

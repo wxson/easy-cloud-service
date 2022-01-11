@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.cloud.web.service.member.biz.mapper.DbVipRechargeMapper">
+
+    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.member.biz.domain.db.VipRechargeDO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="totalRecharge" column="total_recharge" jdbcType="DECIMAL"/>
+            <result property="vipLevel" column="vip_level" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="BOOLEAN"/>
+            <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
+            <result property="creatorAt" column="creator_at" jdbcType="VARCHAR"/>
+            <result property="createAt" column="create_at" jdbcType="VARCHAR"/>
+            <result property="updaterAt" column="updater_at" jdbcType="VARCHAR"/>
+            <result property="updateAt" column="update_at" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,total_recharge,vip_level,
+        status,deleted,creator_at,
+        create_at,updater_at,update_at
+    </sql>
+</mapper>

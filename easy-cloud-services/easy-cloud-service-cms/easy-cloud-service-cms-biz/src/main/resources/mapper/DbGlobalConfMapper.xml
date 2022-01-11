@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.cloud.web.service.cms.biz.mapper.DbGlobalConfMapper">
+
+    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.cms.biz.domain.db.GlobalConfDO">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="confKey" column="conf_key" jdbcType="VARCHAR"/>
+        <result property="confValue" column="conf_value" jdbcType="VARCHAR"/>
+        <result property="confDesc" column="conf_desc" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="creatorAt" column="creator_at" jdbcType="VARCHAR"/>
+        <result property="createAt" column="create_at" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,conf_key,conf_value,conf_desc,
+        status,creator_at,create_at
+    </sql>
+</mapper>

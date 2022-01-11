@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.cloud.web.service.order.biz.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.order.biz.domain.db.OrderDO">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="no" column="no" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="goodsNo" column="goods_no" jdbcType="VARCHAR"/>
+        <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+        <result property="goodsContent" column="goods_content" jdbcType="VARCHAR"/>
+        <result property="goodsNum" column="goods_num" jdbcType="INTEGER"/>
+        <result property="currencyType" column="currency_type" jdbcType="INTEGER"/>
+        <result property="amount" column="amount" jdbcType="VARCHAR"/>
+        <result property="discountsAmount" column="discounts_amount" jdbcType="VARCHAR"/>
+        <result property="salesPrice" column="sales_price" jdbcType="VARCHAR"/>
+        <result property="purchasePrice" column="purchase_price" jdbcType="VARCHAR"/>
+        <result property="originalPrice" column="original_price" jdbcType="VARCHAR"/>
+        <result property="aftermarketStatus" column="aftermarket_status" jdbcType="INTEGER"/>
+        <result property="commentStatus" column="comment_status" jdbcType="INTEGER"/>
+        <result property="finishStatus" column="finish_status" jdbcType="INTEGER"/>
+        <result property="logisticsStatus" column="logistics_status" jdbcType="INTEGER"/>
+        <result property="orderStatus" column="order_status" jdbcType="INTEGER"/>
+        <result property="payStatus" column="pay_status" jdbcType="INTEGER"/>
+        <result property="finishAt" column="finish_at" jdbcType="VARCHAR"/>
+        <result property="createAftermarketAt" column="create_aftermarket_at" jdbcType="VARCHAR"/>
+        <result property="completeAftermarketAt" column="complete_aftermarket_at" jdbcType="VARCHAR"/>
+        <result property="createCommentAt" column="create_comment_at" jdbcType="VARCHAR"/>
+        <result property="completeCommentAt" column="complete_comment_at" jdbcType="VARCHAR"/>
+        <result property="createLogisticsAt" column="create_logistics_at" jdbcType="VARCHAR"/>
+        <result property="completeLogisticsAt" column="complete_logistics_at" jdbcType="VARCHAR"/>
+        <result property="createOrderAt" column="create_order_at" jdbcType="VARCHAR"/>
+        <result property="completeOrderAt" column="complete_order_at" jdbcType="VARCHAR"/>
+        <result property="createPayAt" column="create_pay_at" jdbcType="VARCHAR"/>
+        <result property="completePayAt" column="complete_pay_at" jdbcType="TIMESTAMP"/>
+        <result property="creatorAt" column="creator_at" jdbcType="TIMESTAMP"/>
+        <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+        <result property="updaterAt" column="updater_at" jdbcType="VARCHAR"/>
+        <result property="updateAt" column="update_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,no,user_id,
+        goods_no,goods_name,goods_content,goods_num,
+        currency_type,
+        amount,discounts_amount,
+        sales_price,purchase_price,original_price,
+        aftermarket_status,comment_status,finish_status,logistics_status,order_status,pay_status,
+        finish_at,
+        create_aftermarket_at,complete_aftermarket_at,
+        create_comment_at,complete_comment_at,
+        create_logistics_at,complete_logistics_at,
+        create_order_at,complete_order_at,
+        create_pay_at,complete_pay_at,
+        creator_at,create_at,updater_at,update_at
+    </sql>
+</mapper>

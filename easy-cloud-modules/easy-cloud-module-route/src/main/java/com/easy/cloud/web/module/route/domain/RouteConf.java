@@ -1,12 +1,14 @@
 package com.easy.cloud.web.module.route.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.easy.cloud.web.component.core.service.IConvertProxy;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 路由信息表
@@ -22,6 +24,7 @@ public class RouteConf implements IConvertProxy {
     /**
      * 文档ID
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private String id;
     /**
      * 断言，匹配，格式为JSON 字符串数组
@@ -51,17 +54,17 @@ public class RouteConf implements IConvertProxy {
     /**
      * 排序
      */
-    private Integer sort;
+    private Integer sort = 0;
 
     /**
      * 状态 0 启用 1 禁用
      */
-    private Integer status;
+    private Integer status = 0;
 
     /**
      * 是否删除 0 未删除 1 已删除
      */
-    private Integer deleted;
+    private Integer deleted = 0;
 
     /**
      * 创建用户
@@ -71,12 +74,12 @@ public class RouteConf implements IConvertProxy {
     /**
      * 创建时间
      */
-    private Date createAt;
+    private LocalDateTime createAt;
 
     /**
      * 更新时间
      */
-    private Date updateAt;
+    private LocalDateTime updateAt;
 
     private static final long serialVersionUID = 1L;
 

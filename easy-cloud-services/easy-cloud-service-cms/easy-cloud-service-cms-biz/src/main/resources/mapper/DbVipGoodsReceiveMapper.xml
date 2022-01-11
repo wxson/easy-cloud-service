@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.cloud.web.service.cms.biz.mapper.DbVipGoodsReceiveMapper">
+
+    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.cms.biz.domain.db.VipGoodsReceiveDO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="memberId" column="member_id" jdbcType="VARCHAR"/>
+            <result property="goodsNo" column="goods_no" jdbcType="VARCHAR"/>
+            <result property="creatorAt" column="creator_at" jdbcType="VARCHAR"/>
+            <result property="createAt" column="create_at" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,member_id,goods_no,
+        creator_at,create_at
+    </sql>
+</mapper>
