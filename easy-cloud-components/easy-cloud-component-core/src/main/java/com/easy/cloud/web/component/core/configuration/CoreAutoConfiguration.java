@@ -1,6 +1,6 @@
 package com.easy.cloud.web.component.core.configuration;
 
-import com.easy.cloud.web.component.core.util.SpringHolder;
+import com.easy.cloud.web.component.core.util.SpringContextHolder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class CoreAutoConfiguration {
 
     @Bean
-    public SpringHolder applicationContextUtils() {
-        return new SpringHolder();
+    public SpringContextHolder applicationContextUtils() {
+        return new SpringContextHolder();
     }
 }

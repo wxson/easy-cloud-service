@@ -26,8 +26,8 @@ import java.io.Serializable;
 @ApiModel(value = "响应信息主体", description = "0：成功 1：失败")
 public class HttpResult<T> implements Serializable {
 
-    private Integer code;
-    private String msg;
+    private Object code;
+    private String message;
     private T data;
 
     public static <T> HttpResult<T> ok() {
@@ -42,8 +42,8 @@ public class HttpResult<T> implements Serializable {
         return HttpResult.ok(HttpResultEnum.SUCCESS.getCode(), desc, data);
     }
 
-    public static <T> HttpResult<T> ok(Integer code, String desc, T data) {
-        return HttpResult.<T>build().setData(data).setCode(code).setMsg(desc);
+    public static <T> HttpResult<T> ok(Object code, String desc, T data) {
+        return HttpResult.<T>build().setData(data).setCode(code).setMessage(desc);
     }
 
     public static <T> HttpResult<T> fail() {
@@ -54,7 +54,7 @@ public class HttpResult<T> implements Serializable {
         return HttpResult.fail(HttpResultEnum.FAIL.getCode(), desc);
     }
 
-    public static <T> HttpResult<T> fail(Integer code, String desc) {
-        return HttpResult.<T>build().setCode(code).setMsg(desc);
+    public static <T> HttpResult<T> fail(Object code, String desc) {
+        return HttpResult.<T>build().setCode(code).setMessage(desc);
     }
 }

@@ -1,6 +1,6 @@
 package com.easy.cloud.web.component.core.tenant;
 
-import com.easy.cloud.web.component.core.constants.CommonConstants;
+import com.easy.cloud.web.component.core.constants.GlobalConstants;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class FeignTenantInterceptor implements RequestInterceptor {
             log.debug("TTL 中的 租户ID为空，feign拦截器 >> 跳过");
             return;
         }
-        requestTemplate.header(CommonConstants.TENANT_ID, TenantContextHolder.getTenantId().toString());
+        requestTemplate.header(GlobalConstants.TENANT_ID, TenantContextHolder.getTenantId().toString());
     }
 
 }

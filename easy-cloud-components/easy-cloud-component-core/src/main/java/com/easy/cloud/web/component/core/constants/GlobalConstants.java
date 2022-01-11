@@ -6,7 +6,7 @@ package com.easy.cloud.web.component.core.constants;
  * @author GR
  * @date 2021-3-31 10:45
  */
-public class CommonConstants {
+public class GlobalConstants {
 
     /**
      * 默认属性结构顶端ID（即父级ID）
@@ -26,7 +26,16 @@ public class CommonConstants {
     /**
      * 常用整型
      */
+    public static final int SIGN_ONE = -1;
     public static final int ZERO = 0;
+    public static final long L_ZERO = 0;
     public static final int ONE = 1;
-    public static final int TEN = 1;
+    public static final int EIGHT = 8;
+    public static final int TEN = 10;
+    public static final int TWELVE = 12;
+
+    /**
+     * 全局Redis前缀
+     */
+    public static final String REDIS_PREFIX_KEY = "easy_cloud:";
 }

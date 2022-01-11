@@ -13,12 +13,12 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 public class TenantConfiguration {
 
     @Bean
-    public RequestInterceptor pigxFeignTenantInterceptor() {
+    public RequestInterceptor feignTenantInterceptor() {
         return new FeignTenantInterceptor();
     }
 
     @Bean
-    public ClientHttpRequestInterceptor pigxTenantRequestInterceptor() {
+    public ClientHttpRequestInterceptor tenantRequestInterceptor() {
         return new TenantRequestInterceptor();
     }
 

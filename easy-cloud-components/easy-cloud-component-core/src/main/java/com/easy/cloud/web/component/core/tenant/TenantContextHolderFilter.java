@@ -1,7 +1,7 @@
 package com.easy.cloud.web.component.core.tenant;
 
 import cn.hutool.core.util.StrUtil;
-import com.easy.cloud.web.component.core.constants.CommonConstants;
+import com.easy.cloud.web.component.core.constants.GlobalConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -33,13 +33,13 @@ public class TenantContextHolderFilter extends GenericFilterBean {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        String tenantId = request.getHeader(CommonConstants.TENANT_ID);
+        String tenantId = request.getHeader(GlobalConstants.TENANT_ID);
         log.debug("获取header中的租户ID为:{}", tenantId);
 
         if (StrUtil.isNotBlank(tenantId)) {
             TenantContextHolder.setTenantId(Integer.parseInt(tenantId));
         } else {
-            TenantContextHolder.setTenantId(CommonConstants.DEFAULT_TENANT_ID);
+            TenantContextHolder.setTenantId(GlobalConstants.DEFAULT_TENANT_ID);
         }
 
         filterChain.doFilter(request, response);

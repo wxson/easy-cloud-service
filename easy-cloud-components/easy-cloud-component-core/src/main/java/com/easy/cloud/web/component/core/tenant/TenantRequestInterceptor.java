@@ -1,6 +1,6 @@
 package com.easy.cloud.web.component.core.tenant;
 
-import com.easy.cloud.web.component.core.constants.CommonConstants;
+import com.easy.cloud.web.component.core.constants.GlobalConstants;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -21,7 +21,7 @@ public class TenantRequestInterceptor implements ClientHttpRequestInterceptor {
             throws IOException {
 
         if (TenantContextHolder.getTenantId() != null) {
-            request.getHeaders().set(CommonConstants.TENANT_ID, String.valueOf(TenantContextHolder.getTenantId()));
+            request.getHeaders().set(GlobalConstants.TENANT_ID, String.valueOf(TenantContextHolder.getTenantId()));
         }
 
         return execution.execute(request, body);

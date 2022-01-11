@@ -13,5 +13,10 @@ public interface CacheConstants {
     /**
      * 客户认证缓存key
      */
-    String CLIENT_DETAILS_KEY = BASE_PREFIX + "oauth:client_details_key";
+    String CLIENT_DETAILS_KEY = BASE_PREFIX + "oauth:client_details_key:";
+
+    /**
+     * 客户认证缓存key
+     */
+    String GLOBAL_CONF_KEY = BASE_PREFIX + "global_conf_key:";
 }

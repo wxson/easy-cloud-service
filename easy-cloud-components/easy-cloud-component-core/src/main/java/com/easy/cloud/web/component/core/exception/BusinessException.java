@@ -14,18 +14,18 @@ import lombok.Setter;
 @Setter
 public class BusinessException extends RuntimeException {
 
-    private int code = HttpResultEnum.FAIL.getCode();
+    private Object code = HttpResultEnum.FAIL.getCode();
 
     public BusinessException(String message) {
         super(message);
     }
 
-    public BusinessException(int code, String message) {
+    public BusinessException(Object code, String message) {
         super(message);
         this.code = code;
     }
 
-    public BusinessException(int code, String msgFormat, Object... args) {
+    public BusinessException(Object code, String msgFormat, Object... args) {
         super(String.format(msgFormat, args));
         this.code = code;
     }

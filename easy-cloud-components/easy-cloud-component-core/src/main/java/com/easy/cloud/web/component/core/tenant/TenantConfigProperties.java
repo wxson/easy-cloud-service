@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @RefreshScope
 @Configuration
-@ConfigurationProperties(prefix = "jiayou.tenant")
+@ConfigurationProperties(prefix = "tenant")
 public class TenantConfigProperties {
 
     /**
