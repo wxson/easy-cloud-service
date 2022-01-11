@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.cloud.web.service.upms.biz.mapper.RelationUserDepartmentMapper">
+
+    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.upms.biz.domain.db.RelationUserDepartmentDO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="departmentId" column="department_id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="creatorAt" column="creator_at" jdbcType="VARCHAR"/>
+            <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,department_id,
+        user_id,creator_at,
+        create_at
+    </sql>
+</mapper>

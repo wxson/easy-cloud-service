@@ -27,6 +27,12 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
+        <!-- 认证组件 -->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-security</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <!--Local Route-->
         <dependency>
@@ -35,22 +41,44 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!--Local Sms-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <!--移除Tomcat依赖-->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-module-sms</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--Local Mysql-->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-mysql</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--Local member-api-->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-service-member-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <!--undertow容器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+
+        <!-- 加载hutool -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.7.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.7.0</version>
         </dependency>
 
     </dependencies>
