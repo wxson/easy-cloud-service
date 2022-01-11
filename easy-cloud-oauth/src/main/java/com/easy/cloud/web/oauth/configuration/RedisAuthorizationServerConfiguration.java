@@ -1,12 +1,14 @@
 package com.easy.cloud.web.oauth.configuration;
 
+import com.easy.cloud.web.component.security.constants.SecurityConstants;
 import com.easy.cloud.web.component.security.exception.SecurityWebResponseExceptionTranslator;
 import com.easy.cloud.web.component.security.service.ISecurityUserDetailsService;
-import com.easy.cloud.web.oauth.service.OauthClientDetailsService;
+import com.easy.cloud.web.component.security.service.impl.SecurityClientDetailsService;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -15,8 +17,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,23 +31,32 @@ import java.util.List;
 @Configuration
 @AllArgsConstructor
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+@ConditionalOnExpression("!${security.oauth2.jwt.enabled:false}")
+public class RedisAuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    private final PasswordEncoder passwordEncoder;
+    private final DataSource dataSource;
 
     private final TokenStore redisTokenStore;
+
+    private final TokenEnhancer tokenEnhancer;
 
     private final AuthenticationManager authenticationManager;
 
     private final ISecurityUserDetailsService securityUserDetailsService;
 
-    private final TokenStore jwtTokenStore;
-
-    private final TokenEnhancer jwtTokenEnhancer;
-
-    private final JwtAccessTokenConverter jwtAccessTokenConverter;
-
-    private final OauthClientDetailsService oauthClientDetailsService;
+    /**
+     * 授权服务配置,主要是为了颁发授权码
+     *
+     * @param clients 客户端信息
+     */
+    @Override
+    @SneakyThrows
+    public void configure(ClientDetailsServiceConfigurer clients) {
+        SecurityClientDetailsService clientDetailsService = new SecurityClientDetailsService(dataSource);
+        clientDetailsService.setSelectClientDetailsSql(SecurityConstants.DEFAULT_SELECT_STATEMENT);
+        clientDetailsService.setFindClientDetailsSql(SecurityConstants.DEFAULT_FIND_STATEMENT);
+        clients.withClientDetails(clientDetailsService);
+    }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -64,32 +75,17 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         // She之增强内容
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> delegates = new ArrayList<>();
-        delegates.add(jwtTokenEnhancer);
-        delegates.add(jwtAccessTokenConverter);
+        delegates.add(tokenEnhancer);
         tokenEnhancerChain.setTokenEnhancers(delegates);
 
         endpoints
                 .authenticationManager(authenticationManager)
                 .userDetailsService(securityUserDetailsService)
                 // 启用Redis存储TOKEN
-                // .tokenStore(redisTokenStore)
-                .tokenStore(jwtTokenStore)
-                // token 转换器
-                .accessTokenConverter(jwtAccessTokenConverter)
+                .tokenStore(redisTokenStore)
                 // jwt Token增强器
                 .tokenEnhancer(tokenEnhancerChain)
                 // 异常处理
                 .exceptionTranslator(new SecurityWebResponseExceptionTranslator());
-    }
-
-    /**
-     * 授权服务配置,主要是为了颁发授权码
-     *
-     * @param clients 客户端配置
-     */
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        // JDBC客户端详情
-        clients.withClientDetails(oauthClientDetailsService);
     }
 }
