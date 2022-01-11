@@ -1,7 +1,7 @@
 # easy-cloud-service
 
 #### Description
-hy game
+easy-cloud-service
 
 #### Software Architecture
 Software architecture description

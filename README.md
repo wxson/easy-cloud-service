@@ -1,31 +1,28 @@
-<<<<<<< HEAD
-### easy-cloud-service
+## easy-cloud-service
 Build a pluggable server system.
 
-![avatar](./docs/Easy-Cloud-Service.png)"# easy-cloud-service-game" 
-=======
-# easy-cloud-service-game
+![avatar](./docs/Easy-Cloud-Service.png)
 
-#### 介绍
-hy game
+### 介绍
+easy-cloud-service
 
-#### 软件架构
+### 软件架构
 软件架构说明
 
 
-#### 安装教程
+### 安装教程
 
 1.  xxxx
 2.  xxxx
 3.  xxxx
 
-#### 使用说明
+### 使用说明
 
 1.  xxxx
 2.  xxxx
 3.  xxxx
 
-#### 参与贡献
+### 参与贡献
 
 1.  Fork 本仓库
 2.  新建 Feat_xxx 分支
@@ -33,7 +30,7 @@ hy game
 4.  新建 Pull Request
 
 
-#### 特技
+### 特技
 
 1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
 2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
