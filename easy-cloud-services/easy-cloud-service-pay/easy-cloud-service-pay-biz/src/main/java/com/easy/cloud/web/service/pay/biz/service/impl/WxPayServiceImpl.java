@@ -46,11 +46,11 @@ public class WxPayServiceImpl implements IPayProxyService {
     /**
      * 应用ID
      */
-    private final String APP_ID = "wx73c43374df7eb819";
+    private final String APP_ID = "你的appId";
     /**
      * 商户号
      */
-    private final String MCH_ID = "1618520046";
+    private final String MCH_ID = "你的商户号";
 
     @Override
     public PayVO pay(PayDTO payDTO) {
