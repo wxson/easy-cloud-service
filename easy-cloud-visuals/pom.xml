@@ -14,6 +14,7 @@
     <description>Demo project for Spring Boot</description>
 
     <modules>
+        <module>easy-cloud-visual-dashboard</module>
         <module>easy-cloud-visual-sentinel</module>
     </modules>
 
