@@ -13,6 +13,12 @@
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
+        <!-- MongoDB -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+
         <!-- easy-cloud-core包-->
         <dependency>
             <groupId>com.easy.cloud.web</groupId>
