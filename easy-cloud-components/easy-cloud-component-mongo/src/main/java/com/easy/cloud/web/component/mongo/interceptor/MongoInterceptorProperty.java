@@ -15,8 +15,8 @@ public class MongoInterceptorProperty {
   /**
    * 创建人
    */
-  @Value(value = "${mongo.auto.filed.creatorAt:creatorAt}")
-  public String CREATOR_AT_FILED = "creatorAt";
+  @Value(value = "${mongo.auto.filed.createBy:createBy}")
+  public String CREATOR_BY_FILED = "createBy";
   /**
    * 创建时间
    */
@@ -25,8 +25,8 @@ public class MongoInterceptorProperty {
   /**
    * 更新人
    */
-  @Value(value = "${mongo.auto.filed.updatorAt:updatorAt}")
-  public String UPDATOR_AT_FILED = "updatorAt";
+  @Value(value = "${mongo.auto.filed.updateBy:updateBy}")
+  public String UPDATE_BY_FILED = "updateBy";
   /**
    * 更新时间
    */

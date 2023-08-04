@@ -37,7 +37,7 @@ public class MongoInterceptorHandler implements BeforeConvertCallback<Object> {
       if (this.isNew(targetDoc)) {
         if (Objects.nonNull(authenticationUserId)) {
           // 设置创建用户
-          this.setDefaultProperty(targetDoc, mongoInterceptorProperty.CREATOR_AT_FILED,
+          this.setDefaultProperty(targetDoc, mongoInterceptorProperty.CREATOR_BY_FILED,
               authenticationUserId);
         }
         // 设置创建时间
@@ -47,7 +47,7 @@ public class MongoInterceptorHandler implements BeforeConvertCallback<Object> {
         // 设置更新用户
         if (Objects.nonNull(authenticationUserId)) {
           // 设置更新用户
-          this.setDefaultProperty(targetDoc, mongoInterceptorProperty.UPDATOR_AT_FILED,
+          this.setDefaultProperty(targetDoc, mongoInterceptorProperty.UPDATE_BY_FILED,
               authenticationUserId);
         }
         // 设置更新时间
