@@ -9,7 +9,7 @@ package com.easy.cloud.web.component.core.service;
 public interface IInitService {
 
     /**
-     * 初始化默认配置信息
+     * 初始化
      */
-    void initDefaultConfiguration();
+    void init();
 }
