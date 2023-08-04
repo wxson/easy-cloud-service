@@ -1,11 +1,11 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 家有-SPD-45
+ Source Server         : easy-cloud
  Source Server Type    : MySQL
  Source Server Version : 80022
  Source Host           : 192.168.100.45:65236
- Source Schema         : jiayou_spd_upms
+ Source Schema         : easy_cloud_upms
 
  Target Server Type    : MySQL
  Target Server Version : 80022
