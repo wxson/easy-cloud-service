@@ -41,6 +41,14 @@ public class RoleServiceImpl implements IRoleService {
   private RelationRolePermissionRepository relationRolePermissionRepository;
 
   @Override
+  public void init() {
+    // 未初始化过数据
+    if (roleRepository.count() <= 0) {
+      log.info("init platform roles content success!");
+    }
+  }
+
+  @Override
   @Transactional
   public RoleVO save(RoleDTO roleDTO) {
     // 转换成DO对象

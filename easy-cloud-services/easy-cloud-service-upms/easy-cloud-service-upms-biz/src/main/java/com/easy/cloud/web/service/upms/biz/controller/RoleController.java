@@ -1,93 +1,116 @@
 package com.easy.cloud.web.service.upms.biz.controller;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.component.mysql.controller.BaseController;
-import com.easy.cloud.web.component.mysql.service.IRepositoryService;
-import com.easy.cloud.web.service.upms.biz.domain.db.RoleDO;
-import com.easy.cloud.web.service.upms.biz.domain.dto.RoleDTO;
-import com.easy.cloud.web.service.upms.biz.domain.query.RoleQuery;
+import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
+import com.easy.cloud.web.service.upms.api.dto.RolePermissionDTO;
+import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Role API
+ *
  * @author Fast Java
- * @date 2021-04-01
+ * @date 2023-08-03 14:32:52
  */
 @Slf4j
 @RestController
-@RequestMapping("role")
-@AllArgsConstructor
-@Api(value = "角色管理", tags = "角色管理")
-public class RoleController extends BaseController<RoleQuery, RoleDTO, RoleDO> {
+@RequestMapping(value = "role")
+public class RoleController {
 
-    private final IRoleService roleService;
+  @Autowired
+  private IRoleService roleService;
 
-    @Override
-    public IRepositoryService<RoleDO> getService() {
-        return roleService;
-    }
+  /**
+   * 新增
+   *
+   * @param roleDTO 新增数据
+   * @return 新增数据
+   */
+  @PostMapping(value = "save")
+  @PreAuthorize("@pms.hasPermission('role_add')")
+  public Object save(@Validated @RequestBody RoleDTO roleDTO) {
+    return HttpResult.ok(roleService.save(roleDTO));
+  }
 
-    /**
-     * 重写角色存储逻辑：存储角色时，可顺带存储当前角色分配的权限
-     *
-     * @param dto 角色信息
-     * @return reactor.core.publisher.Mono<com.easy.cloud.web.common.response.HttpResponse>
-     */
-    @Override
-    public HttpResult<Boolean> save(@Validated @RequestBody RoleDTO dto) {
-        RoleDO roleDO = dto.convert();
-        this.getService().save(roleDO);
-        if (CollUtil.isNotEmpty(dto.getPermissionList())) {
-            dto.getPermissionList().forEach(relationRolePermissionDO -> roleService.saveRelationRolePermission(roleDO.getId(),
-                    relationRolePermissionDO.getPermissionId(), relationRolePermissionDO.getActions()));
-        }
-        return HttpResult.ok(true);
-    }
+  /**
+   * 更新
+   *
+   * @param roleDTO 新增数据
+   * @return 更新数据
+   */
+  @PostMapping(value = "update")
+  @PreAuthorize("@pms.hasPermission('role_edit')")
+  public Object update(@Validated @RequestBody RoleDTO roleDTO) {
+    return HttpResult.ok(roleService.update(roleDTO));
+  }
 
-    /**
-     * 分配权限：暂时采取方案一
-     * 方案一：全部删除之前的角色权限信息，再统一添加新的权限信息
-     * 方案二：货权原先的权限与新的权限进行对比，缺少的删除，多出来的新增，相同的保留（业务逻辑相对复杂些）
-     *
-     * @param dto 角色全新信息
-     * @return reactor.core.publisher.Mono<com.easy.cloud.web.common.response.HttpResponse>
-     */
-    @PostMapping("allot/permissions")
-    @ApiOperation(value = "分配权限")
-    public HttpResult<Boolean> allotRolePermissionList(@Validated @RequestBody RoleDTO dto) {
-        if (StrUtil.isBlank(dto.getId())) {
-            throw new BusinessException("当前角色ID不能为空");
-        }
+  /**
+   * 根据ID移除数据
+   *
+   * @param roleId ID
+   * @return 是否删除成功
+   */
+  @GetMapping(value = "remove/{roleId}")
+  @PreAuthorize("@pms.hasPermission('role_delete')")
+  public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long roleId) {
+    return HttpResult.ok(roleService.removeById(roleId));
+  }
 
-        RoleDO roleDO = roleService.getOne(Wrappers.<RoleDO>lambdaQuery().eq(RoleDO::getId, dto.getId()));
-        if (null == roleDO) {
-            throw new BusinessException("当前角色信息不存在");
-        }
+  /**
+   * 根据ID获取详情
+   *
+   * @param roleId ID
+   * @return 详情数据
+   */
+  @GetMapping(value = "detail/{roleId}")
+  public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long roleId) {
+    return HttpResult.ok(roleService.detailById(roleId));
+  }
 
-        // 当前分配权限不为空
-        if (CollUtil.isNotEmpty(dto.getPermissionList())) {
-            dto.getPermissionList().forEach(relationRolePermissionDO -> {
-                // 移除当前角色下的所有权限
-                roleService.removeRelationRolePermissionByRoleId(dto.getId());
-                // 当前权限ID不为空
-                if (StrUtil.isNotBlank(relationRolePermissionDO.getPermissionId())) {
-                    roleService.saveRelationRolePermission(roleDO.getId(),
-                            relationRolePermissionDO.getPermissionId(), relationRolePermissionDO.getActions());
-                }
-            });
-        }
-        return HttpResult.ok();
-    }
+  /**
+   * TODO 所有数据列表，查询参数自定义
+   *
+   * @return 查询列表
+   */
+  @GetMapping(value = "list")
+  public Object list() {
+    return HttpResult.ok(roleService.list());
+  }
+
+  /**
+   * TODO 根据条件查询分页数据，查询参数自定义
+   *
+   * @param page 当前页
+   * @param size 每页大小
+   * @return 查询分页数据
+   */
+  @GetMapping(value = "page")
+  public Object page(@RequestParam(required = false, defaultValue = "0") int page,
+      @RequestParam(required = false, defaultValue = "10") int size) {
+    return HttpResult.ok(roleService.page(page, size));
+  }
+
+
+  /**
+   * 绑定权限
+   *
+   * @param rolePermissionDTO 用户信息
+   * @return success/false
+   */
+  @PostMapping("/bind/permission")
+  public HttpResult<RoleVO> bindRolePermission(@RequestBody RolePermissionDTO rolePermissionDTO) {
+    return HttpResult.ok(roleService.bindRolePermission(rolePermissionDTO));
+  }
 }

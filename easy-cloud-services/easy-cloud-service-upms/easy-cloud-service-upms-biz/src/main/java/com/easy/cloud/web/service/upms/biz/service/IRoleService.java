@@ -1,5 +1,6 @@
 package com.easy.cloud.web.service.upms.biz.service;
 
+import com.easy.cloud.web.component.core.service.IInitService;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
 import com.easy.cloud.web.service.upms.api.dto.RolePermissionDTO;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
@@ -12,7 +13,7 @@ import org.springframework.data.domain.Page;
  * @author Fast Java
  * @date 2023-08-03 14:32:52
  */
-public interface IRoleService {
+public interface IRoleService extends IInitService {
 
   /**
    * 新增数据

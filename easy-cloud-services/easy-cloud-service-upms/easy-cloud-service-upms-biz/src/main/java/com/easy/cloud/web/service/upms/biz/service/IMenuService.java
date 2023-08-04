@@ -1,6 +1,7 @@
 package com.easy.cloud.web.service.upms.biz.service;
 
 import cn.hutool.core.lang.tree.Tree;
+import com.easy.cloud.web.component.core.service.IInitService;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
 import com.easy.cloud.web.service.upms.api.vo.MenuVO;
@@ -13,7 +14,7 @@ import org.springframework.data.domain.Page;
  * @author Fast Java
  * @date 2023-08-03 14:45:40
  */
-public interface IMenuService {
+public interface IMenuService extends IInitService {
 
   /**
    * 新增数据

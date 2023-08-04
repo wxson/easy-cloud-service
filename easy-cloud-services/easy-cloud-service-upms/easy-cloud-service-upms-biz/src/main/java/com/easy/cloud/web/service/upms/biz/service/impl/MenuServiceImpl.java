@@ -42,6 +42,15 @@ public class MenuServiceImpl implements IMenuService {
   private RelationRolePermissionRepository relationRolePermissionRepository;
 
   @Override
+  public void init() {
+    // 未初始化过数据
+    if (menuRepository.count() <= 0) {
+      log.info("init platform menus content success!");
+    }
+  }
+
+
+  @Override
   @Transactional
   public MenuVO save(MenuDTO menuDTO) {
     // 转换成DO对象

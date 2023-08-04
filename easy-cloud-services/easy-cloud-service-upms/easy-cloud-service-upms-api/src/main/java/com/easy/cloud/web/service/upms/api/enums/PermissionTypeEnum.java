@@ -1,4 +1,4 @@
-package com.easy.cloud.web.service.upms.biz.enums;
+package com.easy.cloud.web.service.upms.api.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
