@@ -1,8 +1,8 @@
 package com.easy.cloud.web.module.dict.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.module.dict.domain.dto.DictDTO;
-import com.easy.cloud.web.module.dict.service.IDictService;
+import com.easy.cloud.web.module.dict.domain.dto.DictItemDTO;
+import com.easy.cloud.web.module.dict.service.IDictItemService;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,75 +17,64 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Dict API
+ * DictItem API
  *
  * @author Fast Java
- * @date 2023-08-04 14:22:33
+ * @date 2023-08-04 14:26:29
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "dict")
-public class DictController {
+@RequestMapping(value = "dictItem")
+public class DictItemController {
 
   @Autowired
-  private IDictService dictService;
+  private IDictItemService dictItemService;
 
   /**
    * 新增
    *
-   * @param dictDTO 新增数据
+   * @param dictItemDTO 新增数据
    * @return 新增数据
    */
   @PostMapping(value = "save")
-  @PreAuthorize("@pms.hasPermission('dict_add')")
-  public Object save(@Validated @RequestBody DictDTO dictDTO) {
-    return HttpResult.ok(dictService.save(dictDTO));
+  @PreAuthorize("@pms.hasPermission('dict_item_add')")
+  public Object save(@Validated @RequestBody DictItemDTO dictItemDTO) {
+    return HttpResult.ok(dictItemService.save(dictItemDTO));
   }
 
   /**
    * 更新
    *
-   * @param dictDTO 新增数据
+   * @param dictItemDTO 新增数据
    * @return 更新数据
    */
   @PostMapping(value = "update")
-  @PreAuthorize("@pms.hasPermission('dict_edit')")
-  public Object update(@Validated @RequestBody DictDTO dictDTO) {
-    return HttpResult.ok(dictService.update(dictDTO));
+  @PreAuthorize("@pms.hasPermission('dict_item_edit')")
+  public Object update(@Validated @RequestBody DictItemDTO dictItemDTO) {
+    return HttpResult.ok(dictItemService.update(dictItemDTO));
   }
 
   /**
    * 根据ID移除数据
    *
-   * @param dictId ID
+   * @param dictItemId ID
    * @return 是否删除成功
    */
-  @GetMapping(value = "remove/{dictId}")
-  @PreAuthorize("@pms.hasPermission('dict_delete')")
-  public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long dictId) {
-    return HttpResult.ok(dictService.removeById(dictId));
+  @GetMapping(value = "remove/{dictItemId}")
+  @PreAuthorize("@pms.hasPermission('dict_item_delete')")
+  public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long dictItemId) {
+    return HttpResult.ok(dictItemService.removeById(dictItemId));
   }
 
   /**
    * 根据ID获取详情
    *
-   * @param dictId ID
+   * @param dictItemId ID
    * @return 详情数据
    */
-  @GetMapping(value = "detail/{dictId}")
-  public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long dictId) {
-    return HttpResult.ok(dictService.detailById(dictId));
-  }
-
-  /**
-   * 根据类型获取详情
-   *
-   * @param dictType 类型
-   * @return 详情数据
-   */
-  @GetMapping(value = "type/{dictType}")
-  public Object detailById(@PathVariable @NotNull(message = "当前字典类型不能为空") String dictType) {
-    return HttpResult.ok(dictService.detailByType(dictType));
+  @GetMapping(value = "detail/{dictItemId}")
+  public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long dictItemId) {
+    return HttpResult.ok(dictItemService.detailById(dictItemId));
   }
 
   /**
@@ -95,7 +84,7 @@ public class DictController {
    */
   @GetMapping(value = "list")
   public Object list() {
-    return HttpResult.ok(dictService.list());
+    return HttpResult.ok(dictItemService.list());
   }
 
   /**
@@ -108,6 +97,6 @@ public class DictController {
   @GetMapping(value = "page")
   public Object page(@RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "10") int size) {
-    return HttpResult.ok(dictService.page(page, size));
+    return HttpResult.ok(dictItemService.page(page, size));
   }
 }
