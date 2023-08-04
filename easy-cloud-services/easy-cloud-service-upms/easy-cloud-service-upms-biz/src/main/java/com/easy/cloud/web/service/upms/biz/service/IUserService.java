@@ -1,5 +1,6 @@
 package com.easy.cloud.web.service.upms.biz.service;
 
+import com.easy.cloud.web.component.core.service.IInitService;
 import com.easy.cloud.web.service.upms.api.dto.UserBindDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserLoginDTO;
@@ -13,7 +14,7 @@ import org.springframework.data.domain.Page;
  * @author Fast Java
  * @date 2023-08-03 14:25:41
  */
-public interface IUserService {
+public interface IUserService extends IInitService {
 
   /**
    * 新增数据

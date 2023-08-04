@@ -37,7 +37,7 @@ public class RoleDO implements IConverter {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private String id;
+  private Long id;
   /**
    * 租户ID
    */

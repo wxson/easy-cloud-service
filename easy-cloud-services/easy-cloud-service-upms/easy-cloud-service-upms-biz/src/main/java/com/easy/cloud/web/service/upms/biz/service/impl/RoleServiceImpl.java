@@ -2,9 +2,11 @@ package com.easy.cloud.web.service.upms.biz.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
+import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
 import com.easy.cloud.web.service.upms.api.dto.RolePermissionDTO;
+import com.easy.cloud.web.service.upms.api.enums.RoleEnum;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.biz.converter.RoleConverter;
 import com.easy.cloud.web.service.upms.biz.domain.RelationRolePermissionDO;
@@ -12,6 +14,7 @@ import com.easy.cloud.web.service.upms.biz.domain.RoleDO;
 import com.easy.cloud.web.service.upms.biz.repository.RelationRolePermissionRepository;
 import com.easy.cloud.web.service.upms.biz.repository.RoleRepository;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,6 +47,16 @@ public class RoleServiceImpl implements IRoleService {
   public void init() {
     // 未初始化过数据
     if (roleRepository.count() <= 0) {
+      List<RoleDO> roleDOS = Arrays.stream(RoleEnum.values())
+          .map(roleEnum -> RoleDO.builder()
+              .id(roleEnum.getId())
+              .code(roleEnum.getCode())
+              .describe(roleEnum.getDesc())
+              .deleted(DeletedEnum.UN_DELETED)
+              .status(StatusEnum.START_STATUS)
+              .build()).collect(Collectors.toList());
+      // 初始化存储
+      roleRepository.saveAll(roleDOS);
       log.info("init platform roles content success!");
     }
   }

@@ -5,6 +5,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
+import com.easy.cloud.web.service.upms.api.enums.RoleEnum;
 import com.easy.cloud.web.service.upms.api.vo.MenuVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsConstants;
 import com.easy.cloud.web.service.upms.biz.converter.MenuConverter;
@@ -13,6 +14,7 @@ import com.easy.cloud.web.service.upms.biz.domain.RelationRolePermissionDO;
 import com.easy.cloud.web.service.upms.biz.repository.MenuRepository;
 import com.easy.cloud.web.service.upms.biz.repository.RelationRolePermissionRepository;
 import com.easy.cloud.web.service.upms.biz.service.IMenuService;
+import com.easy.cloud.web.service.upms.biz.utils.MenuInitUtil;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -45,6 +47,17 @@ public class MenuServiceImpl implements IMenuService {
   public void init() {
     // 未初始化过数据
     if (menuRepository.count() <= 0) {
+      List<MenuDO> menus = MenuInitUtil.initSystemDefaultMenus();
+      // 存储菜单信息
+      menuRepository.saveAll(menus);
+      List<RelationRolePermissionDO> relationRolePermissionDOS = menus.stream().map(MenuDO::getId)
+          .map(menuId -> RelationRolePermissionDO.builder()
+              .menuId(menuId)
+              .roleId(RoleEnum.ROLE_SUPER_ADMIN.getId())
+              .build())
+          .collect(Collectors.toList());
+      // 菜单权限分配给超管
+      relationRolePermissionRepository.saveAll(relationRolePermissionDOS);
       log.info("init platform menus content success!");
     }
   }

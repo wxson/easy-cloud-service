@@ -14,10 +14,11 @@ public enum RoleEnum {
   /**
    * 角色枚举类型
    */
-  ROLE_SUPER_ADMIN("admin", "超级管理员"),
-  ROLE_TENANT("TENANT", "租户"),
+  ROLE_SUPER_ADMIN(1, "admin", "超级管理员"),
+  ROLE_TENANT(2, "tenant", "租户"),
   ;
 
+  private final long id;
   private final String code;
   private final String desc;
 }

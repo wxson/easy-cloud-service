@@ -42,11 +42,11 @@
         </dependency>
 
         <!--Local Sms-->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-module-sms</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.easy.cloud.web</groupId>-->
+<!--            <artifactId>easy-cloud-module-sms</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
 
         <!--Local Mysql-->
         <dependency>
@@ -56,11 +56,11 @@
         </dependency>
 
         <!--Local member-api-->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-service-member-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.easy.cloud.web</groupId>-->
+<!--            <artifactId>easy-cloud-service-member-api</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <!--undertow容器-->
         <dependency>

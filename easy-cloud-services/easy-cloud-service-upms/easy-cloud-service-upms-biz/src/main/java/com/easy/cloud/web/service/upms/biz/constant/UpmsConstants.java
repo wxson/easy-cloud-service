@@ -9,6 +9,16 @@ package com.easy.cloud.web.service.upms.biz.constant;
 public interface UpmsConstants {
 
   /**
+   * 超管密码
+   */
+  String SUPER_ADMIN_PASSWORD = "easy_cloud";
+
+  /**
+   * 超管信息
+   */
+  String SUPER_ADMIN_INFO = "admin";
+
+  /**
    * 菜单树根目录ID
    */
   Long MENU_TREE_ROOT_ID = 0L;

@@ -25,7 +25,7 @@ public class RoleDTO implements IConverter {
   /**
    * 文档ID，必须保证角色ID的全局唯一性
    */
-  private String id;
+  private Long id;
   /**
    * 租户ID
    */

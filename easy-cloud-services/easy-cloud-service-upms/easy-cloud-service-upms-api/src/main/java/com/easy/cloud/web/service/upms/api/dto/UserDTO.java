@@ -25,7 +25,7 @@ public class UserDTO implements IConverter {
   /**
    * 文档ID
    */
-  private Long id;
+  private String id;
   /**
    * 租户ID,超管、管理、租户三个角色的租户ID都是自己本身 一个企业、一个单位或一所学校只能有一个租户
    */

@@ -12,9 +12,11 @@ import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.upms.api.dto.UserBindDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserLoginDTO;
+import com.easy.cloud.web.service.upms.api.enums.RoleEnum;
 import com.easy.cloud.web.service.upms.api.enums.SocialTypeEnum;
 import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsCacheConstants;
+import com.easy.cloud.web.service.upms.biz.constant.UpmsConstants;
 import com.easy.cloud.web.service.upms.biz.converter.UserConverter;
 import com.easy.cloud.web.service.upms.biz.domain.MenuDO;
 import com.easy.cloud.web.service.upms.biz.domain.RelationRolePermissionDO;
@@ -81,6 +83,27 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     applicationContext.getBeansOfType(ISocialService.class).values()
         .forEach(socialService -> socialServices.put(socialService.getType(), socialService));
+  }
+
+  @Override
+  public void init() {
+    if (userRepository.count() <= 0) {
+      // 创建超管
+      UserDTO admin = UserDTO.builder()
+          .userName(UpmsConstants.SUPER_ADMIN_INFO)
+          .account(UpmsConstants.SUPER_ADMIN_INFO)
+          .password(UpmsConstants.SUPER_ADMIN_PASSWORD)
+          .tenantId(UpmsConstants.SUPER_ADMIN_INFO)
+          .build();
+      this.save(admin);
+      // 绑定超管角色
+      RelationUserRoleDO re = RelationUserRoleDO.builder()
+          .userId(admin.getId())
+          .roleId(RoleEnum.ROLE_SUPER_ADMIN.getId())
+          .build();
+      relationUserRoleRepository.save(re);
+      log.info("init platform user content success!");
+    }
   }
 
   @Override

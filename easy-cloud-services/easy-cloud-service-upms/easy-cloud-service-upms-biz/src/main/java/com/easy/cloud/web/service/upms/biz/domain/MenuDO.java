@@ -40,15 +40,20 @@ public class MenuDO implements IConverter {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   /**
-   * 租户ID,超管、管理、租户三个角色的租户ID都是自己本身 一个企业、一个单位或一所学校只能有一个租户
-   */
-  @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '租户ID'")
-  private String tenantId;
-  /**
    * 菜单名称
    */
   @Column(columnDefinition = "VARCHAR(125) NOT NULL COMMENT '菜单名称'")
   private String name;
+  /**
+   * 路由
+   */
+  @Column(columnDefinition = "VARCHAR(255) COMMENT '路由'")
+  private String route;
+  /**
+   * 权限字符串
+   */
+  @Column(columnDefinition = "VARCHAR(255) COMMENT '权限字符串'")
+  private String permissionTag;
   /**
    * 路由路径
    */
@@ -64,17 +69,6 @@ public class MenuDO implements IConverter {
    */
   @Column(columnDefinition = "VARCHAR(64) COMMENT '路由图标'")
   private String icon;
-  /**
-   * 路由
-   */
-  @Column(columnDefinition = "VARCHAR(255) COMMENT '路由'")
-  private String route;
-  /**
-   * 权限字符串
-   */
-  @Column(columnDefinition = "VARCHAR(255) COMMENT '权限字符串'")
-  private String permissionTag;
-
   /**
    * 类型（M目录 C菜单 F按钮）
    */
