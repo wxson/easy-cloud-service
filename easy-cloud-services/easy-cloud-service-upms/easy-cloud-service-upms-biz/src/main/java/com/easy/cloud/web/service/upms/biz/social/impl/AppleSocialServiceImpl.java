@@ -10,7 +10,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.easy.cloud.web.component.core.exception.BusinessException;
-import com.easy.cloud.web.service.upms.biz.domain.db.UserDO;
+import com.easy.cloud.web.service.upms.api.enums.SocialTypeEnum;
+import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import com.easy.cloud.web.service.upms.biz.social.ISocialService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -31,6 +32,11 @@ import java.util.Objects;
 @Slf4j
 @Service
 public class AppleSocialServiceImpl implements ISocialService {
+
+    @Override
+    public SocialTypeEnum getType() {
+        return SocialTypeEnum.APPLE;
+    }
 
     @Override
     public UserDO loadSocialUser(String code) {

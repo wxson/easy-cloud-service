@@ -3,7 +3,8 @@ package com.easy.cloud.web.service.upms.biz.social.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.easy.cloud.web.component.core.exception.BusinessException;
-import com.easy.cloud.web.service.upms.biz.domain.db.UserDO;
+import com.easy.cloud.web.service.upms.api.enums.SocialTypeEnum;
+import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import com.easy.cloud.web.service.upms.biz.social.ISocialService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class QqSocialServiceImpl implements ISocialService {
+
+    @Override
+    public SocialTypeEnum getType() {
+        return SocialTypeEnum.QQ;
+    }
 
     @Override
     public UserDO loadSocialUser(String code) {

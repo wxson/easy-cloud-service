@@ -1,77 +1,139 @@
 package com.easy.cloud.web.service.upms.biz.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import cn.hutool.core.collection.CollUtil;
+import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
-import com.easy.cloud.web.component.security.util.SecurityUtils;
-import com.easy.cloud.web.service.upms.biz.domain.db.RoleDO;
-import com.easy.cloud.web.service.upms.biz.mapper.RoleMapper;
+import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
+import com.easy.cloud.web.service.upms.api.dto.RolePermissionDTO;
+import com.easy.cloud.web.service.upms.api.vo.RoleVO;
+import com.easy.cloud.web.service.upms.biz.converter.RoleConverter;
+import com.easy.cloud.web.service.upms.biz.domain.RelationRolePermissionDO;
+import com.easy.cloud.web.service.upms.biz.domain.RoleDO;
+import com.easy.cloud.web.service.upms.biz.repository.RelationRolePermissionRepository;
+import com.easy.cloud.web.service.upms.biz.repository.RoleRepository;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
-
 /**
- * Role 业务逻辑层
+ * Role 业务逻辑
  *
  * @author Fast Java
- * @date 2021-04-01
+ * @date 2023-08-03 14:32:52
  */
 @Slf4j
 @Service
-@AllArgsConstructor
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleDO> implements IRoleService {
+public class RoleServiceImpl implements IRoleService {
 
-    @Override
-    public RoleDO verifyBeforeSave(RoleDO roleDO) {
-        // 角色名称是否重复，角色创建只能有某些角色有权限，非所有用户,鉴别条件：角色名、租户ID
-        RoleDO existRoleDO = this.getOne(Wrappers.<RoleDO>lambdaQuery()
-                .eq(RoleDO::getTenantId, SecurityUtils.getAuthenticationUser().getTenantId())
-                .eq(RoleDO::getName, roleDO.getName()));
-        if (null != existRoleDO) {
-            throw new BusinessException("您所创建的角色名称已存在");
-        }
+  @Autowired
+  private RoleRepository roleRepository;
 
-        return roleDO;
+  @Autowired
+  private RelationRolePermissionRepository relationRolePermissionRepository;
+
+  @Override
+  @Transactional
+  public RoleVO save(RoleDTO roleDTO) {
+    // 转换成DO对象
+    RoleDO role = RoleConverter.convertTo(roleDTO);
+    // TODO 校验逻辑
+
+    // 存储
+    roleRepository.save(role);
+    // 转换对象
+    return RoleConverter.convertTo(role);
+  }
+
+  @Override
+  @Transactional
+  public RoleVO update(RoleDTO roleDTO) {
+    // 转换成DO对象
+    RoleDO role = RoleConverter.convertTo(roleDTO);
+    if (Objects.isNull(role.getId())) {
+      throw new RuntimeException("当前更新对象ID为空");
+    }
+    // TODO 业务逻辑校验
+
+    // 更新
+    roleRepository.save(role);
+    // 转换对象
+    return RoleConverter.convertTo(role);
+  }
+
+  @Override
+  @Transactional
+  public Boolean removeById(Long roleId) {
+    // TODO 业务逻辑校验
+
+    // 删除
+    RoleDO role = roleRepository.findById(roleId)
+        .orElseThrow(() -> new RuntimeException("当前数据不存在"));
+    role.setDeleted(DeletedEnum.DELETED);
+    // 更新操作
+    roleRepository.save(role);
+    return true;
+  }
+
+  @Override
+  public RoleVO detailById(Long roleId) {
+    // TODO 业务逻辑校验
+
+    // 删除
+    RoleDO role = roleRepository.findById(roleId)
+        .orElseThrow(() -> new RuntimeException("当前数据不存在"));
+    // 转换对象
+    return RoleConverter.convertTo(role);
+  }
+
+  @Override
+  public List<RoleVO> list() {
+    // 获取列表数据
+    List<RoleDO> roles = roleRepository.findAll();
+    return RoleConverter.convertTo(roles);
+  }
+
+  @Override
+  public Page<RoleVO> page(int page, int size) {
+    // 构建分页数据
+    Pageable pageable = PageRequest.of(page, size);
+    return RoleConverter.convertTo(roleRepository.findAll(pageable));
+  }
+
+  @Override
+  public RoleVO bindRolePermission(RolePermissionDTO rolePermissionDTO) {
+    // 根据ID获取用户信息
+    Optional<RoleDO> roleDOOptional = roleRepository.findById(rolePermissionDTO.getRoleId());
+    if (!roleDOOptional.isPresent()) {
+      throw new BusinessException("当前角色信息不存在");
     }
 
-    @Override
-    public void verifyAfterDelete(Serializable roleId) {
-        // 删除角色之后，移除该角色的所有相关权限
-        this.removeRelationRolePermissionByRoleId(roleId);
-        // 删除角色之后，移除该角色的所有相关用户
-        this.removeRelationUserRoleByRoleId(roleId);
+    // 获取菜单列表
+    List<Long> menuIds = rolePermissionDTO.getMenuIds();
+    if (CollUtil.isEmpty(menuIds)) {
+      return roleDOOptional.get().convertTo(RoleVO.class);
     }
 
-    @Override
-    public void initDefaultConfiguration() {
-//        MongoIterable<String> mongoIterable = this.getMongoTemplate().getDb().listCollectionNames();
-//        ArrayList<String> mongoTableNameList = CollUtil.newArrayList(mongoIterable);
-//        Document annotation = RoleDO.class.getAnnotation(Document.class);
-//        if (Objects.nonNull(annotation) && !mongoTableNameList.contains(annotation.value())) {
-//            log.info("-------------初始化系统默认角色信息表--------------");
-//            // 初始化超级管理员角色,最顶级角色
-//            RoleDO superAdminRoleDO = this.save(RoleDO.builder()
-//                    .id(RoleEnum.ROLE_SUPER_ADMIN.getId())
-//                    .name(RoleEnum.ROLE_SUPER_ADMIN.getDescribe())
-//                    .tenantId("system_default")
-//                    .creatorAt("system_default")
-//                    .build());
-//            // 初始化其他角色
-//            for (RoleEnum roleEnum : RoleEnum.values()) {
-//                if (RoleEnum.ROLE_SUPER_ADMIN == roleEnum) {
-//                    continue;
-//                }
-//
-//                this.save(RoleDO.builder()
-//                        .id(roleEnum.getId())
-//                        .name(roleEnum.getDescribe())
-//                        .tenantId(superAdminRoleDO.getTenantId())
-//                        .creatorAt(superAdminRoleDO.getId())
-//                        .build());
-//            }
-//        }
-    }
+    // 移除旧数据
+    relationRolePermissionRepository.deleteByRoleId(rolePermissionDTO.getRoleId());
+    // 添加新数据
+    List<RelationRolePermissionDO> relationRolePermissions = menuIds.stream().map(
+        menuId -> RelationRolePermissionDO.builder().roleId(rolePermissionDTO.getRoleId())
+            .menuId(menuId).build())
+        .collect(Collectors.toList());
+    // 批量存储
+    relationRolePermissionRepository.saveAll(relationRolePermissions);
+    RoleDO roleDO = roleDOOptional.get();
+    RoleVO roleVO = roleDO.convertTo(RoleVO.class);
+    roleVO.setMenuIds(menuIds);
+    return roleVO;
+  }
 }

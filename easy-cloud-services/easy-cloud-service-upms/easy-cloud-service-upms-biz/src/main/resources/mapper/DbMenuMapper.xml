@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.easy.cloud.web.service.upms.biz.mapper.MenuMapper">
+<mapper namespace="com.easy.cloud.web.service.upms.biz.v1.mapper.MenuMapper">
 
-    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.upms.biz.domain.db.MenuDO">
+    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.upms.biz.v1.domain.db.MenuDO">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="tenantId" column="tenant_id" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>

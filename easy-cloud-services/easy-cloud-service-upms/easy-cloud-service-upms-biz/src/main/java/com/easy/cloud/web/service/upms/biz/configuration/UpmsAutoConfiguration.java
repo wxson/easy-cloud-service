@@ -1,12 +1,11 @@
 package com.easy.cloud.web.service.upms.biz.configuration;
 
-import com.easy.cloud.web.service.upms.biz.service.IMenuService;
-import com.easy.cloud.web.service.upms.biz.service.IRoleService;
+import com.easy.cloud.web.service.upms.biz.v1.service.IMenuService;
+import com.easy.cloud.web.service.upms.biz.v1.service.IRoleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -29,8 +28,8 @@ public class UpmsAutoConfiguration {
     @EventListener(ApplicationPreparedEvent.class)
     public void initDynamicRouteCache() {
         // 初始化菜单配置
-        menuService.initDefaultConfiguration();
+        menuService.init();
         // 初始化角色配置
-        roleService.initDefaultConfiguration();
+        roleService.init();
     }
 }

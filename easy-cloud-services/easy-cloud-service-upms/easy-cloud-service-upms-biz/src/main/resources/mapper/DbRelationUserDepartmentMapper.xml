@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.easy.cloud.web.service.upms.biz.mapper.RelationUserDepartmentMapper">
+<mapper namespace="com.easy.cloud.web.service.upms.biz.v1.mapper.RelationUserDepartmentMapper">
 
-    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.upms.biz.domain.db.RelationUserDepartmentDO">
+    <resultMap id="BaseResultMap" type="com.easy.cloud.web.service.upms.biz.v1.domain.db.RelationUserDepartmentDO">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="departmentId" column="department_id" jdbcType="INTEGER"/>
             <result property="userId" column="user_id" jdbcType="INTEGER"/>

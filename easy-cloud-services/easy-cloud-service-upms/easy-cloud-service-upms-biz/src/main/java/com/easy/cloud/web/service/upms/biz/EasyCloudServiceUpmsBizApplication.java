@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableEasyCloudFeignClients
 @EnableEasyCloudResourceServer
-@MapperScan("com.easy.cloud.web.service.upms.biz.mapper")
+@MapperScan("com.easy.cloud.web.service.upms.biz.v1.mapper")
 public class EasyCloudServiceUpmsBizApplication {
 
     public static void main(String[] args) {
