@@ -45,8 +45,8 @@
         <!--Hutool-JSON-->
         <dependency>
             <groupId>cn.hutool</groupId>
-            <artifactId>hutool-json</artifactId>
-            <version>5.5.8</version>
+            <artifactId>hutool-all</artifactId>
+            <version>5.7.6</version>
             <scope>compile</scope>
         </dependency>
 

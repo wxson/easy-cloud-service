@@ -1,4 +1,4 @@
-package com.easy.cloud.web.component.security.constants;
+package com.easy.cloud.web.component.core.constants;
 
 /**
  * @author GR
