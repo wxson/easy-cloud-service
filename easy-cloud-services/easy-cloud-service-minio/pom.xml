@@ -12,6 +12,11 @@
     <name>easy-cloud-service-minio</name>
     <description>Demo project for Spring Boot</description>
 
+    <modules>
+        <module>easy-cloud-service-minio-api</module>
+        <module>easy-cloud-service-minio-biz</module>
+    </modules>
+
     <dependencies>
 
     </dependencies>
