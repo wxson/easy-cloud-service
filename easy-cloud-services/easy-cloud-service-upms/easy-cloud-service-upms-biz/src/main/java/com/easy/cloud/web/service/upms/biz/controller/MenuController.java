@@ -2,6 +2,8 @@ package com.easy.cloud.web.service.upms.biz.controller;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.easy.cloud.web.component.core.response.HttpResult;
+import com.easy.cloud.web.component.log.annotation.OperationLog;
+import com.easy.cloud.web.component.log.annotation.OperationLog.Action;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
@@ -46,6 +48,7 @@ public class MenuController {
    */
   @PostMapping(value = "save")
   @PreAuthorize("@pms.hasPermission('menu_add')")
+  @OperationLog(value = "新增菜单", action = Action.ADD)
   public Object save(@Validated @RequestBody MenuDTO menuDTO) {
     return HttpResult.ok(menuService.save(menuDTO));
   }
@@ -58,6 +61,7 @@ public class MenuController {
    */
   @PostMapping(value = "update")
   @PreAuthorize("@pms.hasPermission('menu_edit')")
+  @OperationLog(value = "更新菜单", action = Action.UPDATE)
   public Object update(@Validated @RequestBody MenuDTO menuDTO) {
     return HttpResult.ok(menuService.update(menuDTO));
   }
@@ -70,6 +74,7 @@ public class MenuController {
    */
   @GetMapping(value = "remove/{menuId}")
   @PreAuthorize("@pms.hasPermission('menu_delete')")
+  @OperationLog(value = "删除菜单", action = Action.DELETE)
   public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long menuId) {
     return HttpResult.ok(menuService.removeById(menuId));
   }
@@ -81,6 +86,7 @@ public class MenuController {
    * @return 详情数据
    */
   @GetMapping(value = "detail/{menuId}")
+  @OperationLog(value = "菜单详情", action = Action.FIND)
   public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long menuId) {
     return HttpResult.ok(menuService.detailById(menuId));
   }

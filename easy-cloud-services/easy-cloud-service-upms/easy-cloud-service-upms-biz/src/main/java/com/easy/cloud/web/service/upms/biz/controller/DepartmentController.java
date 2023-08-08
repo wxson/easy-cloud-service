@@ -1,6 +1,8 @@
 package com.easy.cloud.web.service.upms.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
+import com.easy.cloud.web.component.log.annotation.OperationLog;
+import com.easy.cloud.web.component.log.annotation.OperationLog.Action;
 import com.easy.cloud.web.service.upms.api.dto.DepartmentDTO;
 import com.easy.cloud.web.service.upms.biz.service.IDepartmentService;
 import javax.validation.constraints.NotNull;
@@ -38,6 +40,7 @@ public class DepartmentController {
    */
   @PostMapping(value = "save")
   @PreAuthorize("@pms.hasPermission('department_add')")
+  @OperationLog(value = "新增部门", action = Action.ADD)
   public Object save(@Validated @RequestBody DepartmentDTO departmentDTO) {
     return HttpResult.ok(departmentService.save(departmentDTO));
   }
@@ -50,6 +53,7 @@ public class DepartmentController {
    */
   @PostMapping(value = "update")
   @PreAuthorize("@pms.hasPermission('department_edit')")
+  @OperationLog(value = "更新部门", action = Action.UPDATE)
   public Object update(@Validated @RequestBody DepartmentDTO departmentDTO) {
     return HttpResult.ok(departmentService.update(departmentDTO));
   }
@@ -62,6 +66,7 @@ public class DepartmentController {
    */
   @GetMapping(value = "remove/{departmentId}")
   @PreAuthorize("@pms.hasPermission('department_delete')")
+  @OperationLog(value = "移除部门", action = Action.DELETE)
   public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long departmentId) {
     return HttpResult.ok(departmentService.removeById(departmentId));
   }
@@ -73,6 +78,7 @@ public class DepartmentController {
    * @return 详情数据
    */
   @GetMapping(value = "detail/{departmentId}")
+  @OperationLog(value = "部门详情", action = Action.FIND)
   public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long departmentId) {
     return HttpResult.ok(departmentService.detailById(departmentId));
   }
