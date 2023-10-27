@@ -1,6 +1,5 @@
 package com.easy.cloud.web.module.sms.domain.dto;
 
-import com.easy.cloud.web.component.core.service.IConvertProxy;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;

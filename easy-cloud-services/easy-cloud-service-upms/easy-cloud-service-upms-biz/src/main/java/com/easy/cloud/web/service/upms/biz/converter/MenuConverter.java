@@ -1,8 +1,9 @@
 package com.easy.cloud.web.service.upms.biz.converter;
 
-import com.easy.cloud.web.service.upms.biz.domain.MenuDO;
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.vo.MenuVO;
+import com.easy.cloud.web.service.upms.biz.domain.MenuDO;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -22,9 +23,9 @@ public class MenuConverter {
    * @return com.easy.cloud.web.service.upms.biz.domain.db.MenuDO
    */
   public static MenuDO convertTo(MenuDTO menu) {
-    return MenuDO.builder()
-        .id(menu.getId())
-        .build();
+    MenuDO menuDO = MenuDO.builder().build();
+    BeanUtils.copyProperties(menu, menuDO, true);
+    return menuDO;
   }
 
   /**
@@ -34,12 +35,9 @@ public class MenuConverter {
    * @return com.easy.cloud.web.service.upms.api.vo.MenuVO
    */
   public static MenuVO convertTo(MenuDO menu) {
-    return MenuVO.builder()
-        .id(menu.getId())
-        .createBy(menu.getCreateBy())
-        .createAt(menu.getCreateAt())
-        .updateAt(menu.getUpdateAt())
-        .build();
+    MenuVO menuVO = MenuVO.builder().build();
+    BeanUtils.copyProperties(menu, menuVO, true);
+    return menuVO;
   }
 
   /**

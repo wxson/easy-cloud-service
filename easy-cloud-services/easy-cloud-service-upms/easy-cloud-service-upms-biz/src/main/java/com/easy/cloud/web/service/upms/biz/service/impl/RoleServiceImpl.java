@@ -1,17 +1,19 @@
 package com.easy.cloud.web.service.upms.biz.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
-import com.easy.cloud.web.service.upms.api.dto.RolePermissionDTO;
+import com.easy.cloud.web.service.upms.api.dto.RoleMenuDTO;
 import com.easy.cloud.web.service.upms.api.enums.RoleEnum;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
+import com.easy.cloud.web.service.upms.biz.constant.UpmsCacheConstants;
 import com.easy.cloud.web.service.upms.biz.converter.RoleConverter;
-import com.easy.cloud.web.service.upms.biz.domain.RelationRolePermissionDO;
 import com.easy.cloud.web.service.upms.biz.domain.RoleDO;
-import com.easy.cloud.web.service.upms.biz.repository.RelationRolePermissionRepository;
+import com.easy.cloud.web.service.upms.biz.domain.RoleMenuDO;
+import com.easy.cloud.web.service.upms.biz.repository.RoleMenuRepository;
 import com.easy.cloud.web.service.upms.biz.repository.RoleRepository;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
 import java.util.Arrays;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,17 +45,19 @@ public class RoleServiceImpl implements IRoleService {
   private RoleRepository roleRepository;
 
   @Autowired
-  private RelationRolePermissionRepository relationRolePermissionRepository;
+  private RoleMenuRepository roleMenuRepository;
 
   @Override
+  @Transactional(rollbackOn = Exception.class)
   public void init() {
     // 未初始化过数据
     if (roleRepository.count() <= 0) {
       List<RoleDO> roleDOS = Arrays.stream(RoleEnum.values())
           .map(roleEnum -> RoleDO.builder()
-              .id(roleEnum.getId())
               .code(roleEnum.getCode())
-              .describe(roleEnum.getDesc())
+              .remark(roleEnum.getDesc())
+              .name(roleEnum.getDesc())
+              .tenantId(GlobalCommonConstants.DEFAULT_TENANT_ID_VALUE)
               .deleted(DeletedEnum.UN_DELETED)
               .status(StatusEnum.START_STATUS)
               .build()).collect(Collectors.toList());
@@ -76,6 +82,7 @@ public class RoleServiceImpl implements IRoleService {
 
   @Override
   @Transactional
+  @CacheEvict(value = UpmsCacheConstants.SUPER_ROLE_DETAILS, allEntries = true)
   public RoleVO update(RoleDTO roleDTO) {
     // 转换成DO对象
     RoleDO role = RoleConverter.convertTo(roleDTO);
@@ -92,7 +99,8 @@ public class RoleServiceImpl implements IRoleService {
 
   @Override
   @Transactional
-  public Boolean removeById(Long roleId) {
+  @CacheEvict(value = UpmsCacheConstants.SUPER_ROLE_DETAILS, allEntries = true)
+  public Boolean removeById(String roleId) {
     // TODO 业务逻辑校验
 
     // 删除
@@ -105,7 +113,7 @@ public class RoleServiceImpl implements IRoleService {
   }
 
   @Override
-  public RoleVO detailById(Long roleId) {
+  public RoleVO detailById(String roleId) {
     // TODO 业务逻辑校验
 
     // 删除
@@ -116,10 +124,33 @@ public class RoleServiceImpl implements IRoleService {
   }
 
   @Override
+  @Cacheable(value = UpmsCacheConstants.SUPER_ROLE_DETAILS, key = "#code")
+  public RoleVO findFirstByCode(String code) {
+    return RoleConverter
+        .convertTo(roleRepository.findFirstByCodeAndDeleted(code, DeletedEnum.UN_DELETED));
+  }
+
+  @Override
   public List<RoleVO> list() {
     // 获取列表数据
     List<RoleDO> roles = roleRepository.findAll();
     return RoleConverter.convertTo(roles);
+  }
+
+  @Override
+  public List<RoleVO> findAllByIds(List<String> roleIds) {
+    return roleRepository.findAllById(roleIds)
+        .stream()
+        .map(RoleConverter::convertTo)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<RoleVO> findAllByCodes(List<String> roleCodes) {
+    return roleRepository.findAllByCodeInAndDeleted(roleCodes, DeletedEnum.UN_DELETED)
+        .stream()
+        .map(RoleConverter::convertTo)
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -130,28 +161,28 @@ public class RoleServiceImpl implements IRoleService {
   }
 
   @Override
-  public RoleVO bindRolePermission(RolePermissionDTO rolePermissionDTO) {
+  public RoleVO bindRoleMenu(RoleMenuDTO roleMenuDTO) {
     // 根据ID获取用户信息
-    Optional<RoleDO> roleDOOptional = roleRepository.findById(rolePermissionDTO.getRoleId());
+    Optional<RoleDO> roleDOOptional = roleRepository.findById(roleMenuDTO.getRoleId());
     if (!roleDOOptional.isPresent()) {
       throw new BusinessException("当前角色信息不存在");
     }
 
     // 获取菜单列表
-    List<Long> menuIds = rolePermissionDTO.getMenuIds();
+    List<String> menuIds = roleMenuDTO.getMenuIds();
     if (CollUtil.isEmpty(menuIds)) {
       return roleDOOptional.get().convertTo(RoleVO.class);
     }
 
     // 移除旧数据
-    relationRolePermissionRepository.deleteByRoleId(rolePermissionDTO.getRoleId());
+    roleMenuRepository.deleteByRoleId(roleMenuDTO.getRoleId());
     // 添加新数据
-    List<RelationRolePermissionDO> relationRolePermissions = menuIds.stream().map(
-        menuId -> RelationRolePermissionDO.builder().roleId(rolePermissionDTO.getRoleId())
-            .menuId(menuId).build())
+    List<RoleMenuDO> relationRolePermissions = menuIds.stream().map(
+        menuId -> RoleMenuDO.builder()
+            .roleId(roleMenuDTO.getRoleId()).menuId(menuId).build())
         .collect(Collectors.toList());
     // 批量存储
-    relationRolePermissionRepository.saveAll(relationRolePermissions);
+    roleMenuRepository.saveAll(relationRolePermissions);
     RoleDO roleDO = roleDOOptional.get();
     RoleVO roleVO = roleDO.convertTo(RoleVO.class);
     roleVO.setMenuIds(menuIds);

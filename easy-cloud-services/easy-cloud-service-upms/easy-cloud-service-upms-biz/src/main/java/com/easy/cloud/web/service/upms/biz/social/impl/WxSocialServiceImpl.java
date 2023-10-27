@@ -5,6 +5,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.easy.cloud.web.component.core.exception.BusinessException;
+import com.easy.cloud.web.service.upms.api.enums.GenderEnum;
 import com.easy.cloud.web.service.upms.api.enums.SocialTypeEnum;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import com.easy.cloud.web.service.upms.biz.social.ISocialService;
@@ -60,7 +61,7 @@ public class WxSocialServiceImpl implements ISocialService {
         .avatar(userResponseJsonObject.getStr("headimgurl"))
         .province(userResponseJsonObject.getStr("province"))
         .city(userResponseJsonObject.getStr("city"))
-        .sex(userResponseJsonObject.getInt("sex"))
+        .gender(GenderEnum.getInstance(userResponseJsonObject.getInt("sex")))
         .build();
   }
 }

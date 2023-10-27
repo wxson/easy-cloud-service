@@ -1,8 +1,8 @@
 package com.easy.cloud.web.service.upms.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.component.log.annotation.OperationLog;
-import com.easy.cloud.web.component.log.annotation.OperationLog.Action;
+import com.easy.cloud.web.component.log.annotation.SysLog;
+import com.easy.cloud.web.component.log.annotation.SysLog.Action;
 import com.easy.cloud.web.component.security.annotation.Inner;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
@@ -48,7 +48,7 @@ public class UserController {
    */
   @PostMapping(value = "save")
   @PreAuthorize("@pms.hasPermission('user_add')")
-  @OperationLog(value = "新增用户", action = Action.ADD)
+  @SysLog(value = "新增用户", action = Action.ADD)
   public Object save(@Validated @RequestBody UserDTO userDTO) {
     return HttpResult.ok(userService.save(userDTO));
   }
@@ -61,7 +61,7 @@ public class UserController {
    */
   @PostMapping(value = "update")
   @PreAuthorize("@pms.hasPermission('user_edit')")
-  @OperationLog(value = "更新用户", action = Action.UPDATE)
+  @SysLog(value = "更新用户", action = Action.UPDATE)
   public Object update(@Validated @RequestBody UserDTO userDTO) {
     return HttpResult.ok(userService.update(userDTO));
   }
@@ -74,7 +74,7 @@ public class UserController {
    */
   @GetMapping(value = "remove/{userId}")
   @PreAuthorize("@pms.hasPermission('user_delete')")
-  @OperationLog(value = "删除用户", action = Action.DELETE)
+  @SysLog(value = "删除用户", action = Action.DELETE)
   public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") String userId) {
     return HttpResult.ok(userService.removeById(userId));
   }
@@ -86,7 +86,7 @@ public class UserController {
    * @return 详情数据
    */
   @GetMapping(value = "detail/{userId}")
-  @OperationLog(value = "获取用户详情", action = Action.FIND)
+  @SysLog(value = "获取用户详情", action = Action.FIND)
   public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") String userId) {
     return HttpResult.ok(userService.detailById(userId));
   }
@@ -124,7 +124,7 @@ public class UserController {
   @Inner
   @GetMapping("detail/{userName}")
   @ApiOperation(value = "根据用户名获取用户详情")
-  @OperationLog(value = "根据用户名获取用户详情", action = Action.FIND)
+  @SysLog(value = "根据用户名获取用户详情", action = Action.FIND)
   public HttpResult<UserVO> loadUserByUsername(@PathVariable @ApiParam("用户账号") String userName) {
     return HttpResult.ok(userService.loadUserByUsername(userName));
   }
@@ -151,7 +151,7 @@ public class UserController {
    * @return success/false
    */
   @PostMapping("/bind/role")
-  @OperationLog(value = "绑定用户角色", action = Action.UPDATE)
+  @SysLog(value = "绑定用户角色", action = Action.UPDATE)
   public HttpResult<UserVO> bindUserRole(@RequestBody UserBindDTO userBindDTO) {
     AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
     userBindDTO.setId(authenticationUser.getId());
@@ -167,7 +167,7 @@ public class UserController {
    */
   @Inner
   @PostMapping("/register")
-  @OperationLog(value = "注册用户", action = Action.ADD)
+  @SysLog(value = "注册用户", action = Action.ADD)
   public HttpResult<UserVO> registerUser(@RequestBody UserDTO userDto) {
     UserVO userVO = userService.registerUser(userDto);
     return HttpResult.ok(userVO);
@@ -182,7 +182,7 @@ public class UserController {
    */
   @Inner
   @PostMapping("/lock/{userId}")
-  @OperationLog(value = "锁定指定用户", action = Action.UPDATE)
+  @SysLog(value = "锁定指定用户", action = Action.UPDATE)
   public HttpResult<UserVO> lockUser(@PathVariable String userId) {
     return HttpResult.ok(userService.lockUser(userId));
   }
@@ -194,7 +194,7 @@ public class UserController {
    * @return HttpResult
    */
   @PostMapping("/password")
-  @OperationLog(value = "修改用户密码", action = Action.UPDATE)
+  @SysLog(value = "修改用户密码", action = Action.UPDATE)
   public HttpResult<Boolean> changePassword(@RequestBody UserBindDTO userBindDTO) {
     AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
     userBindDTO.setId(authenticationUser.getId());
@@ -227,7 +227,7 @@ public class UserController {
    */
   @PostMapping("certification")
   @ApiOperation(value = "实名认证")
-  @OperationLog(value = "实名认证", action = Action.UPDATE)
+  @SysLog(value = "实名认证", action = Action.UPDATE)
   public HttpResult<Boolean> certification(@RequestBody UserBindDTO userBindDTO) {
     userService.certification(userBindDTO);
     return HttpResult.ok(true);
@@ -241,7 +241,7 @@ public class UserController {
    */
   @PostMapping("bind/tel")
   @ApiOperation(value = "绑定用户电话")
-  @OperationLog(value = "绑定用户电话", action = Action.UPDATE)
+  @SysLog(value = "绑定用户电话", action = Action.UPDATE)
   public HttpResult<Boolean> bindUserTel(@RequestBody UserBindDTO userBindDTO) {
     userService.bindUserTel(userBindDTO);
     return HttpResult.ok(true);

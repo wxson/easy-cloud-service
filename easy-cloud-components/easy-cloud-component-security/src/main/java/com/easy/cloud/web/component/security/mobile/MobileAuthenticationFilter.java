@@ -1,7 +1,7 @@
 package com.easy.cloud.web.component.security.mobile;
 
 import cn.hutool.core.util.StrUtil;
-import com.easy.cloud.web.component.security.constants.SecurityConstants;
+import com.easy.cloud.web.component.core.constants.SecurityConstants;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;

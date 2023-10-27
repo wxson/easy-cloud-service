@@ -2,7 +2,9 @@ package com.easy.cloud.web.service.upms.api.vo;
 
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
-import java.util.List;
+import com.easy.cloud.web.service.upms.api.enums.GenderEnum;
+import java.util.Date;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -69,7 +71,7 @@ public class UserVO {
   /**
    * 性别： 0 未知的性别 1 男 2 女 9 未说明的性别
    */
-  private Integer sex;
+  private GenderEnum gender;
   /**
    * 用户名
    */
@@ -105,7 +107,7 @@ public class UserVO {
   /**
    * 创建时间
    */
-  private String createAt;
+  private Date createAt;
   /**
    * 更新用户
    */
@@ -113,15 +115,15 @@ public class UserVO {
   /**
    * 更新时间
    */
-  private String updateAt;
+  private Date updateAt;
 
   /**
    * 角色ID
    */
-  private List<Long> roleIds;
+  private Set<String> roles;
 
   /**
-   * 菜单权限标识
+   * 菜单权限标识：此权限仅限于按钮权限
    */
-  private List<String> permissionTags;
+  private Set<String> permissions;
 }

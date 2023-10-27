@@ -1,6 +1,5 @@
 package com.easy.cloud.web.service.order.biz.domain.vo;
 
-import com.easy.cloud.web.component.core.service.IConvertProxy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

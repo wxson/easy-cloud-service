@@ -1,6 +1,6 @@
 package com.easy.cloud.web.module.online.constants;
 
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 
 /**
  * 在线常量
@@ -13,7 +13,7 @@ public class OnlineConstants {
     /**
      * 在线前缀
      */
-    public static final String ONLINE_PREFIX = GlobalConstants.REDIS_PREFIX_KEY + "online:";
+    public static final String ONLINE_PREFIX = GlobalCommonConstants.REDIS_PREFIX_KEY + "online:";
 
     /**
      * 在线数量key

@@ -38,7 +38,7 @@ public interface IMenuService extends IInitService {
    * @param menuId 对象ID
    * @return java.lang.Boolean
    */
-  Boolean removeById(Long menuId);
+  Boolean removeById(String menuId);
 
   /**
    * 根据ID获取详情
@@ -46,7 +46,7 @@ public interface IMenuService extends IInitService {
    * @param menuId 对象ID
    * @return java.lang.Boolean
    */
-  MenuVO detailById(Long menuId);
+  MenuVO detailById(String menuId);
 
   /**
    * 根据条件获取列表数据
@@ -54,6 +54,22 @@ public interface IMenuService extends IInitService {
    * @return List<com.easy.cloud.web.service.upms.api.vo.MenuVO> 返回列表数据
    */
   List<MenuVO> list();
+
+  /**
+   * 根据ID获取菜单列表
+   *
+   * @param menuIds
+   * @return
+   */
+  List<MenuVO> findAllByIds(List<String> menuIds);
+
+  /**
+   * 获取用户权限：此权限仅限于按钮权限
+   *
+   * @param menuIds 菜单ID
+   * @return
+   */
+  List<String> findUserPermissions(List<String> menuIds);
 
   /**
    * 根据条件获取分页数据
@@ -67,10 +83,10 @@ public interface IMenuService extends IInitService {
   /**
    * 获取用户菜单树
    *
-   * @param type      菜单类型
-   * @param parentId  菜单根目录
-   * @param userRoles 用户角色
+   * @param type     菜单类型
+   * @param parentId 菜单根目录
+   * @param channels 用户角色编码
    * @return
    */
-  List<Tree<Long>> findUserMenus(MenuTypeEnum type, Long parentId, List<Long> userRoles);
+  List<Tree<String>> findUserMenus(MenuTypeEnum type, String parentId, List<String> channels);
 }

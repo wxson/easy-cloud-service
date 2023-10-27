@@ -1,7 +1,5 @@
 package com.easy.cloud.web.service.member.biz.controller;
 
-import com.easy.cloud.web.component.mysql.controller.BaseController;
-import com.easy.cloud.web.component.mysql.service.IRepositoryService;
 import com.easy.cloud.web.service.member.biz.domain.db.VipRechargeDO;
 import com.easy.cloud.web.service.member.biz.domain.dto.VipRechargeDTO;
 import com.easy.cloud.web.service.member.biz.domain.query.VipRechargeQuery;

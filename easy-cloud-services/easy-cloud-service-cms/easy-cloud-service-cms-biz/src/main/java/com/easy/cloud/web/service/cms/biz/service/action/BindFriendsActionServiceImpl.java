@@ -2,12 +2,10 @@ package com.easy.cloud.web.service.cms.biz.service.action;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.biz.domain.db.ActionAwardDO;
 import com.easy.cloud.web.service.cms.biz.domain.db.GoodsDO;
-import com.easy.cloud.web.service.cms.biz.domain.db.UserFriendsDO;
 import com.easy.cloud.web.service.cms.biz.domain.dto.ActionDTO;
 import com.easy.cloud.web.service.cms.biz.service.IActionAwardService;
 import com.easy.cloud.web.service.cms.biz.service.IActionService;

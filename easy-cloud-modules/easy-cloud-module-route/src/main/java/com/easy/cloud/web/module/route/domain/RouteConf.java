@@ -1,14 +1,16 @@
 package com.easy.cloud.web.module.route.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.easy.cloud.web.component.core.service.IConvertProxy;
+import java.time.LocalDateTime;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * 路由信息表
@@ -16,71 +18,75 @@ import java.time.LocalDateTime;
  * @author GR
  * @TableName route_conf
  */
+@Entity
 @Data
+@Builder
 @Accessors(chain = true)
-@NoArgsConstructor(staticName = "build")
-@TableName("route_conf")
-public class RouteConf implements IConvertProxy {
-    /**
-     * 文档ID
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private String id;
-    /**
-     * 断言，匹配，格式为JSON 字符串数组
-     * 如：Path=/goods/**；网关自动匹配当前请求path，若包含/goods，则会自动匹配到mall-goods服务，并uri为lb://mall-goods的服务
-     */
-    private String predicates;
-    /**
-     * 路由ID，可自定义，不写系统会自动按一定算法进行赋值
-     */
-    private String routeId;
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "route_conf")
+public class RouteConf {
 
-    /**
-     * 过滤规则
-     */
-    private String filters;
+  /**
+   * 文档ID
+   */
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private String id;
+  /**
+   * 断言，匹配，格式为JSON 字符串数组 如：Path=/goods/**；网关自动匹配当前请求path，若包含/goods，则会自动匹配到mall-goods服务，并uri为lb://mall-goods的服务
+   */
+  private String predicates;
+  /**
+   * 路由ID，可自定义，不写系统会自动按一定算法进行赋值
+   */
+  private String routeId;
 
-    /**
-     * 断言，匹配，格式为JSON 字符串数组
-     */
-    private String uri;
+  /**
+   * 过滤规则
+   */
+  private String filters;
 
-    /**
-     * 断言，匹配，格式为JSON 字符串数组
-     */
-    private String routeName;
+  /**
+   * 断言，匹配，格式为JSON 字符串数组
+   */
+  private String uri;
 
-    /**
-     * 排序
-     */
-    private Integer sort = 0;
+  /**
+   * 断言，匹配，格式为JSON 字符串数组
+   */
+  private String routeName;
 
-    /**
-     * 状态 0 启用 1 禁用
-     */
-    private Integer status = 0;
+  /**
+   * 排序
+   */
+  private Integer sort = 0;
 
-    /**
-     * 是否删除 0 未删除 1 已删除
-     */
-    private Integer deleted = 0;
+  /**
+   * 状态 0 启用 1 禁用
+   */
+  private Integer status = 0;
 
-    /**
-     * 创建用户
-     */
-    private String creatorAt;
+  /**
+   * 是否删除 0 未删除 1 已删除
+   */
+  private Integer deleted = 0;
 
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createAt;
+  /**
+   * 创建用户
+   */
+  private String creatorAt;
 
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateAt;
+  /**
+   * 创建时间
+   */
+  private LocalDateTime createAt;
 
-    private static final long serialVersionUID = 1L;
+  /**
+   * 更新时间
+   */
+  private LocalDateTime updateAt;
+
+  private static final long serialVersionUID = 1L;
 
 }

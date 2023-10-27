@@ -1,8 +1,8 @@
 package com.easy.cloud.web.service.upms.biz.converter;
 
-import com.easy.cloud.web.service.upms.biz.domain.RoleDO;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
+import com.easy.cloud.web.service.upms.biz.domain.RoleDO;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ public class RoleConverter {
         .deleted(role.getDeleted())
         .tenantId(role.getTenantId())
         .name(role.getName())
-        .describe(role.getDescribe())
+        .remark(role.getRemark())
         .status(role.getStatus())
         .build();
   }
@@ -47,7 +47,7 @@ public class RoleConverter {
         .deleted(role.getDeleted())
         .tenantId(role.getTenantId())
         .name(role.getName())
-        .describe(role.getDescribe())
+        .remark(role.getRemark())
         .status(role.getStatus())
         .build();
   }

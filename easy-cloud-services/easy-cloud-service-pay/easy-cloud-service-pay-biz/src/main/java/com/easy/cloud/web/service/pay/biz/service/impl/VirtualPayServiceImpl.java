@@ -1,6 +1,5 @@
 package com.easy.cloud.web.service.pay.biz.service.impl;
 
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.api.domain.vo.GoodsVO;

@@ -1,7 +1,5 @@
 package com.easy.cloud.web.service.upms.api.dto;
 
-import com.easy.cloud.web.component.core.enums.DeletedEnum;
-import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.service.IConverter;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
 import lombok.AllArgsConstructor;
@@ -26,64 +24,77 @@ public class MenuDTO implements IConverter {
   /**
    * 文档ID
    */
-  private Long id;
+  private String id;
   /**
    * 租户ID,超管、管理、租户三个角色的租户ID都是自己本身 一个企业、一个单位或一所学校只能有一个租户
    */
   private String tenantId;
-  /**
-   * 路由名称
-   */
-  private String name;
-  /**
-   * 路由路径
-   */
-  private String path;
-  /**
-   * 路由父级ID
-   */
-  private String parentId;
-  /**
-   * 路由图标
-   */
-  private String icon;
-  /**
-   * 路由
-   */
-  private String route;
-  /**
-   * 权限字符串
-   */
-  private String permissionTag;
 
   /**
    * 类型（M目录 C菜单 F按钮）
    */
   private MenuTypeEnum type;
+
   /**
-   * 是否隐藏 0 是 1 否
+   * 路由父级ID
    */
-  private Integer visible;
+  private String parentId;
+
   /**
-   * _blank|_self|_top|_parent
+   * 路由图标
    */
-  private String target;
+  private String icon;
+
   /**
-   * 保持连接 0 是 1 否
+   * 路由路径
    */
-  private Integer keepAlive;
+  private String path;
+
   /**
-   * 是否隐藏头信息 0 是 1 否
+   * 菜单名称
    */
-  private Integer hiddenHeader;
-  /**
-   * 组件名称，用于加载view
-   */
-  private String tag;
+  private String name;
+
   /**
    * 组件名称，用于加载layout
    */
   private String component;
+
+  /**
+   * 菜单搜索名称
+   */
+  private String title;
+
+  /**
+   * 是否超链接菜单
+   */
+  private Boolean isLink;
+
+  /**
+   * 链接地址
+   */
+  private String linkUrl;
+
+  /**
+   * 是否隐藏
+   */
+  private Boolean isHidden;
+
+  /**
+   * 是否缓存组件状态
+   */
+  private Boolean isKeepAlive;
+
+  /**
+   * 是否固定在 tagsView 栏上
+   */
+  private Boolean isAffix;
+
+  /**
+   * 是否内嵌窗口，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
+   */
+  private Boolean isIframe;
+
   /**
    * 重定向路由
    */
@@ -92,14 +103,6 @@ public class MenuDTO implements IConverter {
    * 排序字段，数值越小越排靠前
    */
   private Integer sort;
-  /**
-   * 状态 0 启用 1 禁用
-   */
-  private StatusEnum status;
-  /**
-   * 是否删除 0 未删除 1 已删除
-   */
-  private DeletedEnum deleted;
   /**
    * 创建用户
    */

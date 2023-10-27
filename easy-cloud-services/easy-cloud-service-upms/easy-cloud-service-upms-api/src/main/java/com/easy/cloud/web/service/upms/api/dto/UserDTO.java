@@ -3,6 +3,7 @@ package com.easy.cloud.web.service.upms.api.dto;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.service.IConverter;
+import com.easy.cloud.web.service.upms.api.enums.GenderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -69,7 +70,7 @@ public class UserDTO implements IConverter {
   /**
    * 性别： 0 未知的性别 1 男 2 女 9 未说明的性别
    */
-  private Integer sex;
+  private GenderEnum gender;
   /**
    * 用户名
    */

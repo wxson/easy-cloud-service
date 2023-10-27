@@ -53,6 +53,6 @@ public class UserBindDTO {
   /**
    * 角色ID
    */
-  private List<Long> roleIds;
+  private List<String> roleIds;
 
 }

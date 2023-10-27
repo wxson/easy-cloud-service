@@ -4,7 +4,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
@@ -60,7 +60,8 @@ public class MemberStorageServiceImpl extends ServiceImpl<DbMemberStorageMapper,
         memberDO.setAmount(offsetAmount);
         memberService.updateById(memberDO);
         // 存储金额
-        Long oldAmount = Optional.ofNullable(memberStorageDO.getAmount()).orElse(GlobalConstants.L_ZERO);
+        Long oldAmount = Optional.ofNullable(memberStorageDO.getAmount()).orElse(
+            GlobalCommonConstants.L_ZERO);
         memberStorageDO.setAmount(NumberUtil.add(oldAmount, storeAmount).longValue());
         this.updateById(memberStorageDO);
         return true;
@@ -77,12 +78,13 @@ public class MemberStorageServiceImpl extends ServiceImpl<DbMemberStorageMapper,
         }
 
         // 获取取出的金额
-        Long outAmount = Optional.ofNullable(memberStorageDTO.getAmount()).orElse(GlobalConstants.L_ZERO);
+        Long outAmount = Optional.ofNullable(memberStorageDTO.getAmount()).orElse(
+            GlobalCommonConstants.L_ZERO);
         // 当前仓库中的剩余金额
         Long surplusAmount = memberStorageDO.getAmount();
 
         long offsetAmount = NumberUtil.sub(surplusAmount, outAmount).longValue();
-        if (offsetAmount < GlobalConstants.L_ZERO) {
+        if (offsetAmount < GlobalCommonConstants.L_ZERO) {
             throw new BusinessException("当前取出金额大于剩余金额");
         }
 
@@ -117,7 +119,7 @@ public class MemberStorageServiceImpl extends ServiceImpl<DbMemberStorageMapper,
         MemberStorageDO memberStorageDO = MemberStorageDO.build()
                 .setUserId(userId)
                 .setStatus(StatusEnum.FORBID_STATUS.getCode())
-                .setAmount(GlobalConstants.L_ZERO);
+                .setAmount(GlobalCommonConstants.L_ZERO);
         this.save(memberStorageDO);
         return memberStorageDO;
     }

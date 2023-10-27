@@ -1,6 +1,5 @@
 package com.easy.cloud.web.service.order.biz.service;
 
-import com.easy.cloud.web.component.mysql.service.IRepositoryService;
 import com.easy.cloud.web.service.order.biz.domain.db.OrderDO;
 import com.easy.cloud.web.service.order.biz.domain.dto.OrderDTO;
 import com.easy.cloud.web.service.order.biz.domain.vo.OrderVO;

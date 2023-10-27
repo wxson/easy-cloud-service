@@ -1,7 +1,5 @@
 package com.easy.cloud.web.service.cms.biz.controller;
 
-import com.easy.cloud.web.component.mysql.controller.BaseController;
-import com.easy.cloud.web.component.mysql.service.IRepositoryService;
 import com.easy.cloud.web.service.cms.biz.domain.db.VipGoodsDO;
 import com.easy.cloud.web.service.cms.biz.domain.dto.VipGoodsDTO;
 import com.easy.cloud.web.service.cms.biz.domain.query.VipGoodsQuery;

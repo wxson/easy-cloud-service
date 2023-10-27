@@ -1,62 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.easy.cloud.web</groupId>
-        <artifactId>easy-cloud-components</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
-    <artifactId>easy-cloud-component-mysql</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.easy.cloud.web</groupId>
+    <artifactId>easy-cloud-components</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>easy-cloud-component-mysql</name>
-    <description>Demo project for Spring Boot</description>
+  </parent>
+  <artifactId>easy-cloud-component-mysql</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>easy-cloud-component-mysql</name>
+  <description>Demo project for Spring Boot</description>
 
-    <dependencies>
-        <!-- easy-cloud-core包-->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+  <dependencies>
+    <!-- easy-cloud-core包-->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-component-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-        <!--mybatis-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.0</version>
-        </dependency>
+    <!--mybatis-->
+    <!--        <dependency>-->
+    <!--            <groupId>com.baomidou</groupId>-->
+    <!--            <artifactId>mybatis-plus-boot-starter</artifactId>-->
+    <!--            <version>3.4.0</version>-->
+    <!--        </dependency>-->
 
-        <!-- druid 连接池 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.18</version>
-        </dependency>
+    <!-- Hibernate JPA -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
 
-        <!--数据库-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.22</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-        </dependency>
+    <!-- druid 连接池 -->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>druid-spring-boot-starter</artifactId>
+      <version>1.1.18</version>
+    </dependency>
 
-        <!-- 日志模块 -->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-module-log</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+    <!--数据库-->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.22</version>
+    </dependency>
 
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-security</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-component-security</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 
 </project>

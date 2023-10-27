@@ -7,7 +7,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.biz.constants.CmsConstants;
@@ -66,7 +66,7 @@ public class VipActionServiceImpl implements IActionService {
         // 获取会员信息
         MemberVO memberVO = memberFeignClientService.getMemberDetailByUserId(userId).getData();
         // 获取VIP等级
-        Integer vipLevel = Optional.ofNullable(memberVO.getVipLevel()).orElse(GlobalConstants.ZERO);
+        Integer vipLevel = Optional.ofNullable(memberVO.getVipLevel()).orElse(GlobalCommonConstants.ZERO);
         VipGoodsDO vipGoodsDO = vipGoodsService.getOne(Wrappers.<VipGoodsDO>lambdaQuery().eq(VipGoodsDO::getVipLevel, vipLevel));
         if (Objects.isNull(vipGoodsDO)) {
             throw new BusinessException("当前VIP奖励暂无信息");
@@ -123,7 +123,7 @@ public class VipActionServiceImpl implements IActionService {
         MemberVO nextVipDiamondData = memberFeignClientService.calculateNextVipNeedDiamond(userId).getData();
 
         // 获取VIP等级
-        Integer vipLevel = Optional.ofNullable(memberVO.getVipLevel()).orElse(GlobalConstants.ZERO);
+        Integer vipLevel = Optional.ofNullable(memberVO.getVipLevel()).orElse(GlobalCommonConstants.ZERO);
         // 下一VIP等级
         Integer nextVipLevel = vipLevel + 1;
         // 获取VIP绑定的商品信息

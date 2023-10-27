@@ -1,19 +1,18 @@
 package com.easy.cloud.web.service.upms.biz.controller;
 
 import cn.hutool.core.lang.tree.Tree;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.component.log.annotation.OperationLog;
-import com.easy.cloud.web.component.log.annotation.OperationLog.Action;
-import com.easy.cloud.web.component.security.util.SecurityUtils;
+import com.easy.cloud.web.component.log.annotation.SysLog;
+import com.easy.cloud.web.component.log.annotation.SysLog.Action;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
-import com.easy.cloud.web.service.upms.biz.constant.UpmsConstants;
+import com.easy.cloud.web.service.upms.api.vo.MenuVO;
 import com.easy.cloud.web.service.upms.biz.service.IMenuService;
-import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,8 +47,10 @@ public class MenuController {
    */
   @PostMapping(value = "save")
   @PreAuthorize("@pms.hasPermission('menu_add')")
-  @OperationLog(value = "新增菜单", action = Action.ADD)
-  public Object save(@Validated @RequestBody MenuDTO menuDTO) {
+  @SysLog(value = "新增菜单", action = Action.ADD)
+  @ApiOperation(value = "新增菜单")
+  public HttpResult<MenuVO> save(@Validated @RequestBody MenuDTO menuDTO) {
+    log.info("新增菜单：{}", menuDTO);
     return HttpResult.ok(menuService.save(menuDTO));
   }
 
@@ -61,8 +62,9 @@ public class MenuController {
    */
   @PostMapping(value = "update")
   @PreAuthorize("@pms.hasPermission('menu_edit')")
-  @OperationLog(value = "更新菜单", action = Action.UPDATE)
-  public Object update(@Validated @RequestBody MenuDTO menuDTO) {
+  @SysLog(value = "更新菜单", action = Action.UPDATE)
+  @ApiOperation(value = "更新当前用户菜单")
+  public HttpResult<MenuVO> update(@Validated @RequestBody MenuDTO menuDTO) {
     return HttpResult.ok(menuService.update(menuDTO));
   }
 
@@ -74,8 +76,10 @@ public class MenuController {
    */
   @GetMapping(value = "remove/{menuId}")
   @PreAuthorize("@pms.hasPermission('menu_delete')")
-  @OperationLog(value = "删除菜单", action = Action.DELETE)
-  public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long menuId) {
+  @SysLog(value = "删除菜单", action = Action.DELETE)
+  @ApiOperation(value = "删除当前用户菜单")
+  public HttpResult<Boolean> removeById(
+      @PathVariable @NotBlank(message = "当前ID不能为空") String menuId) {
     return HttpResult.ok(menuService.removeById(menuId));
   }
 
@@ -86,58 +90,27 @@ public class MenuController {
    * @return 详情数据
    */
   @GetMapping(value = "detail/{menuId}")
-  @OperationLog(value = "菜单详情", action = Action.FIND)
-  public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long menuId) {
+  @PreAuthorize("@pms.hasPermission('menu_query')")
+  @SysLog(value = "菜单详情", action = Action.FIND)
+  @ApiOperation(value = "获取当前用户菜单详情")
+  public HttpResult<MenuVO> detailById(
+      @PathVariable @NotBlank(message = "当前ID不能为空") String menuId) {
     return HttpResult.ok(menuService.detailById(menuId));
-  }
-
-  /**
-   * TODO 所有数据列表，查询参数自定义
-   *
-   * @return 查询列表
-   */
-  @GetMapping(value = "list")
-  public Object list() {
-    return HttpResult.ok(menuService.list());
-  }
-
-  /**
-   * TODO 根据条件查询分页数据，查询参数自定义
-   *
-   * @param page 当前页
-   * @param size 每页大小
-   * @return 查询分页数据
-   */
-  @GetMapping(value = "page")
-  public Object page(@RequestParam(required = false, defaultValue = "0") int page,
-      @RequestParam(required = false, defaultValue = "10") int size) {
-    return HttpResult.ok(menuService.page(page, size));
   }
 
   /**
    * 获取当前用户菜单列表
    */
   @GetMapping(value = "tree")
+  @PreAuthorize("@pms.hasPermission('menu_query')")
   @ApiOperation(value = "获取当前用户菜单列表")
-  public HttpResult<List<Tree<Long>>> findUserMenus(MenuTypeEnum type, Long parentId) {
+  public HttpResult<List<Tree<String>>> findUserMenus(
+      @RequestParam(defaultValue = GlobalCommonConstants.MENU_TREE_ROOT_ID) String parentId) {
     // 获取当前登录用户的角色ID
-    List<Long> userRoles = SecurityUtils.getUserRoles();
-    // 默认更目录
-    parentId = Objects.isNull(parentId) ? UpmsConstants.MENU_TREE_ROOT_ID : parentId;
+    List<String> channels = new ArrayList<>();
+    // TODO 测试使用
+    channels.add("admin");
     // 测试查询超管下的所有菜单
-    return HttpResult.ok(menuService.findUserMenus(type, parentId, userRoles));
-  }
-
-
-  /**
-   * 获取当前角色菜单列表
-   */
-  @GetMapping(value = "tree/{role}")
-  @ApiOperation(value = "获取当前角色菜单列表")
-  public HttpResult<List<Tree<Long>>> findMenusByRole(MenuTypeEnum type, Long parentId, Long role) {
-    // 默认更目录
-    parentId = Objects.isNull(parentId) ? UpmsConstants.MENU_TREE_ROOT_ID : parentId;
-    // 测试查询超管下的所有菜单
-    return HttpResult.ok(menuService.findUserMenus(type, parentId, Lists.newArrayList(role)));
+    return HttpResult.ok(menuService.findUserMenus(MenuTypeEnum.MENU, parentId, channels));
   }
 }

@@ -2,6 +2,7 @@ package com.easy.cloud.web.service.upms.api.vo;
 
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class DepartmentVO {
   /**
    * 文档ID
    */
-  private Long id;
+  private String id;
   /**
    * 租户ID
    */
@@ -40,7 +41,7 @@ public class DepartmentVO {
   /**
    * 上级部门
    */
-  private Long parentId;
+  private String parentId;
   /**
    * 负责人
    */
@@ -68,7 +69,7 @@ public class DepartmentVO {
   /**
    * 创建时间
    */
-  private String createAt;
+  private Date createAt;
   /**
    * 更新人员
    */
@@ -76,5 +77,5 @@ public class DepartmentVO {
   /**
    * 更新时间
    */
-  private String updateAt;
+  private Date updateAt;
 }

@@ -1,7 +1,7 @@
 package com.easy.cloud.web.component.security.feign;
 
 import cn.hutool.core.collection.CollUtil;
-import com.easy.cloud.web.component.security.constants.SecurityConstants;
+import com.easy.cloud.web.component.core.constants.SecurityConstants;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;

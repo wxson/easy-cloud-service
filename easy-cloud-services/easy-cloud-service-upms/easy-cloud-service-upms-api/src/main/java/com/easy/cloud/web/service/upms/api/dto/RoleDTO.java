@@ -25,7 +25,7 @@ public class RoleDTO implements IConverter {
   /**
    * 文档ID，必须保证角色ID的全局唯一性
    */
-  private Long id;
+  private String id;
   /**
    * 租户ID
    */
@@ -41,7 +41,7 @@ public class RoleDTO implements IConverter {
   /**
    * 描述
    */
-  private String describe;
+  private String remark;
 
   /**
    * 状态 0 启用 1 禁用

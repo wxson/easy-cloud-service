@@ -1,7 +1,7 @@
 package com.easy.cloud.web.component.security.configuration;
 
+import com.easy.cloud.web.component.core.constants.SecurityConstants;
 import com.easy.cloud.web.component.security.configuration.converter.SecurityUserAuthenticationConverter;
-import com.easy.cloud.web.component.security.constants.SecurityConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;

@@ -28,7 +28,7 @@ public class MenuInitUtil {
    */
   public List<MenuDO> initSystemDefaultMenus() {
     try {
-      File file = ResourceUtils.getFile("classpath:sys_menu.json");
+      File file = ResourceUtils.getFile("classpath:json/sys_menu.json");
       // 读取系统菜单数据
       String sysMenuJsonStr = IoUtil.read(IoUtil.toStream(file)).toString();
       return JSONUtil.toList(sysMenuJsonStr, MenuDO.class);

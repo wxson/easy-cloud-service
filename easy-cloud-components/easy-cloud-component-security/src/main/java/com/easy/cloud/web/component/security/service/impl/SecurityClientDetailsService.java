@@ -1,7 +1,6 @@
 package com.easy.cloud.web.component.security.service.impl;
 
-import com.easy.cloud.web.component.core.constants.CacheConstants;
-import com.easy.cloud.web.component.core.tenant.TenantContextHolder;
+import com.easy.cloud.web.component.core.constants.GlobalCacheConstants;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -27,7 +26,7 @@ public class SecurityClientDetailsService extends JdbcClientDetailsService {
      * @throws InvalidClientException
      */
     @Override
-    @Cacheable(value = CacheConstants.CLIENT_DETAILS_KEY, key = "#clientId", unless = "#result == null")
+    @Cacheable(value = GlobalCacheConstants.CLIENT_DETAILS_KEY, key = "#clientId", unless = "#result == null")
     public ClientDetails loadClientByClientId(String clientId) {
         return super.loadClientByClientId(clientId);
     }

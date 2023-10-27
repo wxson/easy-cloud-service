@@ -1,12 +1,13 @@
 package com.easy.cloud.web.service.upms.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.component.log.annotation.OperationLog;
-import com.easy.cloud.web.component.log.annotation.OperationLog.Action;
+import com.easy.cloud.web.component.log.annotation.SysLog;
+import com.easy.cloud.web.component.log.annotation.SysLog.Action;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
-import com.easy.cloud.web.service.upms.api.dto.RolePermissionDTO;
+import com.easy.cloud.web.service.upms.api.dto.RoleMenuDTO;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class RoleController {
    */
   @PostMapping(value = "save")
   @PreAuthorize("@pms.hasPermission('role_add')")
-  @OperationLog(value = "新增用户", action = Action.ADD)
+  @SysLog(value = "新增用户", action = Action.ADD)
   public Object save(@Validated @RequestBody RoleDTO roleDTO) {
     return HttpResult.ok(roleService.save(roleDTO));
   }
@@ -55,7 +56,7 @@ public class RoleController {
    */
   @PostMapping(value = "update")
   @PreAuthorize("@pms.hasPermission('role_edit')")
-  @OperationLog(value = "更新用户", action = Action.UPDATE)
+  @SysLog(value = "更新用户", action = Action.UPDATE)
   public Object update(@Validated @RequestBody RoleDTO roleDTO) {
     return HttpResult.ok(roleService.update(roleDTO));
   }
@@ -68,8 +69,8 @@ public class RoleController {
    */
   @GetMapping(value = "remove/{roleId}")
   @PreAuthorize("@pms.hasPermission('role_delete')")
-  @OperationLog(value = "删除用户", action = Action.DELETE)
-  public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long roleId) {
+  @SysLog(value = "删除用户", action = Action.DELETE)
+  public Object removeById(@PathVariable @NotBlank(message = "当前ID不能为空") String roleId) {
     return HttpResult.ok(roleService.removeById(roleId));
   }
 
@@ -80,8 +81,8 @@ public class RoleController {
    * @return 详情数据
    */
   @GetMapping(value = "detail/{roleId}")
-  @OperationLog(value = "用户详情", action = Action.FIND)
-  public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long roleId) {
+  @SysLog(value = "用户详情", action = Action.FIND)
+  public Object detailById(@PathVariable @NotBlank(message = "当前ID不能为空") String roleId) {
     return HttpResult.ok(roleService.detailById(roleId));
   }
 
@@ -112,12 +113,12 @@ public class RoleController {
   /**
    * 绑定权限
    *
-   * @param rolePermissionDTO 用户信息
+   * @param roleMenuDTO 用户信息
    * @return success/false
    */
   @PostMapping("/bind/permission")
-  @OperationLog(value = "绑定权限", action = Action.UPDATE)
-  public HttpResult<RoleVO> bindRolePermission(@RequestBody RolePermissionDTO rolePermissionDTO) {
-    return HttpResult.ok(roleService.bindRolePermission(rolePermissionDTO));
+  @SysLog(value = "绑定权限", action = Action.UPDATE)
+  public HttpResult<RoleVO> bindRolePermission(@RequestBody RoleMenuDTO roleMenuDTO) {
+    return HttpResult.ok(roleService.bindRoleMenu(roleMenuDTO));
   }
 }

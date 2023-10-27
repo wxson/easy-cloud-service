@@ -2,6 +2,7 @@ package com.easy.cloud.web.service.upms.api.vo;
 
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
+import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,7 @@ public class RoleVO {
   /**
    * 文档ID，必须保证角色ID的全局唯一性
    */
-  private Long id;
+  private String id;
   /**
    * 租户ID
    */
@@ -41,7 +42,7 @@ public class RoleVO {
   /**
    * 描述
    */
-  private String describe;
+  private String remark;
 
   /**
    * 状态 0 启用 1 禁用
@@ -58,7 +59,7 @@ public class RoleVO {
   /**
    * 创建时间
    */
-  private String createAt;
+  private Date createAt;
   /**
    * 更新用户
    */
@@ -66,10 +67,10 @@ public class RoleVO {
   /**
    * 更新时间
    */
-  private String updateAt;
+  private Date updateAt;
 
   /**
    * 菜单集合
    */
-  private List<Long> menuIds;
+  private List<String> menuIds;
 }

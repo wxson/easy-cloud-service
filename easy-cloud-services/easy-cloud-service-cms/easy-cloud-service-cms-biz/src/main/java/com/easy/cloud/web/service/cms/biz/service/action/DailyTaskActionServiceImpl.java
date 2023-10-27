@@ -5,7 +5,7 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.biz.constants.CmsConstants;
@@ -133,7 +133,8 @@ public class DailyTaskActionServiceImpl implements IActionService {
                 .sorted(Comparator.comparing(GoodsDO::getSort))
                 .map(goodsDO -> {
                     ActionVO actionVO = goodsDO.convertTo(ActionVO.class)
-                            .setGoodsNo(goodsDO.getNo()).setGoodsName(goodsDO.getName()).setHandle(false).setForbid(false).setCurrentValue(GlobalConstants.ZERO);
+                            .setGoodsNo(goodsDO.getNo()).setGoodsName(goodsDO.getName()).setHandle(false).setForbid(false).setCurrentValue(
+                            GlobalCommonConstants.ZERO);
                     // 设置值
                     // 设置当前赢取的金币数
                     if (actionVO.getGoodsName().contains("每日累计赢取")) {
@@ -218,7 +219,7 @@ public class DailyTaskActionServiceImpl implements IActionService {
      * @return java.lang.Integer
      */
     private Integer getCurrentShareNum() {
-        return GlobalConstants.ZERO;
+        return GlobalCommonConstants.ZERO;
     }
 
     /**
@@ -233,6 +234,6 @@ public class DailyTaskActionServiceImpl implements IActionService {
             return userPlayRecordDOOptional.get().getMaxRate();
         }
 
-        return GlobalConstants.ZERO;
+        return GlobalCommonConstants.ZERO;
     }
 }

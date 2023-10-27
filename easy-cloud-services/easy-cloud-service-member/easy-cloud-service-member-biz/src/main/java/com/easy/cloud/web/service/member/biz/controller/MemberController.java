@@ -4,11 +4,9 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.component.mysql.controller.BaseController;
-import com.easy.cloud.web.component.mysql.service.IRepositoryService;
 import com.easy.cloud.web.component.security.annotation.Inner;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.member.biz.domain.db.MemberDO;
@@ -176,7 +174,7 @@ public class MemberController extends BaseController<MemberQuery, MemberDTO, Mem
             throw new BusinessException("获取会员信息为空");
         }
 
-        Integer vipLevel = Optional.ofNullable(memberDO.getVipLevel()).orElse(GlobalConstants.ZERO);
+        Integer vipLevel = Optional.ofNullable(memberDO.getVipLevel()).orElse(GlobalCommonConstants.ZERO);
         Integer nextVipLevel = vipLevel + 1;
         List<VipRechargeDO> vipRechargeDOList = vipRechargeService.list(Wrappers.<VipRechargeDO>lambdaQuery().in(VipRechargeDO::getVipLevel, CollUtil.newArrayList(vipLevel, nextVipLevel)));
         Map<Integer, BigDecimal> vipLevelRechargeMap = vipRechargeDOList.stream().collect(Collectors.toMap(VipRechargeDO::getVipLevel, VipRechargeDO::getTotalRecharge, (v1, v2) -> v1));

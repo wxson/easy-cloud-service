@@ -4,8 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.component.mysql.controller.BaseController;
-import com.easy.cloud.web.component.mysql.service.IRepositoryService;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.member.biz.domain.db.MemberBackpackDO;
 import com.easy.cloud.web.service.member.biz.domain.dto.MemberBackpackDTO;

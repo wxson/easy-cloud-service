@@ -2,7 +2,7 @@ package com.easy.cloud.web.service.cms.biz.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.response.HttpResult;
 import com.easy.cloud.web.component.security.annotation.Inner;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
@@ -82,7 +82,7 @@ public class UserPlayRecordController {
                     List<UserPlayRecordVO> userPlayRecordVOList = entry.getValue().stream().map(UserPlayRecordDO::convert).collect(Collectors.toList());
                     UserPlayRecordVO userPlayRecordVO = UserPlayRecordVO.build().setRoomId(entry.getKey()).setPlayerList(userPlayRecordVOList);
                     if (CollUtil.isNotEmpty(userPlayRecordVOList)) {
-                        userPlayRecordVO.setCreateAt(userPlayRecordDOList.get(GlobalConstants.ZERO).getCreateAt());
+                        userPlayRecordVO.setCreateAt(userPlayRecordDOList.get(GlobalCommonConstants.ZERO).getCreateAt());
                     }
                     return userPlayRecordVO;
                 }).collect(Collectors.toList());

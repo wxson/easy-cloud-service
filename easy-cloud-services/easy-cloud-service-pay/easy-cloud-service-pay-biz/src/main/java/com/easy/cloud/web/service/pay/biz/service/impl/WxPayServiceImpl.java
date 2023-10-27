@@ -9,7 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.service.order.api.domain.vo.OrderVO;
 import com.easy.cloud.web.service.order.api.enums.PayStatusEnum;
@@ -127,7 +127,7 @@ public class WxPayServiceImpl implements IPayProxyService {
         // 如果是DEBUG模式，支付0.01元
         if (PayConstants.DEBUG) {
             // 设置一分的支付
-            prePayBody.setTotal_fee(GlobalConstants.ONE);
+            prePayBody.setTotal_fee(GlobalCommonConstants.ONE);
         }
         // 构建Map对象
         Map<String, Object> beanToMap = BeanUtil.beanToMap(prePayBody);

@@ -1,0 +1,22 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: @artifactId@
+#  cloud:
+#    nacos:
+#      discovery:
+#        #        server-addr: ${NACOS_HOST:easy-cloud-register-cluster-1}:${NACOS_PORT:8848},${NACOS_HOST:easy-cloud-register-cluster-2}:${NACOS_PORT:8848},${NACOS_HOST:easy-cloud-register-cluster-3}:${NACOS_PORT:8848}
+#        server-addr: ${NACOS_HOST:easy-cloud-register-cluster-1}:${NACOS_PORT:8899}
+#      config:
+#        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+#        file-extension: yml
+#        shared-configs:
+#          - easy-cloud-application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+  profiles:
+    active: @profiles.active@
+
+  #bean会覆盖之前定义的相同名称的bean
+  main:
+    allow-bean-definition-overriding: true

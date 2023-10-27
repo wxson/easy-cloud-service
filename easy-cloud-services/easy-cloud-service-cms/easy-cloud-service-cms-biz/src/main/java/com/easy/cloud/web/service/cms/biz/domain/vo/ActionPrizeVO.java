@@ -1,6 +1,5 @@
 package com.easy.cloud.web.service.cms.biz.domain.vo;
 
-import com.easy.cloud.web.component.core.service.IConvertProxy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

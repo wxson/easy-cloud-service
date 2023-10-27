@@ -1,16 +1,12 @@
 package com.easy.cloud.web.component.security.util;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.core.exception.BusinessException;
-import com.easy.cloud.web.component.security.constants.SecurityConstants;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,31 +51,19 @@ public class SecurityUtils {
    *
    * @return 角色集合
    */
-  public List<Long> getUserRoles() {
-    Authentication authentication = getAuthentication();
-    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
-    List<Long> roleIds = new ArrayList<>();
-    authorities.stream()
-        .filter(granted -> StrUtil.startWith(granted.getAuthority(), SecurityConstants.ROLE_PREFIX))
-        .forEach(granted -> {
-          String id = StrUtil.removePrefix(granted.getAuthority(), SecurityConstants.ROLE_PREFIX);
-          roleIds.add(Long.parseLong(id));
-        });
-    return roleIds;
-  }
-
-  /**
-   * 初始化系统默认用户
-   */
-  public void initSystemDefaultUser() {
-    SecurityContextHolder.getContext()
-        .setAuthentication(new UsernamePasswordAuthenticationToken(new AuthenticationUser(
-            "system_default",
-            "system_default",
-            "N/A",
-            "system_default",
-            true, true, true, true, CollUtil.newArrayList()
-        ), "N/A", CollUtil.newArrayList()));
+  public Set<String> getUserPermissions() {
+    if (true) {
+      return CollUtil.newHashSet(
+          "menu_add",
+          "menu_edit",
+          "menu_delete",
+          "menu_query"
+      );
+    }
+    return SecurityUtils.getAuthenticationUser()
+        .getAuthorities()
+        .stream()
+        .map(GrantedAuthority::getAuthority)
+        .collect(Collectors.toSet());
   }
 }

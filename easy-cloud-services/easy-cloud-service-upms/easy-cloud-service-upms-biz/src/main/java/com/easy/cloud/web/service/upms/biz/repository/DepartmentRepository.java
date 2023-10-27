@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * @date 2023-08-03 15:00:02
  */
 @Repository
-public interface DepartmentRepository extends JpaRepository<DepartmentDO, Long> {
+public interface DepartmentRepository extends JpaRepository<DepartmentDO, String> {
 
 }

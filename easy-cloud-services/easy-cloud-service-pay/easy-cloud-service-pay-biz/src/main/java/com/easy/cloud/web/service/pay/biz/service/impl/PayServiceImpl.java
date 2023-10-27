@@ -2,7 +2,7 @@ package com.easy.cloud.web.service.pay.biz.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.api.domain.dto.ActionDTO;
@@ -79,7 +79,7 @@ public class PayServiceImpl implements IPayService {
         // 标记订单已处理，有效时间1天
         redisTemplate.opsForValue().set(StrUtil.format(PayConstants.ORDER_CALLBACK_NOTICE_KEY, orderNo),
                 true,
-                GlobalConstants.ONE,
+                GlobalCommonConstants.ONE,
                 TimeUnit.DAYS);
         return true;
     }
@@ -101,7 +101,7 @@ public class PayServiceImpl implements IPayService {
         }
 
         // 免费支付
-        if (NumberUtil.compare(orderVO.getAmount().longValue(), GlobalConstants.L_ZERO) == GlobalConstants.ZERO) {
+        if (NumberUtil.compare(orderVO.getAmount().longValue(), GlobalCommonConstants.L_ZERO) == GlobalCommonConstants.ZERO) {
             // 免费直接发放奖励
             this.grantPrize(orderVO.getNo(), orderVO.getGoodsNo());
             return PayVO.build().setPayStatus(PayStatusEnum.PAY_YES);
@@ -134,7 +134,7 @@ public class PayServiceImpl implements IPayService {
         }
 
         // 免费支付
-        if (NumberUtil.compare(goodsVO.getSalesPrice().longValue(), GlobalConstants.L_ZERO) == GlobalConstants.ZERO) {
+        if (NumberUtil.compare(goodsVO.getSalesPrice().longValue(), GlobalCommonConstants.L_ZERO) == GlobalCommonConstants.ZERO) {
             this.grantPrize(null, goodsVO.getNo());
             // 免费直接发放奖励
             return PayVO.build().setPayStatus(PayStatusEnum.PAY_YES);
@@ -146,7 +146,7 @@ public class PayServiceImpl implements IPayService {
         }
 
         // 获取商品数量
-        Integer goodsNum = Optional.ofNullable(payDTO.getGoodsNum()).orElse(GlobalConstants.ONE);
+        Integer goodsNum = Optional.ofNullable(payDTO.getGoodsNum()).orElse(GlobalCommonConstants.ONE);
         OrderVO orderVo = orderFeignClientService.createOrder(OrderDTO.build().setGoodsNo(payDTO.getGoodsNo()).setGoodsNum(goodsNum)).getData();
         if (Objects.isNull(orderVo)) {
             throw new BusinessException("创建订单失败");
@@ -196,7 +196,7 @@ public class PayServiceImpl implements IPayService {
                             .setGoodsNo(goodsVO.getNo())
                             .setOrderNo(orderNo)).getCode();
                     // 返回状态不为0则表示失败
-                    if (Objects.isNull(code) || GlobalConstants.ZERO != Integer.parseInt(code.toString())) {
+                    if (Objects.isNull(code) || GlobalCommonConstants.ZERO != Integer.parseInt(code.toString())) {
                         log.error("用户：{} 订单：{} 奖励发放失败", SecurityUtils.getAuthenticationUser().getId(), orderNo);
                         throw new BusinessException("发放奖励失败");
                     }

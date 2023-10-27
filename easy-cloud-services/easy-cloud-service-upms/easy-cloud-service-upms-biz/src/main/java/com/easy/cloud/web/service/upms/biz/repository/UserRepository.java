@@ -28,5 +28,5 @@ public interface UserRepository extends JpaRepository<UserDO, String> {
    * @param appleId 唯一标识
    * @return
    */
-  UserDO findByUnionIdOOrAppleId(String unionId, String appleId);
+  UserDO findByUnionIdOrAppleId(String unionId, String appleId);
 }

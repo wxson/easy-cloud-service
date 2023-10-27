@@ -1,6 +1,5 @@
 package com.easy.cloud.web.service.member.api.domain.vo;
 
-import com.easy.cloud.web.component.core.service.IConvertProxy;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -13,44 +12,45 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor(staticName = "build")
-public class MemberPropertyRecordVO implements IConvertProxy {
-    /**
-     * 唯一标识
-     */
-    private Integer id;
+public class MemberPropertyRecordVO {
 
-    /**
-     * 用户ID
-     */
-    private String userId;
+  /**
+   * 唯一标识
+   */
+  private Integer id;
 
-    /**
-     * 资产来源
-     */
-    private Integer origin;
+  /**
+   * 用户ID
+   */
+  private String userId;
 
-    /**
-     * 金币
-     */
-    private Long amount;
+  /**
+   * 资产来源
+   */
+  private Integer origin;
 
-    /**
-     * 钻石
-     */
-    private Long diamond;
+  /**
+   * 金币
+   */
+  private Long amount;
 
-    /**
-     * 点券
-     */
-    private Long coupon;
+  /**
+   * 钻石
+   */
+  private Long diamond;
 
-    /**
-     * 创建用户
-     */
-    private String creatorAt;
+  /**
+   * 点券
+   */
+  private Long coupon;
 
-    /**
-     * 创建时间
-     */
-    private String createAt;
+  /**
+   * 创建用户
+   */
+  private String creatorAt;
+
+  /**
+   * 创建时间
+   */
+  private String createAt;
 }

@@ -1,8 +1,8 @@
 package com.easy.cloud.web.service.upms.biz.converter;
 
-import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import com.easy.cloud.web.service.upms.api.dto.UserDTO;
 import com.easy.cloud.web.service.upms.api.vo.UserVO;
+import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class UserConverter {
         .unionId(user.getUnionId())
         .city(user.getCity())
         .nickName(user.getNickName())
-        .sex(user.getSex())
+        .gender(user.getGender())
         .avatar(user.getAvatar())
         .userName(user.getUserName())
         .appleId(user.getAppleId())
@@ -61,7 +61,7 @@ public class UserConverter {
         .unionId(user.getUnionId())
         .city(user.getCity())
         .nickName(user.getNickName())
-        .sex(user.getSex())
+        .gender(user.getGender())
         .avatar(user.getAvatar())
         .userName(user.getUserName())
         .appleId(user.getAppleId())

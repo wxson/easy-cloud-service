@@ -1,6 +1,6 @@
 package com.easy.cloud.web.component.security.configuration;
 
-import com.easy.cloud.web.component.security.constants.SecurityConstants;
+import com.easy.cloud.web.component.core.constants.SecurityConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;

@@ -2,7 +2,7 @@ package com.easy.cloud.web.module.online.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.module.online.constants.OnlineConstants;
 import com.easy.cloud.web.module.online.service.IOnlineService;
 import lombok.AllArgsConstructor;
@@ -39,12 +39,13 @@ public class OnlineServiceImpl implements IOnlineService {
     @Override
     public Integer getOnlineNumber() {
         // 获取当前在线人数
-        return this.readRedisStore(int.class, OnlineConstants.ONLINE_USER_NUMBER_KEY).orElse(GlobalConstants.ZERO);
+        return this.readRedisStore(int.class, OnlineConstants.ONLINE_USER_NUMBER_KEY).orElse(
+            GlobalCommonConstants.ZERO);
     }
 
     @Override
     public Integer addOnLineNumber(Integer number, CharSequence keyCharSequence, Object... objects) {
-        number = Optional.ofNullable(number).orElse(GlobalConstants.ZERO);
+        number = Optional.ofNullable(number).orElse(GlobalCommonConstants.ZERO);
         // 获取当前在线人数
         int newOnlineNumber = this.getOnlineNumber(keyCharSequence, objects) + number;
         // 更新新的在线人数
@@ -54,10 +55,10 @@ public class OnlineServiceImpl implements IOnlineService {
 
     @Override
     public Integer removeOnLineNumber(Integer number, CharSequence keyCharSequence, Object... objects) {
-        number = Optional.ofNullable(number).orElse(GlobalConstants.ZERO);
+        number = Optional.ofNullable(number).orElse(GlobalCommonConstants.ZERO);
         Integer onlineNumber = this.getOnlineNumber(keyCharSequence, objects);
         int newOnlineNumber = onlineNumber - number;
-        newOnlineNumber = Math.max(newOnlineNumber, GlobalConstants.ZERO);
+        newOnlineNumber = Math.max(newOnlineNumber, GlobalCommonConstants.ZERO);
         // 更新新的在线人数
         this.saveRedisStore(newOnlineNumber, keyCharSequence, objects);
         return newOnlineNumber;
@@ -66,7 +67,8 @@ public class OnlineServiceImpl implements IOnlineService {
     @Override
     public Integer getOnlineNumber(CharSequence keyCharSequence, Object... objects) {
         // 获取当前在线人数
-        return this.readRedisStore(int.class, keyCharSequence, objects).orElse(GlobalConstants.ZERO);
+        return this.readRedisStore(int.class, keyCharSequence, objects).orElse(
+            GlobalCommonConstants.ZERO);
     }
 
     @Override

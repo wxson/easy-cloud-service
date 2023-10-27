@@ -6,7 +6,7 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
@@ -77,7 +77,7 @@ public class MonthCardActionServiceImpl implements IActionService {
 
             // 当前用户是否已购买过
             long count = orderVOList.stream().filter(orderVO -> orderVO.getUserId().equals(SecurityUtils.getAuthenticationUser().getId())).count();
-            if (count == GlobalConstants.ZERO) {
+            if (count == GlobalCommonConstants.ZERO) {
                 throw new BusinessException("当前用户未购买过当前商品");
             }
 

@@ -2,7 +2,7 @@ package com.easy.cloud.web.service.cms.biz.service.action;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.biz.domain.db.GoodsDO;
@@ -52,7 +52,7 @@ public class Promotion88ActionServiceImpl implements IActionService {
 
         // 当前用户是否已购买过
         long count = orderVOList.stream().filter(orderVO -> orderVO.getUserId().equals(SecurityUtils.getAuthenticationUser().getId())).count();
-        if (count == GlobalConstants.ZERO) {
+        if (count == GlobalCommonConstants.ZERO) {
             throw new BusinessException("当前用户未购买过当前商品");
         }
 

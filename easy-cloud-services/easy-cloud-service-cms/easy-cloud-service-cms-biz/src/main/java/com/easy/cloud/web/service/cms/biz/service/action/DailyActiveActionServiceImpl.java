@@ -7,7 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.biz.constants.CmsConstants;
@@ -65,7 +65,7 @@ public class DailyActiveActionServiceImpl implements IActionService {
         // 获取当前玩家的活跃值
         Object o = redisTemplate.opsForValue().get(StrUtil.format(CmsConstants.USER_ACTIVE_KEY, SecurityUtils.getAuthenticationUser().getId()));
         // 当前活跃度
-        int currentActive = GlobalConstants.ZERO;
+        int currentActive = GlobalCommonConstants.ZERO;
         if (Objects.nonNull(o)) {
             currentActive = Integer.parseInt(o.toString());
         }
@@ -95,7 +95,7 @@ public class DailyActiveActionServiceImpl implements IActionService {
 
         Object o = redisTemplate.opsForValue().get(StrUtil.format(CmsConstants.USER_ACTIVE_KEY, SecurityUtils.getAuthenticationUser().getId()));
         // 当前活跃度
-        int currentActive = GlobalConstants.ZERO;
+        int currentActive = GlobalCommonConstants.ZERO;
         if (Objects.nonNull(o)) {
             currentActive = Integer.parseInt(o.toString());
         }

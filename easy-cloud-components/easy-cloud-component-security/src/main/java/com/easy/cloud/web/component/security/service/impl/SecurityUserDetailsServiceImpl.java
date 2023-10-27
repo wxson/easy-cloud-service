@@ -1,5 +1,7 @@
 package com.easy.cloud.web.component.security.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -47,11 +49,11 @@ public class SecurityUserDetailsServiceImpl implements ISecurityUserDetailsServi
       throw new UsernameNotFoundException("当前账号用户不存在");
     }
 
-    // Authority 即角色
+    // Authority 即角色，随机绑定一个其中的角色信息
     return new AuthenticationUser(userVO.getId(), userVO.getAccount(), userVO.getPassword(),
-        userVO.getTenantId(),
+        RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoles())),
         true, true, true, userVO.getStatus() == StatusEnum.FREEZE_STATUS,
-        AuthorityUtils.createAuthorityList(userVO.getPermissionTags().toArray(new String[0])));
+        AuthorityUtils.createAuthorityList(userVO.getPermissions().toArray(new String[0])));
   }
 
   @Override
@@ -69,9 +71,10 @@ public class SecurityUserDetailsServiceImpl implements ISecurityUserDetailsServi
       throw new UsernameNotFoundException("当前账号用户不存在");
     }
 
-    // Authority 即角色
-    return new AuthenticationUser(userVO.getId(), userVO.getAccount(), "N/A", userVO.getTenantId(),
+    // Authority 即角色，随机绑定一个其中的角色信息
+    return new AuthenticationUser(userVO.getId(), userVO.getAccount(), "N/A",
+        RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoles())),
         true, true, true, userVO.getStatus() == StatusEnum.FREEZE_STATUS,
-        AuthorityUtils.createAuthorityList(userVO.getPermissionTags().toArray(new String[0])));
+        AuthorityUtils.createAuthorityList(userVO.getPermissions().toArray(new String[0])));
   }
 }

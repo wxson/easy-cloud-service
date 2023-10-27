@@ -3,6 +3,7 @@ package com.easy.cloud.web.service.upms.biz.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.service.upms.api.dto.DepartmentDTO;
 import com.easy.cloud.web.service.upms.api.vo.DepartmentVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsConstants;
@@ -65,7 +66,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
 
   @Override
   @Transactional
-  public Boolean removeById(Long departmentId) {
+  public Boolean removeById(String departmentId) {
     // TODO 业务逻辑校验
 
     // 删除
@@ -74,7 +75,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
   }
 
   @Override
-  public DepartmentVO detailById(Long departmentId) {
+  public DepartmentVO detailById(String departmentId) {
     // TODO 业务逻辑校验
 
     // 删除
@@ -92,9 +93,9 @@ public class DepartmentServiceImpl implements IDepartmentService {
   }
 
   @Override
-  public List<Tree<Long>> tree() {
+  public List<Tree<String>> tree() {
     List<DepartmentVO> departmentVOS = this.list();
-    return TreeUtil.build(departmentVOS, UpmsConstants.DEPART_TREE_ROOT_ID, (menu, tree) -> {
+    return TreeUtil.build(departmentVOS, GlobalCommonConstants.DEPART_TREE_ROOT_ID, (menu, tree) -> {
       Map<String, Object> departMap = BeanUtil.beanToMap(menu);
       tree.setId(menu.getId());
       tree.setName(menu.getName());

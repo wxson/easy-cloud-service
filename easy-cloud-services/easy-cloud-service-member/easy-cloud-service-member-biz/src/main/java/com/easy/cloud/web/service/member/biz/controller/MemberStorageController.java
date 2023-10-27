@@ -2,8 +2,6 @@ package com.easy.cloud.web.service.member.biz.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.component.mysql.controller.BaseController;
-import com.easy.cloud.web.component.mysql.service.IRepositoryService;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.member.biz.domain.db.MemberStorageDO;
 import com.easy.cloud.web.service.member.biz.domain.dto.MemberStorageDTO;

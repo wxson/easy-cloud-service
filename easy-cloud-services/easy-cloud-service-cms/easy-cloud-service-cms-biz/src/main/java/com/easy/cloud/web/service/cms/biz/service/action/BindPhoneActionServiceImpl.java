@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.biz.domain.db.ActionAwardDO;
@@ -67,7 +67,7 @@ public class BindPhoneActionServiceImpl implements IActionService {
 
         // 绑定当前手机号
         Object code = upmsFeignClientService.bindUserTel(User.build().setId(userId).setTel(actionDTO.getTel())).getCode();
-        if (GlobalConstants.ZERO != Integer.parseInt(code.toString())) {
+        if (GlobalCommonConstants.ZERO != Integer.parseInt(code.toString())) {
             throw new BusinessException("绑定手机号失败");
         }
 

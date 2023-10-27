@@ -1,6 +1,6 @@
 package com.easy.cloud.web.component.security.configuration;
 
-import com.easy.cloud.web.component.security.constants.SecurityConstants;
+import com.easy.cloud.web.component.core.constants.SecurityConstants;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
 import com.easy.cloud.web.component.security.handler.SecurityAuthenticationFailureHandler;
 import com.easy.cloud.web.component.security.handler.SecurityAuthenticationSuccessHandler;
@@ -45,8 +45,8 @@ public class SecurityAutoConfiguration {
             if (Objects.nonNull(principal) && principal instanceof AuthenticationUser) {
                 AuthenticationUser authenticationUser = (AuthenticationUser) principal;
                 hashMap.put(SecurityConstants.AUTHORIZATION_USER_ID, authenticationUser.getId());
-                hashMap.put(SecurityConstants.AUTHORIZATION_USER_CHANEL_ID, authenticationUser.getChannelId());
-                hashMap.put(SecurityConstants.AUTHORIZATION_USER_TENANT_ID, authenticationUser.getTenantId());
+                hashMap.put(SecurityConstants.AUTHORIZATION_USER_CHANEL, authenticationUser.getChannel());
+                hashMap.put(SecurityConstants.AUTHORIZATION_USER_TENANT, authenticationUser.getTenant());
             }
 
             ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(hashMap);

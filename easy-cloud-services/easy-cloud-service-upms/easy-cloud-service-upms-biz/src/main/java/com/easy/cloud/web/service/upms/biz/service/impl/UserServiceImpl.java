@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
@@ -12,26 +13,28 @@ import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.upms.api.dto.UserBindDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserLoginDTO;
-import com.easy.cloud.web.service.upms.api.enums.RoleEnum;
+import com.easy.cloud.web.service.upms.api.enums.GenderEnum;
 import com.easy.cloud.web.service.upms.api.enums.SocialTypeEnum;
+import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsCacheConstants;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsConstants;
 import com.easy.cloud.web.service.upms.biz.converter.UserConverter;
-import com.easy.cloud.web.service.upms.biz.domain.MenuDO;
-import com.easy.cloud.web.service.upms.biz.domain.RelationRolePermissionDO;
-import com.easy.cloud.web.service.upms.biz.domain.RelationUserRoleDO;
+import com.easy.cloud.web.service.upms.biz.domain.RoleMenuDO;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
-import com.easy.cloud.web.service.upms.biz.repository.MenuRepository;
-import com.easy.cloud.web.service.upms.biz.repository.RelationRolePermissionRepository;
-import com.easy.cloud.web.service.upms.biz.repository.RelationUserRoleRepository;
+import com.easy.cloud.web.service.upms.biz.domain.UserRoleDO;
+import com.easy.cloud.web.service.upms.biz.repository.RoleMenuRepository;
 import com.easy.cloud.web.service.upms.biz.repository.UserRepository;
+import com.easy.cloud.web.service.upms.biz.repository.UserRoleRepository;
+import com.easy.cloud.web.service.upms.biz.service.IMenuService;
+import com.easy.cloud.web.service.upms.biz.service.IRoleService;
 import com.easy.cloud.web.service.upms.biz.service.IUserService;
 import com.easy.cloud.web.service.upms.biz.social.ISocialService;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -61,9 +64,6 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   private EnumMap<SocialTypeEnum, ISocialService> socialServices = new EnumMap<>(
       SocialTypeEnum.class);
 
-//  @PersistenceContext
-//  private EntityManager em;
-
   @Autowired
   private UserRepository userRepository;
 
@@ -71,13 +71,16 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   private PasswordEncoder passwordEncoder;
 
   @Autowired
-  private MenuRepository menuRepository;
+  private IMenuService menuService;
 
   @Autowired
-  private RelationUserRoleRepository relationUserRoleRepository;
+  private IRoleService roleService;
 
   @Autowired
-  private RelationRolePermissionRepository relationRolePermissionRepository;
+  private UserRoleRepository userRoleRepository;
+
+  @Autowired
+  private RoleMenuRepository roleMenuRepository;
 
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -86,22 +89,28 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   }
 
   @Override
+  @Transactional(rollbackOn = Exception.class)
   public void init() {
+    // 未初始化过数据
     if (userRepository.count() <= 0) {
+      // 获取超级管理员角色
+      RoleVO superAdminRole = roleService.findFirstByCode(GlobalCommonConstants.SUPER_ADMIN_ROLE);
       // 创建超管
-      UserDTO admin = UserDTO.builder()
-          .userName(UpmsConstants.SUPER_ADMIN_INFO)
-          .account(UpmsConstants.SUPER_ADMIN_INFO)
-          .password(UpmsConstants.SUPER_ADMIN_PASSWORD)
-          .tenantId(UpmsConstants.SUPER_ADMIN_INFO)
+      UserDO admin = UserDO.builder()
+          .nickName(GlobalCommonConstants.SUPER_ADMIN_ROLE)
+          .userName(GlobalCommonConstants.SUPER_ADMIN_ROLE)
+          .account(GlobalCommonConstants.SUPER_ADMIN_ROLE)
+          .password(passwordEncoder.encode(UpmsConstants.SUPER_ADMIN_PASSWORD))
+          .tenantId(GlobalCommonConstants.DEFAULT_TENANT_ID_VALUE + "")
+          .gender(GenderEnum.MAN)
           .build();
-      this.save(admin);
+      userRepository.save(admin);
       // 绑定超管角色
-      RelationUserRoleDO re = RelationUserRoleDO.builder()
+      UserRoleDO userRoleDO = UserRoleDO.builder()
           .userId(admin.getId())
-          .roleId(RoleEnum.ROLE_SUPER_ADMIN.getId())
+          .roleId(superAdminRole.getId())
           .build();
-      relationUserRoleRepository.save(re);
+      userRoleRepository.save(userRoleDO);
       log.info("init platform user content success!");
     }
   }
@@ -113,6 +122,8 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     UserDO user = UserConverter.convertTo(userDTO);
     // TODO 校验逻辑
 
+    // 密码编译
+    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
     // 存储
     userRepository.save(user);
     // 转换对象
@@ -130,6 +141,8 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     }
     // TODO 业务逻辑校验
 
+    // 密码编译
+    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
     // 更新
     userRepository.save(user);
     // 转换对象
@@ -171,24 +184,28 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     // 转换
     UserVO userVO = userDO.convertTo(UserVO.class);
     // 获取用户角色列表
-    List<Long> roleIds = relationUserRoleRepository.findByUserId(userDO.getId()).stream()
-        .map(RelationUserRoleDO::getRoleId)
-        .collect(Collectors.toList());
-    // 设置角色列表 （ID）
-    userVO.setRoleIds(roleIds);
-
-    // 获取所有关联的菜单ID
-    List<Long> menuIds = relationRolePermissionRepository.findByRoleIdIn(roleIds).stream()
-        .map(RelationRolePermissionDO::getMenuId)
-        .collect(Collectors.toList());
-    // 获取所有有关的菜单权限标识
-    List<String> permissionTags = menuRepository.findAllById(menuIds).stream()
-        .map(MenuDO::getPermissionTag)
-        .filter(StringUtils::isNotBlank)
+    List<String> roleIds = userRoleRepository.findByUserId(userDO.getId()).stream()
+        .map(UserRoleDO::getRoleId)
         .distinct()
         .collect(Collectors.toList());
+    // 根据角色ID获取角色编码
+    Set<String> roleCodes = roleService.findAllByIds(roleIds).stream()
+        .map(RoleVO::getCode)
+        .collect(Collectors.toSet());
+    // 设置角色列表 （ID）
+    userVO.setRoles(roleCodes);
+
+    // 获取所有关联的菜单ID
+    List<String> menuIds = roleMenuRepository.findByRoleIdIn(roleIds).stream()
+        .map(RoleMenuDO::getMenuId)
+        .distinct()
+        .collect(Collectors.toList());
+    // 获取所有有关的菜单权限标识
+    Set<String> permissions = menuService.findUserPermissions(menuIds).stream()
+        .filter(StringUtils::isNotBlank)
+        .collect(Collectors.toSet());
     // 设置权限列表（menu.permission）
-    userVO.setPermissionTags(permissionTags);
+    userVO.setPermissions(permissions);
     return userVO;
   }
 
@@ -216,22 +233,27 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     }
 
     // 获取角色列表
-    List<Long> roleIds = userBindDTO.getRoleIds();
+    List<String> roleIds = userBindDTO.getRoleIds();
     if (CollUtil.isEmpty(roleIds)) {
       return userDOOptional.get().convertTo(UserVO.class);
     }
 
     // 移除旧数据
-    relationUserRoleRepository.deleteByUserId(userBindDTO.getId());
+    userRoleRepository.deleteByUserId(userBindDTO.getId());
     // 添加新数据
-    List<RelationUserRoleDO> relationUserRoles = roleIds.stream().map(
-        roleId -> RelationUserRoleDO.builder().userId(userBindDTO.getId()).roleId(roleId).build())
+    List<UserRoleDO> userRoles = roleIds.stream().map(
+        roleId -> UserRoleDO.builder().userId(userBindDTO.getId()).roleId(roleId).build())
         .collect(Collectors.toList());
     // 批量存储
-    relationUserRoleRepository.saveAll(relationUserRoles);
+    userRoleRepository.saveAll(userRoles);
     UserDO userDO = userDOOptional.get();
     UserVO userVO = userDO.convertTo(UserVO.class);
-    userVO.setRoleIds(roleIds);
+    // 根据角色ID获取角色编码
+    Set<String> roleCodes = roleService.findAllByIds(roleIds).stream()
+        .map(RoleVO::getCode)
+        .collect(Collectors.toSet());
+    // 设置角色列表 （ID）
+    userVO.setRoles(roleCodes);
     return userVO;
   }
 
@@ -270,7 +292,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
 
     // 尝试获取是否已存在当前用户,后续新增其他平台授权，依次增加OR条件即可
     UserDO existUser = userRepository
-        .findByUnionIdOOrAppleId(userDO.getUnionId(), userDO.getAppleId());
+        .findByUnionIdOrAppleId(userDO.getUnionId(), userDO.getAppleId());
     if (Objects.isNull(existUser)) {
       // 赋值
       existUser = userDO;

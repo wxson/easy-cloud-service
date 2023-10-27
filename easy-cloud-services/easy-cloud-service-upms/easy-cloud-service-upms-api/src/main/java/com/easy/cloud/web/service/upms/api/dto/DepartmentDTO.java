@@ -25,7 +25,7 @@ public class DepartmentDTO implements IConverter {
   /**
    * 文档ID
    */
-  private Long id;
+  private String id;
   /**
    * 租户ID
    */

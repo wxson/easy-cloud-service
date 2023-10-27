@@ -64,8 +64,8 @@ public class SecurityConstants {
   /***************************************认证用户信息增强KEY**********************************/
   public static final String AUTHORIZATION_USER_ID = "user_id";
   public static final String AUTHORIZATION_USER_NAME = "user_name";
-  public static final String AUTHORIZATION_USER_CHANEL_ID = "channel_id";
-  public static final String AUTHORIZATION_USER_TENANT_ID = "tenant_id";
+  public static final String AUTHORIZATION_USER_CHANEL = "channel";
+  public static final String AUTHORIZATION_USER_TENANT = "tenant";
 
   /**
    * 移动端登录前缀

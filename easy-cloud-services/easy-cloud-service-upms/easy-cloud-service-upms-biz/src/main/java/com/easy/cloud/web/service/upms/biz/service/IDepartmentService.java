@@ -36,7 +36,7 @@ public interface IDepartmentService {
    * @param departmentId 对象ID
    * @return java.lang.Boolean
    */
-  Boolean removeById(Long departmentId);
+  Boolean removeById(String departmentId);
 
   /**
    * 根据ID获取详情
@@ -44,7 +44,7 @@ public interface IDepartmentService {
    * @param departmentId 对象ID
    * @return java.lang.Boolean
    */
-  DepartmentVO detailById(Long departmentId);
+  DepartmentVO detailById(String departmentId);
 
   /**
    * 根据条件获取列表数据
@@ -58,7 +58,7 @@ public interface IDepartmentService {
    *
    * @return
    */
-  List<Tree<Long>> tree();
+  List<Tree<String>> tree();
 
   /**
    * 根据条件获取分页数据

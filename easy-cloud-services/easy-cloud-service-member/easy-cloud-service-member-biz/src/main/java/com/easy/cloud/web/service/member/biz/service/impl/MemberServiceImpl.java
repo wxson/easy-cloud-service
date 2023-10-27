@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.easy.cloud.web.component.core.constants.GlobalConstants;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.member.biz.domain.db.MemberDO;
@@ -83,9 +83,9 @@ public class MemberServiceImpl extends ServiceImpl<DbMemberMapper, MemberDO> imp
                 .setOrigin(memberDTO.getOrigin())
                 .setOrderNo(memberDTO.getOrderNo())
                 .setRecharge(BigDecimal.ZERO)
-                .setAmount(GlobalConstants.L_ZERO)
-                .setDiamond(GlobalConstants.L_ZERO)
-                .setCoupon(GlobalConstants.L_ZERO);
+                .setAmount(GlobalCommonConstants.L_ZERO)
+                .setDiamond(GlobalCommonConstants.L_ZERO)
+                .setCoupon(GlobalCommonConstants.L_ZERO);
         // 资产累加
         Optional.ofNullable(memberDTO.getRecharge()).ifPresent(memberPropertyRecordDO::setRecharge);
         Optional.ofNullable(memberDTO.getAmount()).ifPresent(memberPropertyRecordDO::setAmount);
