@@ -8,6 +8,7 @@ import cn.hutool.json.JSONUtil;
 import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.upms.api.dto.UserBindDTO;
@@ -20,7 +21,6 @@ import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsCacheConstants;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsConstants;
 import com.easy.cloud.web.service.upms.biz.converter.UserConverter;
-import com.easy.cloud.web.service.upms.biz.domain.RoleMenuDO;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import com.easy.cloud.web.service.upms.biz.domain.UserRoleDO;
 import com.easy.cloud.web.service.upms.biz.repository.RoleMenuRepository;
@@ -99,7 +99,6 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
       UserDO admin = UserDO.builder()
           .nickName(GlobalCommonConstants.SUPER_ADMIN_ROLE)
           .userName(GlobalCommonConstants.SUPER_ADMIN_ROLE)
-          .account(GlobalCommonConstants.SUPER_ADMIN_ROLE)
           .password(passwordEncoder.encode(UpmsConstants.SUPER_ADMIN_PASSWORD))
           .tenantId(GlobalCommonConstants.DEFAULT_TENANT_ID_VALUE + "")
           .gender(GenderEnum.MAN)
@@ -121,11 +120,18 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     // 转换成DO对象
     UserDO user = UserConverter.convertTo(userDTO);
     // TODO 校验逻辑
+    // 若昵称为空，则根据账号或电话生成默认昵称
+    if (StrUtil.isBlank(userDTO.getNickName())) {
+      // 昵称=账号
+      user.setNickName(userDTO.getUserName());
+    }
 
     // 密码编译
     user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
     // 存储
     userRepository.save(user);
+    // 更新用户角色信息
+    this.updateUserRole(user, userDTO);
     // 转换对象
     return UserConverter.convertTo(user);
   }
@@ -135,18 +141,46 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   @CacheEvict(value = UpmsCacheConstants.USER_DETAILS, allEntries = true)
   public UserVO update(UserDTO userDTO) {
     // 转换成DO对象
-    UserDO user = UserConverter.convertTo(userDTO);
-    if (Objects.isNull(user.getId())) {
+    if (Objects.isNull(userDTO.getId())) {
       throw new RuntimeException("当前更新对象ID为空");
     }
     // TODO 业务逻辑校验
-
-    // 密码编译
-    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+    UserDO user = userRepository.findById(userDTO.getId())
+        .orElseThrow(() -> new BusinessException("当前菜单信息不存在"));
+    // 保留密码，修改密码采用单独的接口修改
+    String oldPassword = user.getPassword();
+    // 将修改的数据赋值给数据库数据
+    BeanUtils.copyProperties(userDTO, user, true);
+    user.setPassword(oldPassword);
     // 更新
     userRepository.save(user);
+    // 更新用户角色信息
+    this.updateUserRole(user, userDTO);
+
     // 转换对象
     return UserConverter.convertTo(user);
+  }
+
+  /**
+   * 更新用户角色信息
+   *
+   * @param userDO  用户信息
+   * @param userDTO 绑定信息
+   */
+  private void updateUserRole(UserDO userDO, UserDTO userDTO) {
+    // 更新用户角色信息:先删除，后添加
+    userRoleRepository.deleteByUserId(userDO.getId());
+    // 如果绑定有角色ID，则存储
+    if (CollUtil.isNotEmpty(userDTO.getRoleIds())) {
+      // 构建关系表
+      List<UserRoleDO> userRoles = userDTO.getRoleIds().stream()
+          .map(roleId -> UserRoleDO.builder()
+              .userId(userDO.getId())
+              .roleId(roleId)
+              .build())
+          .collect(Collectors.toList());
+      userRoleRepository.saveAll(userRoles);
+    }
   }
 
   @Override
@@ -156,7 +190,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     // TODO 业务逻辑校验
 
     // 删除
-    userRepository.deleteById(userId);
+    userRepository.logicDelete(userId);
     return true;
   }
 
@@ -170,6 +204,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
         .orElseThrow(() -> new RuntimeException("当前数据不存在"));
     // 转换
     UserVO userVO = this.findUserInfo(user);
+    userVO.setPassword("N/A");
     // 转换对象
     return userVO;
   }
@@ -194,16 +229,9 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
         .collect(Collectors.toSet());
     // 设置角色列表 （ID）
     userVO.setRoles(roleCodes);
-
-    // 获取所有关联的菜单ID
-    List<String> menuIds = roleMenuRepository.findByRoleIdIn(roleIds).stream()
-        .map(RoleMenuDO::getMenuId)
-        .distinct()
-        .collect(Collectors.toList());
     // 获取所有有关的菜单权限标识
-    Set<String> permissions = menuService.findUserPermissions(menuIds).stream()
-        .filter(StringUtils::isNotBlank)
-        .collect(Collectors.toSet());
+    Set<String> permissions = menuService
+        .findPermissionsByRoleCodes(CollUtil.newArrayList(roleCodes));
     // 设置权限列表（menu.permission）
     userVO.setPermissions(permissions);
     return userVO;
@@ -219,7 +247,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   @Override
   public Page<UserVO> page(int page, int size) {
     // 构建分页数据
-    Pageable pageable = PageRequest.of(page, size);
+    Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size);
     return UserConverter.convertTo(userRepository.findAll(pageable));
   }
 
@@ -264,7 +292,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
       throw new BusinessException("登录名不能为空");
     }
     // 用户名
-    UserDO userDO = userRepository.findByAccount(userName);
+    UserDO userDO = userRepository.findByUserName(userName);
     if (Objects.isNull(userDO)) {
       throw new BusinessException("当前用户不存在");
     }
@@ -306,10 +334,10 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
 
   @Override
   public UserVO registerUser(UserDTO userDto) {
-    if (StringUtils.isBlank(userDto.getAccount())) {
+    if (StringUtils.isBlank(userDto.getUserName())) {
       throw new BusinessException("账号信息为空");
     }
-    UserDO existUser = userRepository.findByAccount(userDto.getAccount());
+    UserDO existUser = userRepository.findByUserName(userDto.getUserName());
     if (Objects.nonNull(existUser)) {
       throw new BusinessException("账号已存在");
     }

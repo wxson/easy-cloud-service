@@ -1,11 +1,12 @@
 package com.easy.cloud.web.service.upms.biz.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.util.BeanUtils;
-import com.easy.cloud.web.component.core.util.FieldUtils;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
 import com.easy.cloud.web.service.upms.api.vo.MenuVO;
@@ -18,10 +19,10 @@ import com.easy.cloud.web.service.upms.biz.repository.RoleMenuRepository;
 import com.easy.cloud.web.service.upms.biz.service.IMenuService;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
 import com.easy.cloud.web.service.upms.biz.utils.MenuInitUtil;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -59,34 +60,39 @@ public class MenuServiceImpl implements IMenuService {
       // 存储菜单信息
       menuRepository.saveAll(menus);
       // 根据父级菜单获取子菜单数据
-      List<MenuDO> childrenMenus = menus.stream()
-          .filter(childrenMenu -> "system".equals(childrenMenu.getParentId()))
-          .collect(Collectors.toList());
-      // 修改系统菜单层级
-      menus.stream().filter(menuDO -> "system".equals(menuDO.getName()))
-          .findFirst()
-          .ifPresent(menuDO -> {
-            for (MenuDO childrenMenu : childrenMenus) {
-              childrenMenu.setParentId(menuDO.getId());
-            }
-            menuRepository.saveAll(childrenMenus);
-          });
-
-      // 获取超级管理员角色
-      RoleVO superAdminRole = roleService.findFirstByCode(GlobalCommonConstants.SUPER_ADMIN_ROLE);
-      // 修改菜单层级
-      List<RoleMenuDO> roleMenuDOS = menus.stream().map(MenuDO::getId)
-          .map(menuId -> RoleMenuDO.builder()
-              .menuId(menuId)
-              .roleId(superAdminRole.getId())
-              .build())
-          .collect(Collectors.toList());
-      // 菜单权限分配给超管
-      roleMenuRepository.saveAll(roleMenuDOS);
+      this.initChildrenMenu("system", menus);
+      // 根据父级菜单获取子菜单数据
+      this.initChildrenMenu("systemUser", menus);
+      // 根据父级菜单获取子菜单数据
+      this.initChildrenMenu("systemRole", menus);
+      // 根据父级菜单获取子菜单数据
+      this.initChildrenMenu("systemMenu", menus);
       log.info("init platform menus content success!");
     }
   }
 
+  /**
+   * 初始化子菜单数据
+   *
+   * @param parentName 父级菜单名称
+   * @param menus      菜单列表
+   */
+  private void initChildrenMenu(String parentName, List<MenuDO> menus) {
+    // 根据父级菜单获取子菜单数据
+    List<MenuDO> menuChildrenMenus = menus.stream()
+        .filter(childrenMenu -> parentName.equals(childrenMenu.getParentId()))
+        .collect(Collectors.toList());
+    // 修改系统菜单层级
+    menus.stream()
+        .filter(menuDO -> parentName.equals(menuDO.getName()))
+        .findFirst()
+        .ifPresent(menuDO -> {
+          for (MenuDO childrenMenu : menuChildrenMenus) {
+            childrenMenu.setParentId(menuDO.getId());
+          }
+          menuRepository.saveAll(menuChildrenMenus);
+        });
+  }
 
   @Override
   @Transactional(rollbackOn = Exception.class)
@@ -97,15 +103,6 @@ public class MenuServiceImpl implements IMenuService {
 
     // 存储
     menuRepository.save(menu);
-    // 获取超管信息
-    RoleVO superAdminRode = roleService.findFirstByCode(GlobalCommonConstants.SUPER_ADMIN_ROLE);
-    // 赋予超级管理员权限
-    RoleMenuDO roleMenuDO = RoleMenuDO.builder()
-        .menuId(menu.getId())
-        .roleId(superAdminRode.getId())
-        .build();
-    // 菜单权限分配给超管
-    roleMenuRepository.save(roleMenuDO);
     // 转换对象
     return MenuConverter.convertTo(menu);
   }
@@ -116,6 +113,10 @@ public class MenuServiceImpl implements IMenuService {
     // 更新操作，ID不能为空
     if (Objects.isNull(menuDTO.getId())) {
       throw new RuntimeException("当前更新对象ID为空");
+    }
+    // 若父级ID为空，则设置默认父级ID
+    if (StrUtil.isBlank(menuDTO.getParentId())) {
+      menuDTO.setParentId(GlobalCommonConstants.DEPART_TREE_ROOT_ID);
     }
     // 获取当前菜单信息
     MenuDO menuDO = menuRepository.findById(menuDTO.getId())
@@ -159,21 +160,41 @@ public class MenuServiceImpl implements IMenuService {
   }
 
   @Override
-  public List<MenuVO> findAllByIds(List<String> menuIds) {
-    return menuRepository.findAllById(menuIds)
-        .stream()
-        .map(MenuConverter::convertTo)
+  public Set<String> findPermissionsByRoleIds(List<String> roleIds) {
+    // 否则根据权限获取数据
+    List<String> menuIds = roleMenuRepository.findByRoleIdIn(roleIds).stream()
+        .map(RoleMenuDO::getMenuId)
+        .distinct()
         .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> findUserPermissions(List<String> menuIds) {
+    // 根据ID获取菜单权限
     return menuRepository.findAllById(menuIds)
         .stream()
         .filter(menuDO -> MenuTypeEnum.BUTTON == menuDO.getType())
-        .map(MenuDO::getName)
-        .collect(Collectors.toList());
+        .map(MenuDO::getPerms)
+        .collect(Collectors.toSet());
   }
+
+
+  @Override
+  public Set<String> findPermissionsByRoleCodes(ArrayList<String> roleCodes) {
+    // 若包含超管，则获取所有
+    if (roleCodes.contains(GlobalCommonConstants.SUPER_ADMIN_ROLE)) {
+      return menuRepository.findAll()
+          .stream()
+          .filter(menuDO -> MenuTypeEnum.BUTTON == menuDO.getType())
+          .map(MenuDO::getPerms)
+          .collect(Collectors.toSet());
+    }
+    // 根据角色编码获取所有角色ID
+    List<String> roleIds = roleService.findAllByCodes(roleCodes)
+        .stream()
+        .map(RoleVO::getId)
+        .distinct()
+        .collect(Collectors.toList());
+    // 根据ID获取菜单权限
+    return this.findPermissionsByRoleIds(roleIds);
+  }
+
 
   @Override
   public Page<MenuVO> page(int page, int size) {
@@ -183,46 +204,51 @@ public class MenuServiceImpl implements IMenuService {
   }
 
   @Override
-  public List<Tree<String>> findUserMenus(MenuTypeEnum type, String parentId,
-      List<String> channels) {
-    // 根据角色编码获取所有角色ID
-    List<String> roleIds = roleService.findAllByCodes(channels)
-        .stream()
-        .map(RoleVO::getId)
-        .collect(Collectors.toList());
-    // 根据角色ID获取菜单ID
-    List<String> menuIds = roleMenuRepository.findByRoleIdIn(roleIds).stream()
-        .map(RoleMenuDO::getMenuId)
-        .collect(Collectors.toList());
-    // 根据菜单ID获取所有菜单
-    List<MenuVO> menus = menuRepository.findAllById(menuIds).stream()
-        .filter(menuDO -> menuDO.getType() == MenuTypeEnum.MENU)
-        .map(menuDO -> menuDO.convertTo(MenuVO.class))
-        .collect(Collectors.toList());
+  public List<Tree<String>> findUserMenus(String parentId, List<String> channels) {
+    // 菜单集合
+    List<MenuVO> menus = new ArrayList<>();
+    // 如果是超级管理员，拥有所有权限
+    if (channels.contains(GlobalCommonConstants.SUPER_ADMIN_ROLE)) {
+      menus.addAll(menuRepository.findAll().stream()
+          .map(menuDO -> menuDO.convertTo(MenuVO.class))
+          .collect(Collectors.toList())
+      );
+    } else {
+      // 根据角色编码获取所有角色ID
+      List<String> roleIds = roleService.findAllByCodes(channels)
+          .stream()
+          .map(RoleVO::getId)
+          .collect(Collectors.toList());
+      // 根据角色ID获取菜单ID
+      List<String> menuIds = roleMenuRepository.findByRoleIdIn(roleIds).stream()
+          .map(RoleMenuDO::getMenuId)
+          .collect(Collectors.toList());
+      // 根据菜单ID获取所有菜单
+      menus.addAll(menuRepository.findAllById(menuIds).stream()
+          .map(menuDO -> menuDO.convertTo(MenuVO.class))
+          .collect(Collectors.toList()));
+    }
     return TreeUtil
         .build(menus, GlobalCommonConstants.MENU_TREE_ROOT_ID, (menu, tree) -> {
-          // menu转为｛“name”:"",meta:{"title":""}｝格式
-          Map<String, Object> metaMap = new HashMap<>();
-          metaMap.put(FieldUtils.propertyName(MenuDO::getTitle), menu.getTitle());
-          metaMap.put(FieldUtils.propertyName(MenuDO::getIsLink), menu.getIsLink());
-          metaMap.put(FieldUtils.propertyName(MenuDO::getIsHidden), menu.getIsHidden());
-          metaMap.put(FieldUtils.propertyName(MenuDO::getIsKeepAlive), menu.getIsKeepAlive());
-          metaMap.put(FieldUtils.propertyName(MenuDO::getIsAffix), menu.getIsAffix());
-          metaMap.put(FieldUtils.propertyName(MenuDO::getIsIframe), menu.getIsIframe());
-          metaMap.put(FieldUtils.propertyName(MenuDO::getIcon), menu.getIcon());
-          Map<String, Object> menuMap = new HashMap<>();
-          menuMap.put("meta", metaMap);
-          menuMap.put(FieldUtils.propertyName(MenuDO::getType), menu.getType());
-          menuMap.put(FieldUtils.propertyName(MenuDO::getName), menu.getName());
-          menuMap.put(FieldUtils.propertyName(MenuDO::getPath), menu.getPath());
-          menuMap.put(FieldUtils.propertyName(MenuDO::getComponent), menu.getComponent());
-          menuMap.put(FieldUtils.propertyName(MenuDO::getRedirect), menu.getRedirect());
-          menuMap.put(FieldUtils.propertyName(MenuDO::getSort), menu.getSort());
           tree.setId(menu.getId());
           tree.setName(menu.getName());
           tree.setParentId(menu.getParentId());
           tree.setWeight(menu.getSort());
-          tree.putAll(menuMap);
+          tree.putAll(BeanUtil.beanToMap(menu));
         });
+  }
+
+  @Override
+  public List<String> findRoleMenus(String roleId) {
+    // 根据角色ID获取菜单ID
+    List<String> menuIds = roleMenuRepository.findAllByRoleId(roleId)
+        .stream()
+        .map(RoleMenuDO::getMenuId)
+        .collect(Collectors.toList());
+    // 根据菜单ID获取所有菜单
+    return menuRepository.findAllById(menuIds).stream()
+        .map(MenuDO::getId)
+        .distinct()
+        .collect(Collectors.toList());
   }
 }

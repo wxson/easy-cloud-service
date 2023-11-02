@@ -4,6 +4,7 @@ import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.service.IConverter;
 import com.easy.cloud.web.service.upms.api.enums.GenderEnum;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -60,9 +61,9 @@ public class UserDTO implements IConverter {
    */
   private String nickName;
   /**
-   * 账号
+   * 真实名字
    */
-  private String account;
+  private String realName;
   /**
    * 密码
    */
@@ -72,7 +73,7 @@ public class UserDTO implements IConverter {
    */
   private GenderEnum gender;
   /**
-   * 用户名
+   * 用户名、用户账号
    */
   private String userName;
   /**
@@ -116,4 +117,9 @@ public class UserDTO implements IConverter {
    * 更新时间
    */
   private String updateAt;
+
+  /**
+   * 角色ID
+   */
+  private Set<String> roleIds;
 }

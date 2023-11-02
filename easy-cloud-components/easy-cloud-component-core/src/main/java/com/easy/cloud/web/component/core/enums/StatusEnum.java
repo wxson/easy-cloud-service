@@ -13,14 +13,14 @@ import lombok.Getter;
 @AllArgsConstructor
 @ApiModel(value = "", description = "状态枚举：0：启用状态 1：禁用状态 2：冻结状态")
 public enum StatusEnum implements IBaseEnum {
-    /**
-     * Status枚举：0：启用状态 1：禁用状态 2：冻结状态
-     */
-    START_STATUS(0, "启用"),
-    FORBID_STATUS(1, "禁用"),
-    FREEZE_STATUS(2, "冻结"),
-    ;
+  /**
+   * Status枚举：0：启用状态 1：禁用状态 2：冻结状态
+   */
+  FORBID_STATUS(0, "禁用"),
+  START_STATUS(1, "启用"),
+  FREEZE_STATUS(2, "冻结"),
+  ;
 
-    private final int code;
-    private final String desc;
+  private final int code;
+  private final String desc;
 }

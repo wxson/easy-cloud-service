@@ -44,4 +44,9 @@ public class RoleDO extends BaseEntity {
    */
   @Column(columnDefinition = "VARCHAR(255) NOT NULL DEFAULT '' COMMENT '描述'")
   private String remark;
+  /**
+   * 排序字段，数值越小越排靠前
+   */
+  @Column(columnDefinition = "INT NOT NULL DEFAULT '0' COMMENT '排序'")
+  private Integer sort;
 }

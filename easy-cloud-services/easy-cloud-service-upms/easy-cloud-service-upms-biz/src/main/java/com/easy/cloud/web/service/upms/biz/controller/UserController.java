@@ -13,9 +13,11 @@ import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.service.IUserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,9 +49,10 @@ public class UserController {
    * @return 新增数据
    */
   @PostMapping(value = "save")
-  @PreAuthorize("@pms.hasPermission('user_add')")
+  @PreAuthorize("@pms.hasPermission('system:user:add')")
   @SysLog(value = "新增用户", action = Action.ADD)
-  public Object save(@Validated @RequestBody UserDTO userDTO) {
+  @ApiOperation(value = "新增用户")
+  public HttpResult<UserVO> save(@Validated @RequestBody UserDTO userDTO) {
     return HttpResult.ok(userService.save(userDTO));
   }
 
@@ -60,9 +63,10 @@ public class UserController {
    * @return 更新数据
    */
   @PostMapping(value = "update")
-  @PreAuthorize("@pms.hasPermission('user_edit')")
+  @PreAuthorize("@pms.hasPermission('system:user:update')")
   @SysLog(value = "更新用户", action = Action.UPDATE)
-  public Object update(@Validated @RequestBody UserDTO userDTO) {
+  @ApiOperation(value = "更新用户")
+  public HttpResult<UserVO> update(@Validated @RequestBody UserDTO userDTO) {
     return HttpResult.ok(userService.update(userDTO));
   }
 
@@ -73,9 +77,11 @@ public class UserController {
    * @return 是否删除成功
    */
   @GetMapping(value = "remove/{userId}")
-  @PreAuthorize("@pms.hasPermission('user_delete')")
+  @PreAuthorize("@pms.hasPermission('system:user:delete')")
   @SysLog(value = "删除用户", action = Action.DELETE)
-  public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") String userId) {
+  @ApiOperation(value = "删除用户")
+  public HttpResult<Boolean> removeById(
+      @PathVariable @NotNull(message = "当前ID不能为空") String userId) {
     return HttpResult.ok(userService.removeById(userId));
   }
 
@@ -86,9 +92,25 @@ public class UserController {
    * @return 详情数据
    */
   @GetMapping(value = "detail/{userId}")
+  @PreAuthorize("@pms.hasPermission('system:user:query')")
   @SysLog(value = "获取用户详情", action = Action.FIND)
-  public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") String userId) {
+  @ApiOperation(value = "获取用户详情")
+  public HttpResult<UserVO> detailById(@PathVariable @NotNull(message = "当前ID不能为空") String userId) {
     return HttpResult.ok(userService.detailById(userId));
+  }
+
+
+  /**
+   * 根据当前用户基本信息（登录用户的所有信息）
+   *
+   * @return 详情数据
+   */
+  @GetMapping(value = "base/detail")
+  @PreAuthorize("@pms.hasPermission('system:user:query')")
+  @SysLog(value = "获取用户基本详情", action = Action.FIND)
+  @ApiOperation(value = "获取用户基本详情")
+  public HttpResult<UserVO> baseDetail() {
+    return HttpResult.ok(userService.detailById(SecurityUtils.getAuthenticationUser().getId()));
   }
 
   /**
@@ -97,7 +119,10 @@ public class UserController {
    * @return 查询列表
    */
   @GetMapping(value = "list")
-  public Object list() {
+  @PreAuthorize("@pms.hasPermission('system:user:query')")
+  @SysLog(value = "用户列表", action = Action.FIND)
+  @ApiOperation(value = "用户列表")
+  public HttpResult<List<UserVO>> list() {
     return HttpResult.ok(userService.list());
   }
 
@@ -109,7 +134,10 @@ public class UserController {
    * @return 查询分页数据
    */
   @GetMapping(value = "page")
-  public Object page(@RequestParam(required = false, defaultValue = "0") int page,
+  @PreAuthorize("@pms.hasPermission('system:user:query')")
+  @SysLog(value = "用户分页", action = Action.FIND)
+  @ApiOperation(value = "用户分页")
+  public HttpResult<Page<UserVO>> page(@RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "10") int size) {
     return HttpResult.ok(userService.page(page, size));
   }
@@ -123,8 +151,8 @@ public class UserController {
    */
   @Inner
   @GetMapping("detail/{userName}")
-  @ApiOperation(value = "根据用户名获取用户详情")
   @SysLog(value = "根据用户名获取用户详情", action = Action.FIND)
+  @ApiOperation(value = "根据用户名获取用户详情")
   public HttpResult<UserVO> loadUserByUsername(@PathVariable @ApiParam("用户账号") String userName) {
     return HttpResult.ok(userService.loadUserByUsername(userName));
   }
@@ -138,6 +166,7 @@ public class UserController {
    */
   @Inner
   @PostMapping("detail/{type}")
+  @SysLog(value = "根据传入对象获取用户详情", action = Action.FIND)
   @ApiOperation(value = "根据传入对象获取用户详情")
   public HttpResult<UserVO> loadSocialUserByObject(@PathVariable String type,
       @RequestBody UserLoginDTO userLoginDTO) {
@@ -151,7 +180,9 @@ public class UserController {
    * @return success/false
    */
   @PostMapping("/bind/role")
+  @PreAuthorize("@pms.hasPermission('system:user:update')")
   @SysLog(value = "绑定用户角色", action = Action.UPDATE)
+  @ApiOperation(value = "绑定用户角色")
   public HttpResult<UserVO> bindUserRole(@RequestBody UserBindDTO userBindDTO) {
     AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
     userBindDTO.setId(authenticationUser.getId());
@@ -168,6 +199,7 @@ public class UserController {
   @Inner
   @PostMapping("/register")
   @SysLog(value = "注册用户", action = Action.ADD)
+  @ApiOperation(value = "注册用户")
   public HttpResult<UserVO> registerUser(@RequestBody UserDTO userDto) {
     UserVO userVO = userService.registerUser(userDto);
     return HttpResult.ok(userVO);
@@ -183,6 +215,7 @@ public class UserController {
   @Inner
   @PostMapping("/lock/{userId}")
   @SysLog(value = "锁定指定用户", action = Action.UPDATE)
+  @ApiOperation(value = "锁定指定用户")
   public HttpResult<UserVO> lockUser(@PathVariable String userId) {
     return HttpResult.ok(userService.lockUser(userId));
   }
@@ -195,6 +228,7 @@ public class UserController {
    */
   @PostMapping("/password")
   @SysLog(value = "修改用户密码", action = Action.UPDATE)
+  @ApiOperation(value = "修改用户密码")
   public HttpResult<Boolean> changePassword(@RequestBody UserBindDTO userBindDTO) {
     AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
     userBindDTO.setId(authenticationUser.getId());
@@ -209,6 +243,8 @@ public class UserController {
    * @return HttpResult
    */
   @PostMapping("/check")
+  @SysLog(value = "校验用户密码", action = Action.FIND)
+  @ApiOperation(value = "校验用户密码")
   public HttpResult<String> checkPassword(@RequestBody UserBindDTO userBindDTO) {
     AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
     userBindDTO.setId(authenticationUser.getId());
@@ -226,8 +262,8 @@ public class UserController {
    * @return void
    */
   @PostMapping("certification")
-  @ApiOperation(value = "实名认证")
   @SysLog(value = "实名认证", action = Action.UPDATE)
+  @ApiOperation(value = "实名认证")
   public HttpResult<Boolean> certification(@RequestBody UserBindDTO userBindDTO) {
     userService.certification(userBindDTO);
     return HttpResult.ok(true);
@@ -240,8 +276,8 @@ public class UserController {
    * @return void
    */
   @PostMapping("bind/tel")
-  @ApiOperation(value = "绑定用户电话")
   @SysLog(value = "绑定用户电话", action = Action.UPDATE)
+  @ApiOperation(value = "绑定用户电话")
   public HttpResult<Boolean> bindUserTel(@RequestBody UserBindDTO userBindDTO) {
     userService.bindUserTel(userBindDTO);
     return HttpResult.ok(true);

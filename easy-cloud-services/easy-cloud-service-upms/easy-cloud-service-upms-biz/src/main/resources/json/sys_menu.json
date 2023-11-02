@@ -5,6 +5,7 @@
     "name": "dashboard",
     "component": "dashboard/index",
     "title": "message.router.dashboard",
+    "perms": "dashboard",
     "isLink": "",
     "isHide": false,
     "isKeepAlive": true,
@@ -20,6 +21,7 @@
     "component": "layout/routerView/parent",
     "redirect": "/system/menu",
     "title": "message.router.system",
+    "perms": "system",
     "isLink": "",
     "isHide": false,
     "isKeepAlive": true,
@@ -35,6 +37,7 @@
     "name": "systemUser",
     "component": "system/user/index.vue",
     "title": "message.router.systemUser",
+    "perms": "system:user",
     "isLink": "",
     "isHide": false,
     "isKeepAlive": true,
@@ -50,6 +53,7 @@
     "name": "systemRole",
     "component": "system/role/index.vue",
     "title": "message.router.systemRole",
+    "perms": "system:role",
     "isLink": "",
     "isHide": false,
     "isKeepAlive": true,
@@ -63,8 +67,9 @@
     "parentId": "system",
     "path": "/system/menu",
     "name": "systemMenu",
-    "component": "system/menu/index",
+    "component": "system/menu/index.vue",
     "title": "message.router.systemMenu",
+    "perms": "system:menu",
     "isLink": "",
     "isHide": false,
     "isKeepAlive": true,
@@ -80,6 +85,7 @@
     "name": "systemDept",
     "component": "system/dept/index.vue",
     "title": "message.router.systemDept",
+    "perms": "system:dept",
     "isLink": "",
     "isHide": false,
     "isKeepAlive": true,
@@ -95,6 +101,7 @@
     "name": "systemDict",
     "component": "system/dict/index.vue",
     "title": "message.router.systemDict",
+    "perms": "system:dict",
     "isLink": "",
     "isHide": false,
     "isKeepAlive": true,
@@ -102,5 +109,89 @@
     "isIframe": false,
     "icon": "ele-SetUp",
     "sort": 4
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemMenu",
+    "title": "message.btn.add",
+    "perms": "system:menu:add",
+    "sort": 5
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemMenu",
+    "title": "message.btn.delete",
+    "perms": "system:menu:delete",
+    "sort": 6
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemMenu",
+    "title": "message.btn.update",
+    "perms": "system:menu:update",
+    "sort": 7
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemMenu",
+    "title": "message.btn.query",
+    "perms": "system:menu:query",
+    "sort": 8
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemUser",
+    "title": "message.btn.add",
+    "perms": "system:user:add",
+    "sort": 9
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemUser",
+    "title": "message.btn.delete",
+    "perms": "system:user:delete",
+    "sort": 10
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemUser",
+    "title": "message.btn.update",
+    "perms": "system:user:update",
+    "sort": 11
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemUser",
+    "title": "message.btn.query",
+    "perms": "system:user:query",
+    "sort": 12
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemRole",
+    "title": "message.btn.add",
+    "perms": "system:role:add",
+    "sort": 13
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemRole",
+    "title": "message.btn.delete",
+    "perms": "system:role:delete",
+    "sort": 14
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemRole",
+    "title": "message.btn.update",
+    "perms": "system:role:update",
+    "sort": 15
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemRole",
+    "title": "message.btn.query",
+    "perms": "system:role:query",
+    "sort": 16
   }
 ]

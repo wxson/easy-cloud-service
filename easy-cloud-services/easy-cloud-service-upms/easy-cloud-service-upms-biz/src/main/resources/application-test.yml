@@ -31,6 +31,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        session_factory:
+          statement_inspector: com.easy.cloud.web.component.mysql.interceptor.JpaSqlInterceptor
   #MySQL数据源配置
   datasource:
     type: com.zaxxer.hikari.HikariDataSource

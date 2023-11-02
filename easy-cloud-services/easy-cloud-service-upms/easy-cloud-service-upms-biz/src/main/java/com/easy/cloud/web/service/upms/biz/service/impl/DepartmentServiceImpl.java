@@ -6,7 +6,6 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.service.upms.api.dto.DepartmentDTO;
 import com.easy.cloud.web.service.upms.api.vo.DepartmentVO;
-import com.easy.cloud.web.service.upms.biz.constant.UpmsConstants;
 import com.easy.cloud.web.service.upms.biz.converter.DepartmentConverter;
 import com.easy.cloud.web.service.upms.biz.domain.DepartmentDO;
 import com.easy.cloud.web.service.upms.biz.repository.DepartmentRepository;
@@ -95,13 +94,14 @@ public class DepartmentServiceImpl implements IDepartmentService {
   @Override
   public List<Tree<String>> tree() {
     List<DepartmentVO> departmentVOS = this.list();
-    return TreeUtil.build(departmentVOS, GlobalCommonConstants.DEPART_TREE_ROOT_ID, (menu, tree) -> {
-      Map<String, Object> departMap = BeanUtil.beanToMap(menu);
-      tree.setId(menu.getId());
-      tree.setName(menu.getName());
-      tree.setParentId(menu.getParentId());
-      tree.putAll(departMap);
-    });
+    return TreeUtil
+        .build(departmentVOS, GlobalCommonConstants.DEPART_TREE_ROOT_ID, (menu, tree) -> {
+          Map<String, Object> departMap = BeanUtil.beanToMap(menu);
+          tree.setId(menu.getId());
+          tree.setName(menu.getName());
+          tree.setParentId(menu.getParentId());
+          tree.putAll(departMap);
+        });
   }
 
   @Override

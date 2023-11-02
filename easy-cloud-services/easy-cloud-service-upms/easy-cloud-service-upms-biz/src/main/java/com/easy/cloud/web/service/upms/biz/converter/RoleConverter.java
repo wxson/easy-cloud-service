@@ -29,6 +29,8 @@ public class RoleConverter {
         .name(role.getName())
         .remark(role.getRemark())
         .status(role.getStatus())
+        .code(role.getCode())
+        .sort(role.getSort())
         .build();
   }
 
@@ -49,6 +51,8 @@ public class RoleConverter {
         .name(role.getName())
         .remark(role.getRemark())
         .status(role.getStatus())
+        .code(role.getCode())
+        .sort(role.getSort())
         .build();
   }
 

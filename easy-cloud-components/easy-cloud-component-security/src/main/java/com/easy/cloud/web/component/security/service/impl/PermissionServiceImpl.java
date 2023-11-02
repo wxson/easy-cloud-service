@@ -1,6 +1,7 @@
 package com.easy.cloud.web.component.security.service.impl;
 
 import cn.hutool.core.util.ArrayUtil;
+import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.security.service.IPermissionService;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,12 @@ public class PermissionServiceImpl implements IPermissionService {
    */
   @Override
   public boolean hasPermission(String... permissions) {
+    // 超级管理员拥有绝对权限
+    String channel = SecurityUtils.getAuthenticationUser().getChannel();
+    // 如果是超级管理员
+    if (GlobalCommonConstants.SUPER_ADMIN_ROLE.equals(channel)) {
+      return true;
+    }
     // 权限标识为空，则无权限
     if (ArrayUtil.isEmpty(permissions)) {
       return false;

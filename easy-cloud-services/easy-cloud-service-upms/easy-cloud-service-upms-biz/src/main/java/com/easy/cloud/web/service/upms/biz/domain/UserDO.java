@@ -33,10 +33,10 @@ import org.hibernate.annotations.DynamicUpdate;
 public class UserDO extends BaseEntity {
 
   /**
-   * 登录账号
+   * 用户名/用户账号
    */
-  @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '登录账号'")
-  private String account;
+  @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '用户名/用户账号'")
+  private String userName;
   /**
    * 登录密码
    */
@@ -46,7 +46,7 @@ public class UserDO extends BaseEntity {
    * 用户名（真实名字）
    */
   @Column(columnDefinition = "VARCHAR(32) COMMENT '用户名（真实名字）'")
-  private String userName;
+  private String realName;
   /**
    * 昵称
    */

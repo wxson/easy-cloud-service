@@ -9,11 +9,6 @@ package com.easy.cloud.web.component.core.constants;
 public class GlobalCommonConstants {
 
   /**
-   * 默认属性结构顶端ID（即父级ID）
-   */
-  public static final String DEFAULT_TREE_PARENT_ID = "0";
-
-  /**
    * 租户字段
    */
   public static final String TENANT_ID_FIELD = "tenant_id";
@@ -42,7 +37,7 @@ public class GlobalCommonConstants {
   public static final String REDIS_PREFIX_KEY = "easy_cloud:";
 
   /**
-   * 超管角色
+   * 超管角色: 超级管理员获得所有权限
    */
   public static final String SUPER_ADMIN_ROLE = "admin";
 

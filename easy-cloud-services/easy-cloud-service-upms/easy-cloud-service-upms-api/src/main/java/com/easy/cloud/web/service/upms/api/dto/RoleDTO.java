@@ -3,6 +3,7 @@ package com.easy.cloud.web.service.upms.api.dto;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.service.IConverter;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,6 +43,10 @@ public class RoleDTO implements IConverter {
    * 描述
    */
   private String remark;
+  /**
+   * 排序
+   */
+  private Integer sort;
 
   /**
    * 状态 0 启用 1 禁用
@@ -67,4 +72,9 @@ public class RoleDTO implements IConverter {
    * 更新时间
    */
   private String updateAt;
+
+  /**
+   * 权限列表
+   */
+  private Set<String> menuIds;
 }

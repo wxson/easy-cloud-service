@@ -54,13 +54,13 @@ public class MenuDO extends BaseEntity {
   /**
    * 路由路径
    */
-  @Column(columnDefinition = "VARCHAR(255) NOT NULL COMMENT '路由路径'")
+  @Column(columnDefinition = "VARCHAR(255) COMMENT '路由路径'")
   private String path;
 
   /**
-   * 菜单名称
+   * 路由名称
    */
-  @Column(columnDefinition = "VARCHAR(125) NOT NULL COMMENT '菜单名称'")
+  @Column(columnDefinition = "VARCHAR(125) COMMENT '路由名称'")
   private String name;
 
   /**
@@ -72,8 +72,14 @@ public class MenuDO extends BaseEntity {
   /**
    * 菜单搜索名称
    */
-  @Column(columnDefinition = "VARCHAR(125) COMMENT '菜单搜索名称'")
+  @Column(columnDefinition = "VARCHAR(125) NOT NULL COMMENT '菜单搜索名称'")
   private String title;
+
+  /**
+   * 权限标识
+   */
+  @Column(columnDefinition = "VARCHAR(125) COMMENT '权限标识'")
+  private String perms;
 
   /**
    * 是否超链接菜单

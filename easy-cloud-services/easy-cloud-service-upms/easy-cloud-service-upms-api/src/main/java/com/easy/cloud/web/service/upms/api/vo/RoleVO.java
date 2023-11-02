@@ -43,6 +43,10 @@ public class RoleVO {
    * 描述
    */
   private String remark;
+  /**
+   * 排序
+   */
+  private Integer sort;
 
   /**
    * 状态 0 启用 1 禁用

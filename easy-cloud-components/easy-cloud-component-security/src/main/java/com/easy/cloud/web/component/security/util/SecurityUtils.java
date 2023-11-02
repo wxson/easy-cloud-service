@@ -1,6 +1,5 @@
 package com.easy.cloud.web.component.security.util;
 
-import cn.hutool.core.collection.CollUtil;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
 import java.util.Objects;
@@ -47,19 +46,11 @@ public class SecurityUtils {
   }
 
   /**
-   * 获取用户角色信息
+   * 获取用户权限信息
    *
-   * @return 角色集合
+   * @return 权限集合
    */
   public Set<String> getUserPermissions() {
-    if (true) {
-      return CollUtil.newHashSet(
-          "menu_add",
-          "menu_edit",
-          "menu_delete",
-          "menu_query"
-      );
-    }
     return SecurityUtils.getAuthenticationUser()
         .getAuthorities()
         .stream()

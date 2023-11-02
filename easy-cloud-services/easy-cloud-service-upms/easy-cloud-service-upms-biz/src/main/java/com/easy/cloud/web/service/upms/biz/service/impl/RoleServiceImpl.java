@@ -5,6 +5,7 @@ import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
 import com.easy.cloud.web.service.upms.api.dto.RoleMenuDTO;
 import com.easy.cloud.web.service.upms.api.enums.RoleEnum;
@@ -76,25 +77,52 @@ public class RoleServiceImpl implements IRoleService {
 
     // 存储
     roleRepository.save(role);
+    // 更新角色权限信息:先删除，后添加
+    this.updateRoleMenu(role, roleDTO);
     // 转换对象
     return RoleConverter.convertTo(role);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackOn = Exception.class)
   @CacheEvict(value = UpmsCacheConstants.SUPER_ROLE_DETAILS, allEntries = true)
   public RoleVO update(RoleDTO roleDTO) {
     // 转换成DO对象
-    RoleDO role = RoleConverter.convertTo(roleDTO);
-    if (Objects.isNull(role.getId())) {
+    if (Objects.isNull(roleDTO.getId())) {
       throw new RuntimeException("当前更新对象ID为空");
     }
     // TODO 业务逻辑校验
-
+    RoleDO role = roleRepository.findById(roleDTO.getId())
+        .orElseThrow(() -> new BusinessException("当前菜单信息不存在"));
+    // 将修改的数据赋值给数据库数据
+    BeanUtils.copyProperties(roleDTO, role, true);
     // 更新
     roleRepository.save(role);
+    // 更新角色权限信息:先删除，后添加
+    this.updateRoleMenu(role, roleDTO);
+
     // 转换对象
     return RoleConverter.convertTo(role);
+  }
+
+  /**
+   * 更新角色权限信息:先删除，后添加
+   *
+   * @param roleDO  角色信息
+   * @param roleDTO 绑定信息
+   */
+  private void updateRoleMenu(RoleDO roleDO, RoleDTO roleDTO) {
+    // 更新角色权限信息:先删除，后添加
+    roleMenuRepository.deleteByRoleId(roleDO.getId());
+    if (CollUtil.isNotEmpty(roleDTO.getMenuIds())) {
+      List<RoleMenuDO> roleMenus = roleDTO.getMenuIds().stream()
+          .map(menuId -> RoleMenuDO.builder()
+              .roleId(roleDO.getId())
+              .menuId(menuId)
+              .build())
+          .collect(Collectors.toList());
+      roleMenuRepository.saveAll(roleMenus);
+    }
   }
 
   @Override
@@ -102,13 +130,8 @@ public class RoleServiceImpl implements IRoleService {
   @CacheEvict(value = UpmsCacheConstants.SUPER_ROLE_DETAILS, allEntries = true)
   public Boolean removeById(String roleId) {
     // TODO 业务逻辑校验
-
-    // 删除
-    RoleDO role = roleRepository.findById(roleId)
-        .orElseThrow(() -> new RuntimeException("当前数据不存在"));
-    role.setDeleted(DeletedEnum.DELETED);
-    // 更新操作
-    roleRepository.save(role);
+    // 逻辑删除操作
+    roleRepository.logicDelete(roleId);
     return true;
   }
 
@@ -156,7 +179,7 @@ public class RoleServiceImpl implements IRoleService {
   @Override
   public Page<RoleVO> page(int page, int size) {
     // 构建分页数据
-    Pageable pageable = PageRequest.of(page, size);
+    Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size);
     return RoleConverter.convertTo(roleRepository.findAll(pageable));
   }
 

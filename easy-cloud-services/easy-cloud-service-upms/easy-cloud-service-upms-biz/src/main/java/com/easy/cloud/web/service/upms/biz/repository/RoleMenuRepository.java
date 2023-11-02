@@ -19,12 +19,14 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenuDO, String> {
    */
   void deleteByRoleId(String roleId);
 
+
   /**
-   * 根据菜单ID删除数据
+   * 根据角色编码获取菜单信息
    *
-   * @param menuId 菜单ID
+   * @param roleId 角色ID
+   * @return
    */
-  void deleteByMenuId(String menuId);
+  List<RoleMenuDO> findAllByRoleId(String roleId);
 
 
   /**

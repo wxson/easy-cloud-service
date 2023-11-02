@@ -61,9 +61,9 @@ public class UserVO {
    */
   private String nickName;
   /**
-   * 账号
+   * 真实名字
    */
-  private String account;
+  private String realName;
   /**
    * 密码
    */
@@ -73,7 +73,7 @@ public class UserVO {
    */
   private GenderEnum gender;
   /**
-   * 用户名
+   * 用户名、用户账号
    */
   private String userName;
   /**

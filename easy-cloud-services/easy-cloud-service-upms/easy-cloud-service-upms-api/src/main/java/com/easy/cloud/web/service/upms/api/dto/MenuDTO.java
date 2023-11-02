@@ -66,6 +66,11 @@ public class MenuDTO implements IConverter {
   private String title;
 
   /**
+   * 权限标识
+   */
+  private String perms;
+
+  /**
    * 是否超链接菜单
    */
   private Boolean isLink;
