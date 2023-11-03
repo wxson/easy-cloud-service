@@ -1,0 +1,20 @@
+[
+  {
+    "label": "未知的性别",
+    "value": "0",
+    "dictType": "USER_GENDER",
+    "remark": "未知的性别"
+  },
+  {
+    "label": "男",
+    "value": "1",
+    "dictType": "USER_GENDER",
+    "remark": "性别男"
+  },
+  {
+    "label": "女",
+    "value": "2",
+    "dictType": "USER_GENDER",
+    "remark": "性别女"
+  }
+]

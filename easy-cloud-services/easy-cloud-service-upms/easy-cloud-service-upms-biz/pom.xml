@@ -28,10 +28,25 @@
 <!--      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
 <!--    </dependency>-->
 
+
+    <!-- 依赖upms api -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-service-upms-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <!-- 认证组件 -->
     <dependency>
       <groupId>com.easy.cloud.web</groupId>
       <artifactId>easy-cloud-component-security</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
+    <!--Local Dict-->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-module-dict-biz</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
 

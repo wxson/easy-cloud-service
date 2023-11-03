@@ -1,0 +1,7 @@
+[
+  {
+    "name": "用户性别",
+    "type": "USER_GENDER",
+    "remark": "用户性别字典"
+  }
+]
