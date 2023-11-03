@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * Department 持久类
@@ -22,8 +24,10 @@ import lombok.experimental.SuperBuilder;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "db_department")
-public class DepartmentDO extends BaseEntity {
+@DynamicInsert
+@DynamicUpdate
+@Table(name = "db_dept")
+public class DeptDO extends BaseEntity {
 
   /**
    * 部门名称
@@ -38,8 +42,8 @@ public class DepartmentDO extends BaseEntity {
   /**
    * 上级部门
    */
-  @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0' COMMENT '父级部门ID'")
-  private Long parentId;
+  @Column(columnDefinition = "VARCHAR(32) NOT NULL DEFAULT '0' COMMENT '父级部门ID'")
+  private String parentId;
   /**
    * 负责人
    */
@@ -49,10 +53,15 @@ public class DepartmentDO extends BaseEntity {
    * 联系电话
    */
   @Column(columnDefinition = "VARCHAR(11) COMMENT '联系电话'")
-  private String phone;
+  private String tel;
   /**
    * 邮箱
    */
-  @Column(columnDefinition = "VARCHAR(11) COMMENT '联系电话'")
+  @Column(columnDefinition = "VARCHAR(32) COMMENT '邮箱'")
   private String email;
+  /**
+   * 描述
+   */
+  @Column(columnDefinition = "VARCHAR(225) COMMENT '描述'")
+  private String remark;
 }

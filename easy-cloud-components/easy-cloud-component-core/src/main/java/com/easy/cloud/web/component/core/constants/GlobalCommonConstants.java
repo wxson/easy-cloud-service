@@ -16,7 +16,7 @@ public class GlobalCommonConstants {
   /**
    * 默认租户ID
    */
-  public static final String DEFAULT_TENANT_ID_VALUE = "1";
+  public static final String DEFAULT_TENANT = "1";
 
   /**
    * 常用整型
@@ -42,14 +42,9 @@ public class GlobalCommonConstants {
   public static final String SUPER_ADMIN_ROLE = "admin";
 
   /**
-   * 超管信息
+   * 渠道角色编码信息
    */
   public static final String TENANT_ROLE = "tenant";
-
-  /**
-   * 菜单树根目录ID
-   */
-  public static final String MENU_TREE_ROOT_ID = "0";
 
   /**
    * 部门树根目录ID

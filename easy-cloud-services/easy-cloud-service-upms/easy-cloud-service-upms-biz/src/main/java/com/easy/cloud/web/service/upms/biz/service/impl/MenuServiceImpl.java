@@ -229,7 +229,7 @@ public class MenuServiceImpl implements IMenuService {
           .collect(Collectors.toList()));
     }
     return TreeUtil
-        .build(menus, GlobalCommonConstants.MENU_TREE_ROOT_ID, (menu, tree) -> {
+        .build(menus, GlobalCommonConstants.DEPART_TREE_ROOT_ID, (menu, tree) -> {
           tree.setId(menu.getId());
           tree.setName(menu.getName());
           tree.setParentId(menu.getParentId());

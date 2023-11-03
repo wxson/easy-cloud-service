@@ -106,7 +106,7 @@ public class MenuController {
   @SysLog(value = "菜单树", action = Action.FIND)
   @ApiOperation(value = "菜单树")
   public HttpResult<List<Tree<String>>> findUserMenus(
-      @RequestParam(defaultValue = GlobalCommonConstants.MENU_TREE_ROOT_ID) String parentId) {
+      @RequestParam(defaultValue = GlobalCommonConstants.DEPART_TREE_ROOT_ID) String parentId) {
     // 测试查询超管下的所有菜单
     return HttpResult.ok(menuService.findUserMenus(parentId,
         CollUtil.newArrayList(SecurityUtils.getAuthenticationUser().getChannel())));

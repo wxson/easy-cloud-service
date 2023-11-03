@@ -1,8 +1,10 @@
 package com.easy.cloud.web.service.upms.api.vo;
 
+import com.easy.cloud.web.component.core.constants.DateTimeConstants;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.service.upms.api.enums.GenderEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -107,7 +109,7 @@ public class UserVO {
   /**
    * 创建时间
    */
-  private Date createAt;
+  private String createAt;
   /**
    * 更新用户
    */
@@ -115,7 +117,7 @@ public class UserVO {
   /**
    * 更新时间
    */
-  private Date updateAt;
+  private String updateAt;
 
   /**
    * 角色ID

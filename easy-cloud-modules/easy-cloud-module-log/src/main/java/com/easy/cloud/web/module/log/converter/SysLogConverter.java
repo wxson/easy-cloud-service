@@ -1,5 +1,8 @@
 package com.easy.cloud.web.module.log.converter;
 
+import cn.hutool.core.date.DateUtil;
+import com.easy.cloud.web.component.core.constants.DateTimeConstants;
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.module.log.domain.SysLogDO;
 import com.easy.cloud.web.service.upms.api.dto.SysLogDTO;
 import com.easy.cloud.web.service.upms.api.vo.SysLogVO;
@@ -35,21 +38,14 @@ public class SysLogConverter {
   /**
    * DO转为VO
    *
-   * @param sysLogDO 转换数据
+   * @param sysLog 转换数据
    * @return com.easy.cloud.web.module.log.domain.vo.OperationLogVO
    */
-  public static SysLogVO convertTo(SysLogDO sysLogDO) {
-    return SysLogVO.builder()
-        .id(sysLogDO.getId())
-        .createAt(sysLogDO.getCreateAt())
-        .name(sysLogDO.getName())
-        .action(sysLogDO.getAction())
-        .methodName(sysLogDO.getMethodName())
-        .className(sysLogDO.getClassName())
-        .type(sysLogDO.getType())
-        .params(sysLogDO.getParams())
-        .elapsedTime(sysLogDO.getElapsedTime())
-        .build();
+  public static SysLogVO convertTo(SysLogDO sysLog) {
+    SysLogVO sysLogVO = SysLogVO.builder().build();
+    BeanUtils.copyProperties(sysLog, sysLogVO, true);
+    sysLogVO.setCreateAt(DateUtil.format(sysLog.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
+    return sysLogVO;
   }
 
   /**

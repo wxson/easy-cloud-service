@@ -1,8 +1,9 @@
 package com.easy.cloud.web.service.upms.biz.service;
 
 import cn.hutool.core.lang.tree.Tree;
-import com.easy.cloud.web.service.upms.api.dto.DepartmentDTO;
-import com.easy.cloud.web.service.upms.api.vo.DepartmentVO;
+import com.easy.cloud.web.component.core.service.IInitService;
+import com.easy.cloud.web.service.upms.api.dto.DeptDTO;
+import com.easy.cloud.web.service.upms.api.vo.DeptVO;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
@@ -12,23 +13,23 @@ import org.springframework.data.domain.Page;
  * @author Fast Java
  * @date 2023-08-03 15:00:02
  */
-public interface IDepartmentService {
+public interface IDeptService extends IInitService {
 
   /**
    * 新增数据
    *
-   * @param departmentDTO 保存参数
+   * @param deptDTO 保存参数
    * @return com.easy.cloud.web.service.upms.api.vo.DepartmentVO
    */
-  DepartmentVO save(DepartmentDTO departmentDTO);
+  DeptVO save(DeptDTO deptDTO);
 
   /**
    * 更新数据，默认全量更新
    *
-   * @param departmentDTO 保存参数
+   * @param deptDTO 保存参数
    * @return com.easy.cloud.web.service.upms.api.vo.DepartmentVO
    */
-  DepartmentVO update(DepartmentDTO departmentDTO);
+  DeptVO update(DeptDTO deptDTO);
 
   /**
    * 根据ID删除数据
@@ -44,14 +45,14 @@ public interface IDepartmentService {
    * @param departmentId 对象ID
    * @return java.lang.Boolean
    */
-  DepartmentVO detailById(String departmentId);
+  DeptVO detailById(String departmentId);
 
   /**
    * 根据条件获取列表数据
    *
    * @return List<com.easy.cloud.web.service.upms.api.vo.DepartmentVO> 返回列表数据
    */
-  List<DepartmentVO> list();
+  List<DeptVO> list();
 
   /**
    * 获取部门树
@@ -67,6 +68,6 @@ public interface IDepartmentService {
    * @param size 每页大小
    * @return List<com.easy.cloud.web.service.upms.api.vo.DepartmentVO> 返回列表数据
    */
-  Page<DepartmentVO> page(int page, int size);
+  Page<DeptVO> page(int page, int size);
 
 }

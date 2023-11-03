@@ -1,5 +1,7 @@
 package com.easy.cloud.web.service.upms.biz.converter;
 
+import cn.hutool.core.date.DateUtil;
+import com.easy.cloud.web.component.core.constants.DateTimeConstants;
 import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.vo.MenuVO;
@@ -37,6 +39,8 @@ public class MenuConverter {
   public static MenuVO convertTo(MenuDO menu) {
     MenuVO menuVO = MenuVO.builder().build();
     BeanUtils.copyProperties(menu, menuVO, true);
+    menuVO.setCreateAt(DateUtil.format(menu.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
+    menuVO.setUpdateAt(DateUtil.format(menu.getUpdateAt(), DateTimeConstants.DEFAULT_FORMAT));
     return menuVO;
   }
 

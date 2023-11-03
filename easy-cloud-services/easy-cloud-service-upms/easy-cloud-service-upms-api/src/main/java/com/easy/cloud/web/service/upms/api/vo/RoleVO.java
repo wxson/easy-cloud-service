@@ -2,7 +2,6 @@ package com.easy.cloud.web.service.upms.api.vo;
 
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
-import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,7 +62,7 @@ public class RoleVO {
   /**
    * 创建时间
    */
-  private Date createAt;
+  private String createAt;
   /**
    * 更新用户
    */
@@ -71,7 +70,7 @@ public class RoleVO {
   /**
    * 更新时间
    */
-  private Date updateAt;
+  private String updateAt;
 
   /**
    * 菜单集合

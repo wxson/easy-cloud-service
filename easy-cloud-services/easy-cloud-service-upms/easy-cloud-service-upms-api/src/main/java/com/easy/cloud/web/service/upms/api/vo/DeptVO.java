@@ -1,8 +1,7 @@
-package com.easy.cloud.web.service.upms.api.dto;
+package com.easy.cloud.web.service.upms.api.vo;
 
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
-import com.easy.cloud.web.component.core.service.IConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * Department请求数据
+ * Department展示数据
  *
  * @author Fast Java
  * @date 2023-08-03 15:00:02
@@ -20,7 +19,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepartmentDTO implements IConverter {
+public class DeptVO {
 
   /**
    * 文档ID
@@ -49,11 +48,15 @@ public class DepartmentDTO implements IConverter {
   /**
    * 联系电话
    */
-  private String phone;
+  private String tel;
   /**
    * 邮箱
    */
   private String email;
+  /**
+   * 描述
+   */
+  private String remark;
   /**
    * 状态 0 启用 1 禁用
    */

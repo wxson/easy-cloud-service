@@ -39,7 +39,7 @@ public class TenantContextHolderFilter extends GenericFilterBean {
     if (StrUtil.isNotBlank(tenantId)) {
       TenantContextHolder.setTenantId(tenantId);
     } else {
-      TenantContextHolder.setTenantId(GlobalCommonConstants.DEFAULT_TENANT_ID_VALUE);
+      TenantContextHolder.setTenantId(GlobalCommonConstants.DEFAULT_TENANT);
     }
 
     filterChain.doFilter(request, response);

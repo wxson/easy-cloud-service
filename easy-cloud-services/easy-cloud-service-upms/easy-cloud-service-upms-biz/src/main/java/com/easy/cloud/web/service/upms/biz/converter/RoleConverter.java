@@ -1,5 +1,8 @@
 package com.easy.cloud.web.service.upms.biz.converter;
 
+import cn.hutool.core.date.DateUtil;
+import com.easy.cloud.web.component.core.constants.DateTimeConstants;
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.biz.domain.RoleDO;
@@ -22,16 +25,9 @@ public class RoleConverter {
    * @return com.easy.cloud.web.service.upms.biz.domain.db.RoleDO
    */
   public static RoleDO convertTo(RoleDTO role) {
-    return RoleDO.builder()
-        .id(role.getId())
-        .deleted(role.getDeleted())
-        .tenantId(role.getTenantId())
-        .name(role.getName())
-        .remark(role.getRemark())
-        .status(role.getStatus())
-        .code(role.getCode())
-        .sort(role.getSort())
-        .build();
+    RoleDO roleDO = RoleDO.builder().build();
+    BeanUtils.copyProperties(role, roleDO, true);
+    return roleDO;
   }
 
   /**
@@ -41,19 +37,11 @@ public class RoleConverter {
    * @return com.easy.cloud.web.service.upms.api.vo.RoleVO
    */
   public static RoleVO convertTo(RoleDO role) {
-    return RoleVO.builder()
-        .id(role.getId())
-        .createBy(role.getCreateBy())
-        .createAt(role.getCreateAt())
-        .updateAt(role.getUpdateAt())
-        .deleted(role.getDeleted())
-        .tenantId(role.getTenantId())
-        .name(role.getName())
-        .remark(role.getRemark())
-        .status(role.getStatus())
-        .code(role.getCode())
-        .sort(role.getSort())
-        .build();
+    RoleVO roleVO = RoleVO.builder().build();
+    BeanUtils.copyProperties(role, roleVO, true);
+    roleVO.setCreateAt(DateUtil.format(role.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
+    roleVO.setUpdateAt(DateUtil.format(role.getUpdateAt(), DateTimeConstants.DEFAULT_FORMAT));
+    return roleVO;
   }
 
   /**

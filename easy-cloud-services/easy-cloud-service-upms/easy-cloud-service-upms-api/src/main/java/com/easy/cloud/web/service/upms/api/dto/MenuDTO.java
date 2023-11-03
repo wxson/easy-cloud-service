@@ -26,11 +26,6 @@ public class MenuDTO implements IConverter {
    */
   private String id;
   /**
-   * 租户ID,超管、管理、租户三个角色的租户ID都是自己本身 一个企业、一个单位或一所学校只能有一个租户
-   */
-  private String tenantId;
-
-  /**
    * 类型（M目录 C菜单 F按钮）
    */
   private MenuTypeEnum type;
@@ -108,20 +103,4 @@ public class MenuDTO implements IConverter {
    * 排序字段，数值越小越排靠前
    */
   private Integer sort;
-  /**
-   * 创建用户
-   */
-  private String createBy;
-  /**
-   * 创建时间
-   */
-  private String createAt;
-  /**
-   * 更新人员
-   */
-  private String updateBy;
-  /**
-   * 更新时间
-   */
-  private String updateAt;
 }

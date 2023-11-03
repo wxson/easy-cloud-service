@@ -28,10 +28,6 @@ public class RoleDTO implements IConverter {
    */
   private String id;
   /**
-   * 租户ID
-   */
-  private String tenantId;
-  /**
    * 角色编码
    */
   private String code;
@@ -56,22 +52,6 @@ public class RoleDTO implements IConverter {
    * 是否删除 0 未删除 1 已删除
    */
   private DeletedEnum deleted;
-  /**
-   * 创建用户
-   */
-  private String createBy;
-  /**
-   * 创建时间
-   */
-  private String createAt;
-  /**
-   * 更新用户
-   */
-  private String updateBy;
-  /**
-   * 更新时间
-   */
-  private String updateAt;
 
   /**
    * 权限列表

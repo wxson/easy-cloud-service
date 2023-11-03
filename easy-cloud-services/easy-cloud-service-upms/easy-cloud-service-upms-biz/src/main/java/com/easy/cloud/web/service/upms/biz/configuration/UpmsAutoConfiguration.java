@@ -1,5 +1,6 @@
 package com.easy.cloud.web.service.upms.biz.configuration;
 
+import com.easy.cloud.web.service.upms.biz.service.IDeptService;
 import com.easy.cloud.web.service.upms.biz.service.IMenuService;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
 import com.easy.cloud.web.service.upms.biz.service.IUserService;
@@ -27,6 +28,8 @@ public class UpmsAutoConfiguration {
 
   private final IUserService userService;
 
+  private final IDeptService deptService;
+
   @Async
   @EventListener(ApplicationPreparedEvent.class)
   public void initDynamicRouteCache() {
@@ -39,5 +42,7 @@ public class UpmsAutoConfiguration {
     menuService.init();
     // 初始化用户
     userService.init();
+    // 初始化部门
+    deptService.init();
   }
 }

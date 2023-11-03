@@ -1,5 +1,8 @@
 package com.easy.cloud.web.service.upms.biz.converter;
 
+import cn.hutool.core.date.DateUtil;
+import com.easy.cloud.web.component.core.constants.DateTimeConstants;
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.upms.api.dto.UserDTO;
 import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
@@ -22,27 +25,9 @@ public class UserConverter {
    * @return com.easy.cloud.web.service.upms.biz.domain.db.UserDO
    */
   public static UserDO convertTo(UserDTO user) {
-    return UserDO.builder()
-        .id(user.getId())
-        .country(user.getCountry())
-        .unionId(user.getUnionId())
-        .city(user.getCity())
-        .nickName(user.getNickName())
-        .gender(user.getGender())
-        .avatar(user.getAvatar())
-        .userName(user.getUserName())
-        .appleId(user.getAppleId())
-        .password(user.getPassword())
-        .deleted(user.getDeleted())
-        .province(user.getProvince())
-        .identity(user.getIdentity())
-        .tenantId(user.getTenantId())
-        .tel(user.getTel())
-        .region(user.getRegion())
-        .realName(user.getRealName())
-        .email(user.getEmail())
-        .status(user.getStatus())
-        .build();
+    UserDO userDO = UserDO.builder().build();
+    BeanUtils.copyProperties(user, userDO, true);
+    return userDO;
   }
 
   /**
@@ -52,29 +37,11 @@ public class UserConverter {
    * @return com.easy.cloud.web.service.upms.api.vo.UserVO
    */
   public static UserVO convertTo(UserDO user) {
-    return UserVO.builder()
-        .id(user.getId())
-        .createBy(user.getCreateBy())
-        .createAt(user.getCreateAt())
-        .updateAt(user.getUpdateAt())
-        .country(user.getCountry())
-        .unionId(user.getUnionId())
-        .city(user.getCity())
-        .nickName(user.getNickName())
-        .gender(user.getGender())
-        .avatar(user.getAvatar())
-        .userName(user.getUserName())
-        .appleId(user.getAppleId())
-        .deleted(user.getDeleted())
-        .province(user.getProvince())
-        .identity(user.getIdentity())
-        .tenantId(user.getTenantId())
-        .tel(user.getTel())
-        .region(user.getRegion())
-        .realName(user.getRealName())
-        .email(user.getEmail())
-        .status(user.getStatus())
-        .build();
+    UserVO userVO = UserVO.builder().build();
+    BeanUtils.copyProperties(user, userVO, true);
+    userVO.setCreateAt(DateUtil.format(user.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
+    userVO.setUpdateAt(DateUtil.format(user.getUpdateAt(), DateTimeConstants.DEFAULT_FORMAT));
+    return userVO;
   }
 
   /**

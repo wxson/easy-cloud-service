@@ -1,6 +1,8 @@
 package com.easy.cloud.web.service.upms.api.vo;
 
+import com.easy.cloud.web.component.core.constants.DateTimeConstants;
 import com.easy.cloud.web.service.upms.api.enums.OperationLogType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +21,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonFormat(pattern = DateTimeConstants.DEFAULT_FORMAT, timezone = DateTimeConstants.DEFAULT_TIMEZONE)
 public class SysLogVO {
 
   /**
@@ -72,5 +75,5 @@ public class SysLogVO {
   /**
    * 创建时间
    */
-  private Date createAt;
+  private String createAt;
 }

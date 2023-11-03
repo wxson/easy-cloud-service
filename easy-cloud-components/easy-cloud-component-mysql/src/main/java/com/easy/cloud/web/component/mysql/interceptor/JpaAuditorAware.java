@@ -8,6 +8,8 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
 /**
+ * JPA用户自动注入
+ *
  * @author GR
  * @date 2023/10/24 16:40
  */
@@ -21,7 +23,6 @@ public class JpaAuditorAware implements AuditorAware<String> {
       AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
       return Optional.of(authenticationUser.getId());
     } catch (Exception exception) {
-      log.info("JpaInterceptor Exception:{}", exception.getMessage());
     }
     return Optional.empty();
   }

@@ -100,7 +100,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
           .nickName(GlobalCommonConstants.SUPER_ADMIN_ROLE)
           .userName(GlobalCommonConstants.SUPER_ADMIN_ROLE)
           .password(passwordEncoder.encode(UpmsConstants.SUPER_ADMIN_PASSWORD))
-          .tenantId(GlobalCommonConstants.DEFAULT_TENANT_ID_VALUE + "")
+          .tenantId(GlobalCommonConstants.DEFAULT_TENANT)
           .gender(GenderEnum.MAN)
           .build();
       userRepository.save(admin);

@@ -29,10 +29,6 @@ public class UserDTO implements IConverter {
    */
   private String id;
   /**
-   * 租户ID,超管、管理、租户三个角色的租户ID都是自己本身 一个企业、一个单位或一所学校只能有一个租户
-   */
-  private String tenantId;
-  /**
    * 微信union Id
    */
   private String unionId;
@@ -101,23 +97,6 @@ public class UserDTO implements IConverter {
    * 邮箱
    */
   private String email;
-  /**
-   * 创建用户
-   */
-  private String createBy;
-  /**
-   * 创建时间
-   */
-  private String createAt;
-  /**
-   * 更新用户
-   */
-  private String updateBy;
-  /**
-   * 更新时间
-   */
-  private String updateAt;
-
   /**
    * 角色ID
    */

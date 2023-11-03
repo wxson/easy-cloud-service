@@ -58,7 +58,7 @@ public class RoleServiceImpl implements IRoleService {
               .code(roleEnum.getCode())
               .remark(roleEnum.getDesc())
               .name(roleEnum.getDesc())
-              .tenantId(GlobalCommonConstants.DEFAULT_TENANT_ID_VALUE)
+              .tenantId(GlobalCommonConstants.DEFAULT_TENANT)
               .deleted(DeletedEnum.UN_DELETED)
               .status(StatusEnum.START_STATUS)
               .build()).collect(Collectors.toList());
