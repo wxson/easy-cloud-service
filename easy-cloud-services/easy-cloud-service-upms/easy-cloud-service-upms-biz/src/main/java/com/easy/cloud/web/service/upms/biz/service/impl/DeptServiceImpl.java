@@ -40,13 +40,9 @@ public class DeptServiceImpl implements IDeptService {
   public void init() {
     // 未初始化过数据
     if (deptRepository.count() <= 0) {
-      DeptDO dept = DeptDO.builder()
-          .name("EasyCloud")
-          .parentId(GlobalCommonConstants.DEPART_TREE_ROOT_ID)
-          .sort(GlobalCommonConstants.ZERO)
-          .remark("Easy Cloud Service")
-          .build();
-      deptRepository.save(dept);
+      // 初始化部门数据
+      List<DeptDO> depts = this.initJsonToList("json/sys_dept.json", DeptDO.class);
+      deptRepository.saveAll(depts);
       log.info("init platform depts content success!");
     }
   }

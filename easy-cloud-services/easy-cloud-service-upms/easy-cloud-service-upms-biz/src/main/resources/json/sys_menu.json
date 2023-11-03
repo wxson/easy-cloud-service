@@ -193,5 +193,33 @@
     "title": "message.btn.query",
     "perms": "system:role:query",
     "sort": 16
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemDept",
+    "title": "message.btn.add",
+    "perms": "system:dept:add",
+    "sort": 17
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemDept",
+    "title": "message.btn.delete",
+    "perms": "system:dept:delete",
+    "sort": 18
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemDept",
+    "title": "message.btn.update",
+    "perms": "system:dept:update",
+    "sort": 19
+  },
+  {
+    "type": "BUTTON",
+    "parentId": "systemDept",
+    "title": "message.btn.query",
+    "perms": "system:dept:query",
+    "sort": 20
   }
 ]

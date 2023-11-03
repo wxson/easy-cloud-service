@@ -1,14 +1,11 @@
 package com.easy.cloud.web.service.upms.biz.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
-import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
 import com.easy.cloud.web.service.upms.api.dto.RoleMenuDTO;
-import com.easy.cloud.web.service.upms.api.enums.RoleEnum;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsCacheConstants;
 import com.easy.cloud.web.service.upms.biz.converter.RoleConverter;
@@ -17,7 +14,6 @@ import com.easy.cloud.web.service.upms.biz.domain.RoleMenuDO;
 import com.easy.cloud.web.service.upms.biz.repository.RoleMenuRepository;
 import com.easy.cloud.web.service.upms.biz.repository.RoleRepository;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,17 +49,10 @@ public class RoleServiceImpl implements IRoleService {
   public void init() {
     // 未初始化过数据
     if (roleRepository.count() <= 0) {
-      List<RoleDO> roleDOS = Arrays.stream(RoleEnum.values())
-          .map(roleEnum -> RoleDO.builder()
-              .code(roleEnum.getCode())
-              .remark(roleEnum.getDesc())
-              .name(roleEnum.getDesc())
-              .tenantId(GlobalCommonConstants.DEFAULT_TENANT)
-              .deleted(DeletedEnum.UN_DELETED)
-              .status(StatusEnum.START_STATUS)
-              .build()).collect(Collectors.toList());
+      // 初始化角色数据
+      List<RoleDO> roles = this.initJsonToList("json/sys_role.json", RoleDO.class);
       // 初始化存储
-      roleRepository.saveAll(roleDOS);
+      roleRepository.saveAll(roles);
       log.info("init platform roles content success!");
     }
   }

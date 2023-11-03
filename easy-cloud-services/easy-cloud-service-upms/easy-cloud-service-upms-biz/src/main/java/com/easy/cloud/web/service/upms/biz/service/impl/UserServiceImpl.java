@@ -14,16 +14,13 @@ import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.upms.api.dto.UserBindDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserLoginDTO;
-import com.easy.cloud.web.service.upms.api.enums.GenderEnum;
 import com.easy.cloud.web.service.upms.api.enums.SocialTypeEnum;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsCacheConstants;
-import com.easy.cloud.web.service.upms.biz.constant.UpmsConstants;
 import com.easy.cloud.web.service.upms.biz.converter.UserConverter;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import com.easy.cloud.web.service.upms.biz.domain.UserRoleDO;
-import com.easy.cloud.web.service.upms.biz.repository.RoleMenuRepository;
 import com.easy.cloud.web.service.upms.biz.repository.UserRepository;
 import com.easy.cloud.web.service.upms.biz.repository.UserRoleRepository;
 import com.easy.cloud.web.service.upms.biz.service.IMenuService;
@@ -79,9 +76,6 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   @Autowired
   private UserRoleRepository userRoleRepository;
 
-  @Autowired
-  private RoleMenuRepository roleMenuRepository;
-
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     applicationContext.getBeansOfType(ISocialService.class).values()
@@ -93,17 +87,11 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   public void init() {
     // 未初始化过数据
     if (userRepository.count() <= 0) {
+      // 创建超管
+      UserDO admin = this.initJsonToBean("json/sys_user.json", UserDO.class);
+      userRepository.save(admin);
       // 获取超级管理员角色
       RoleVO superAdminRole = roleService.findFirstByCode(GlobalCommonConstants.SUPER_ADMIN_ROLE);
-      // 创建超管
-      UserDO admin = UserDO.builder()
-          .nickName(GlobalCommonConstants.SUPER_ADMIN_ROLE)
-          .userName(GlobalCommonConstants.SUPER_ADMIN_ROLE)
-          .password(passwordEncoder.encode(UpmsConstants.SUPER_ADMIN_PASSWORD))
-          .tenantId(GlobalCommonConstants.DEFAULT_TENANT)
-          .gender(GenderEnum.MAN)
-          .build();
-      userRepository.save(admin);
       // 绑定超管角色
       UserRoleDO userRoleDO = UserRoleDO.builder()
           .userId(admin.getId())

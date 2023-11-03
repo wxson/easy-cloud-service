@@ -1,0 +1,14 @@
+[
+  {
+    "code": "admin",
+    "name": "超级管理员",
+    "remark": "超级管理员",
+    "sort": 0
+  },
+  {
+    "code": "tenant",
+    "name": "租户",
+    "remark": "租户",
+    "sort": 0
+  }
+]

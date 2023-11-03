@@ -18,7 +18,6 @@ import com.easy.cloud.web.service.upms.biz.repository.MenuRepository;
 import com.easy.cloud.web.service.upms.biz.repository.RoleMenuRepository;
 import com.easy.cloud.web.service.upms.biz.service.IMenuService;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
-import com.easy.cloud.web.service.upms.biz.utils.MenuInitUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,7 +55,8 @@ public class MenuServiceImpl implements IMenuService {
   public void init() {
     // 未初始化过数据
     if (menuRepository.count() <= 0) {
-      List<MenuDO> menus = MenuInitUtil.initSystemDefaultMenus();
+      // 初始化菜单数据
+      List<MenuDO> menus = this.initJsonToList("json/sys_menu.json", MenuDO.class);
       // 存储菜单信息
       menuRepository.saveAll(menus);
       // 根据父级菜单获取子菜单数据
@@ -67,6 +67,8 @@ public class MenuServiceImpl implements IMenuService {
       this.initChildrenMenu("systemRole", menus);
       // 根据父级菜单获取子菜单数据
       this.initChildrenMenu("systemMenu", menus);
+      // 根据父级菜单获取子菜单数据
+      this.initChildrenMenu("systemDept", menus);
       log.info("init platform menus content success!");
     }
   }
