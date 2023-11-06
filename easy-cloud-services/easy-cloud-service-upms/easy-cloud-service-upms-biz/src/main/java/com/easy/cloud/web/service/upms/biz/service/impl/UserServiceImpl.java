@@ -116,6 +116,14 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
 
     // 密码编译
     user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+    // 创建租户信息
+    user.setTenantId(SecurityUtils.getAuthenticationUser().getTenant());
+    // 如果渠道信息不为空，且当前用户为超级管理员,则允许设置渠道信息
+    if (StrUtil.isNotBlank(userDTO.getTenantId())
+        && GlobalCommonConstants.SUPER_ADMIN_ROLE
+        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
+      user.setTenantId(userDTO.getTenantId());
+    }
     // 存储
     userRepository.save(user);
     // 更新用户角色信息
@@ -131,6 +139,12 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     // 转换成DO对象
     if (Objects.isNull(userDTO.getId())) {
       throw new RuntimeException("当前更新对象ID为空");
+    }
+    // 如果渠道信息不为空，且当前用户为超级管理员,则允许设置渠道信息
+    if (StrUtil.isNotBlank(userDTO.getTenantId())
+        && GlobalCommonConstants.SUPER_ADMIN_ROLE
+        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
+      userDTO.setTenantId(userDTO.getTenantId());
     }
     // TODO 业务逻辑校验
     UserDO user = userRepository.findById(userDTO.getId())
