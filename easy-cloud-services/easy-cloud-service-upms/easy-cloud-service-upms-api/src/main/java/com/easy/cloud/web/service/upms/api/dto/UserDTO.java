@@ -103,7 +103,11 @@ public class UserDTO implements IConverter {
    */
   private String email;
   /**
-   * 角色ID
+   * 部门ID
    */
-  private Set<String> roleIds;
+  private Set<String> deptIds;
+  /**
+   * 角色编码
+   */
+  private Set<String> roleCodes;
 }

@@ -120,9 +120,14 @@ public class UserVO {
   private String updateAt;
 
   /**
+   * 部门ID
+   */
+  private Set<String> deptIds;
+
+  /**
    * 角色ID
    */
-  private Set<String> roles;
+  private Set<String> roleCodes;
 
   /**
    * 菜单权限标识：此权限仅限于按钮权限

@@ -20,15 +20,19 @@ import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsCacheConstants;
 import com.easy.cloud.web.service.upms.biz.converter.UserConverter;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
+import com.easy.cloud.web.service.upms.biz.domain.UserDeptDO;
 import com.easy.cloud.web.service.upms.biz.domain.UserRoleDO;
+import com.easy.cloud.web.service.upms.biz.repository.UserDeptRepository;
 import com.easy.cloud.web.service.upms.biz.repository.UserRepository;
 import com.easy.cloud.web.service.upms.biz.repository.UserRoleRepository;
 import com.easy.cloud.web.service.upms.biz.service.IMenuService;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
 import com.easy.cloud.web.service.upms.biz.service.IUserService;
 import com.easy.cloud.web.service.upms.biz.social.ISocialService;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -76,6 +80,11 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   @Autowired
   private UserRoleRepository userRoleRepository;
 
+  @Autowired
+  private UserDeptRepository userDeptRepository;
+
+  private final String PASSWORD_PLACE_HOLDER = "N/A";
+
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     applicationContext.getBeansOfType(ISocialService.class).values()
@@ -103,8 +112,14 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackOn = Exception.class)
   public UserVO save(UserDTO userDTO) {
+    // 超级管理员禁止创建
+    if (CollUtil.isNotEmpty(userDTO.getRoleCodes())
+        && userDTO.getRoleCodes().contains(GlobalCommonConstants.SUPER_ADMIN_ROLE)) {
+      throw new BusinessException("当前无权限创建超级管理员账户");
+    }
+
     // 转换成DO对象
     UserDO user = UserConverter.convertTo(userDTO);
     // TODO 校验逻辑
@@ -128,24 +143,39 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     userRepository.save(user);
     // 更新用户角色信息
     this.updateUserRole(user, userDTO);
+    // 更新用户部门信息
+    this.updateUserDept(user, userDTO);
     // 转换对象
     return UserConverter.convertTo(user);
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackOn = Exception.class)
   @CacheEvict(value = UpmsCacheConstants.USER_DETAILS, allEntries = true)
   public UserVO update(UserDTO userDTO) {
     // 转换成DO对象
     if (Objects.isNull(userDTO.getId())) {
       throw new RuntimeException("当前更新对象ID为空");
     }
+
+    // 超级管理员禁止创建
+    if (CollUtil.isNotEmpty(userDTO.getRoleCodes())
+        && userDTO.getRoleCodes().contains(GlobalCommonConstants.SUPER_ADMIN_ROLE)) {
+      throw new BusinessException("当前无权限创建超级管理员账户");
+    }
+
     // 如果渠道信息不为空，且当前用户为超级管理员,则允许设置渠道信息
     if (StrUtil.isNotBlank(userDTO.getTenantId())
         && GlobalCommonConstants.SUPER_ADMIN_ROLE
         .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
       userDTO.setTenantId(userDTO.getTenantId());
     }
+
+    // 若密码为空或N/A，则禁止修改密码
+    if (PASSWORD_PLACE_HOLDER.equals(userDTO.getPassword())) {
+      userDTO.setPassword(null);
+    }
+
     // TODO 业务逻辑校验
     UserDO user = userRepository.findById(userDTO.getId())
         .orElseThrow(() -> new BusinessException("当前菜单信息不存在"));
@@ -158,7 +188,8 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     userRepository.save(user);
     // 更新用户角色信息
     this.updateUserRole(user, userDTO);
-
+    // 更新用户部门信息
+    this.updateUserDept(user, userDTO);
     // 转换对象
     return UserConverter.convertTo(user);
   }
@@ -172,10 +203,15 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   private void updateUserRole(UserDO userDO, UserDTO userDTO) {
     // 更新用户角色信息:先删除，后添加
     userRoleRepository.deleteByUserId(userDO.getId());
+    // 获取角色ID
+    Set<String> roleCodes = userDTO.getRoleCodes();
     // 如果绑定有角色ID，则存储
-    if (CollUtil.isNotEmpty(userDTO.getRoleIds())) {
+    if (CollUtil.isNotEmpty(roleCodes)) {
+      // 根据角色编码获取角色ID列表
+      List<String> roleIds = roleService.findAllByCodes(CollUtil.newArrayList(roleCodes)).stream()
+          .map(RoleVO::getId).collect(Collectors.toList());
       // 构建关系表
-      List<UserRoleDO> userRoles = userDTO.getRoleIds().stream()
+      List<UserRoleDO> userRoles = roleIds.stream()
           .map(roleId -> UserRoleDO.builder()
               .userId(userDO.getId())
               .roleId(roleId)
@@ -183,6 +219,43 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
           .collect(Collectors.toList());
       userRoleRepository.saveAll(userRoles);
     }
+  }
+
+  /**
+   * 更新用户部门信息
+   *
+   * @param user    用户信息
+   * @param userDTO 入参信息
+   */
+  private void updateUserDept(UserDO user, UserDTO userDTO) {
+    // 用户部门是一对一的关系，使用关系表防止出现一对多的要求
+    Optional<UserDeptDO> userDeptOptional = userDeptRepository.findByUserId(user.getId())
+        .stream().findFirst();
+    UserDeptDO userDeptDO = null;
+    if (userDeptOptional.isPresent()) {
+      userDeptDO = userDeptOptional.get();
+    }
+
+    // TODO 此时默认用户部门为一对一的关系
+    // 若部门信息为空
+    if (CollUtil.isEmpty(userDTO.getDeptIds())) {
+      // 且不存在部门关系对象，则跳过剩余逻辑
+      if (Objects.isNull(userDeptDO)) {
+        return;
+      }
+      // 且存在部门关系对象，则删除关系表
+      userDeptRepository.deleteById(userDeptDO.getId());
+    }
+
+    // 部门信息不为空，则新增部门关系
+    userDeptRepository.saveAll(userDTO.getDeptIds()
+        .stream()
+        .map(deptId -> UserDeptDO.builder()
+            .userId(user.getId())
+            .deptId(deptId)
+            .build())
+        .collect(Collectors.toList())
+    );
   }
 
   @Override
@@ -206,7 +279,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
         .orElseThrow(() -> new RuntimeException("当前数据不存在"));
     // 转换
     UserVO userVO = this.findUserInfo(user);
-    userVO.setPassword("N/A");
+    userVO.setPassword(PASSWORD_PLACE_HOLDER);
     // 转换对象
     return userVO;
   }
@@ -230,7 +303,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
         .map(RoleVO::getCode)
         .collect(Collectors.toSet());
     // 设置角色列表 （ID）
-    userVO.setRoles(roleCodes);
+    userVO.setRoleCodes(roleCodes);
     // 获取所有有关的菜单权限标识
     Set<String> permissions = menuService
         .findPermissionsByRoleCodes(CollUtil.newArrayList(roleCodes));
@@ -243,14 +316,61 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   public List<UserVO> list() {
     // 获取列表数据
     List<UserDO> users = userRepository.findAll();
-    return UserConverter.convertTo(users);
+    List<UserVO> userList = UserConverter.convertTo(users);
+    this.traversalBuildUser(userList);
+    return userList;
   }
 
   @Override
   public Page<UserVO> page(int page, int size) {
     // 构建分页数据
     Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size);
-    return UserConverter.convertTo(userRepository.findAll(pageable));
+    Page<UserVO> userPage = UserConverter.convertTo(userRepository.findAll(pageable));
+    // 查询所有用户信息
+    List<UserVO> users = userPage.getContent();
+    this.traversalBuildUser(users);
+    // 获取所有部门信息
+    return userPage;
+  }
+
+  /**
+   * 遍历构建用户信息
+   *
+   * @param users 用户信息
+   */
+  private void traversalBuildUser(List<UserVO> users) {
+    // 获取用户ID集合
+    List<String> userIds = users.stream().map(UserVO::getId).collect(Collectors.toList());
+    // 获取所有角色信息
+    List<UserRoleDO> userRoleDOS = userRoleRepository.findAllByUserIdIn(userIds);
+    // 所有的角色ID
+    List<String> roleIds = userRoleDOS.stream()
+        .map(UserRoleDO::getRoleId)
+        .collect(Collectors.toList());
+    // 获取角色编码集合
+    Map<String, String> roleIdAndCodeMaps = roleService.findAllByIds(roleIds).stream()
+        .collect(Collectors.toMap(RoleVO::getId, RoleVO::getCode, (c1, c2) -> c1));
+    Map<String, List<UserRoleDO>> userRoleMaps = userRoleDOS.stream()
+        .collect(Collectors.groupingBy(UserRoleDO::getUserId));
+
+    // 所有部门
+    Map<String, String> userDeptMaps = userDeptRepository.findAllByUserIdIn(userIds)
+        .stream()
+        .collect(Collectors.toMap(UserDeptDO::getUserId, UserDeptDO::getDeptId, (d1, d2) -> d1));
+    for (UserVO user : users) {
+      // 设置用户密码
+      user.setPassword(PASSWORD_PLACE_HOLDER);
+      // 用户是否归属于某个部门
+      if (userDeptMaps.containsKey(user.getId())) {
+        // 设置用户部门
+        user.setDeptIds(CollUtil.newHashSet(userDeptMaps.get(user.getId())));
+      }
+      Set<String> roleCodes = Optional.ofNullable(userRoleMaps.get(user.getId()))
+          .orElse(new ArrayList<>())
+          .stream().map(userRoleDO -> roleIdAndCodeMaps.get(userRoleDO.getRoleId()))
+          .collect(Collectors.toSet());
+      user.setRoleCodes(roleCodes);
+    }
   }
 
   @Override
@@ -283,7 +403,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
         .map(RoleVO::getCode)
         .collect(Collectors.toSet());
     // 设置角色列表 （ID）
-    userVO.setRoles(roleCodes);
+    userVO.setRoleCodes(roleCodes);
     return userVO;
   }
 

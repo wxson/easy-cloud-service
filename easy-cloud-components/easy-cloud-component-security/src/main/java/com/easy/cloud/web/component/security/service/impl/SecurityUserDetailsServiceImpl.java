@@ -51,7 +51,7 @@ public class SecurityUserDetailsServiceImpl implements ISecurityUserDetailsServi
 
     // Authority 即角色，随机绑定一个其中的角色信息
     return new AuthenticationUser(userVO.getId(), userVO.getUserName(), userVO.getPassword(),
-        RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoles())),
+        RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoleCodes())),
         true, true, true, userVO.getStatus() == StatusEnum.FREEZE_STATUS,
         AuthorityUtils.createAuthorityList(userVO.getPermissions().toArray(new String[0])));
   }
@@ -73,7 +73,7 @@ public class SecurityUserDetailsServiceImpl implements ISecurityUserDetailsServi
 
     // Authority 即角色，随机绑定一个其中的角色信息
     return new AuthenticationUser(userVO.getId(), userVO.getUserName(), "N/A",
-        RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoles())),
+        RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoleCodes())),
         true, true, true, userVO.getStatus() == StatusEnum.FREEZE_STATUS,
         AuthorityUtils.createAuthorityList(userVO.getPermissions().toArray(new String[0])));
   }
