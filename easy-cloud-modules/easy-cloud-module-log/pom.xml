@@ -10,26 +10,16 @@
     <artifactId>easy-cloud-module-log</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easy-cloud-module-log</name>
+    <packaging>pom</packaging>
     <description>Demo project for Spring Boot</description>
 
+    <modules>
+        <module>easy-cloud-module-log-api</module>
+        <module>easy-cloud-module-log-biz</module>
+    </modules>
+
     <dependencies>
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-mysql</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-service-upms-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

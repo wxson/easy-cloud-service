@@ -5,9 +5,9 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.easy.cloud.web.component.core.constants.SecurityConstants;
 import com.easy.cloud.web.component.log.annotation.SysLog;
-import com.easy.cloud.web.service.upms.api.dto.SysLogDTO;
-import com.easy.cloud.web.service.upms.api.enums.OperationLogType;
-import com.easy.cloud.web.service.upms.api.feign.UpmsLogFeignClientService;
+import com.easy.cloud.web.module.log.api.dto.SysLogDTO;
+import com.easy.cloud.web.module.log.api.dto.SysLogType;
+import com.easy.cloud.web.module.log.api.feign.SysLogModuleApi;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -18,6 +18,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,29 +30,36 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @Slf4j
 @Aspect
+@Component
 @AllArgsConstructor
 public class SysLogAspect {
 
-  private final UpmsLogFeignClientService upmsLogFeignClientService;
+  private final SysLogModuleApi sysLogModuleApi;
 
   @SneakyThrows
   @Around("@annotation(sysLog)")
   public Object around(ProceedingJoinPoint proceedingJoinPoint, SysLog sysLog) {
     // 构建日志对象
     SysLogDTO sysLogDTO = this.buildLogInfo();
+    // 读取参数
     Object[] objs = proceedingJoinPoint.getArgs();
-    sysLogDTO.setName(sysLog.value()).setParams(JSONUtil.toJsonStr(objs));
+    // 日志内容
+    sysLogDTO.setName(sysLog.value());
+    // 操作类型
+    sysLogDTO.setAction(sysLog.action().name());
+    // 执行参数
+    sysLogDTO.setParams(JSONUtil.toJsonStr(objs));
     // 发送异步日志事件
     Long startTime = System.currentTimeMillis();
     try {
       return proceedingJoinPoint.proceed();
     } catch (Exception e) {
-      sysLogDTO.setType(OperationLogType.EXCEPTION);
+      sysLogDTO.setType(SysLogType.EXCEPTION);
       sysLogDTO.setException(e.getMessage());
       throw e;
     } finally {
       Long endTime = System.currentTimeMillis();
-      sysLogDTO.setElapsedTime(endTime - startTime);
+      sysLogDTO.setElapsedTime(Long.valueOf(endTime - startTime).intValue());
       this.remoteLogSave(sysLogDTO);
     }
   }
@@ -65,11 +73,12 @@ public class SysLogAspect {
     HttpServletRequest request = ((ServletRequestAttributes) Objects
         .requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
     SysLogDTO sysLogDTO = SysLogDTO.builder().build();
-    sysLogDTO.setType(OperationLogType.NORMAL);
-    sysLogDTO.setRequestUri(URLUtil.getPath(request.getRequestURI()));
+    sysLogDTO.setType(SysLogType.NORMAL);
+    sysLogDTO.setRequestPath(URLUtil.getPath(request.getRequestURI()));
     sysLogDTO.setMethod(request.getMethod());
     sysLogDTO.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
     sysLogDTO.setParams(HttpUtil.toParams(request.getParameterMap()));
+    sysLogDTO.setRemoteAddr(request.getRemoteAddr());
     return sysLogDTO;
   }
 
@@ -80,7 +89,11 @@ public class SysLogAspect {
    */
   @Async
   public void remoteLogSave(SysLogDTO sysLogDTO) {
-    // 存储日志，走内部接口
-    upmsLogFeignClientService.saveLog(sysLogDTO, SecurityConstants.INNER_ORIGIN);
+    try {
+      // 存储日志，走内部接口
+      sysLogModuleApi.saveLog(sysLogDTO, SecurityConstants.INNER_ORIGIN);
+    } catch (Exception exception) {
+      log.error("execute remote log save fail：{}", exception.getMessage());
+    }
   }
 }

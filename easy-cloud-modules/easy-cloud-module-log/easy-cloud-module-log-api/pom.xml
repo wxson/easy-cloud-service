@@ -5,26 +5,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.easy.cloud.web</groupId>
-    <artifactId>easy-cloud-components</artifactId>
+    <artifactId>easy-cloud-module-log</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>easy-cloud-component-log</artifactId>
+  <artifactId>easy-cloud-module-log-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>easy-cloud-component-log</name>
+  <name>easy-cloud-module-log-api</name>
   <description>Demo project for Spring Boot</description>
 
   <dependencies>
     <dependency>
-      <groupId>com.easy.cloud.web</groupId>
-      <artifactId>easy-cloud-component-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.easy.cloud.web</groupId>
-      <artifactId>easy-cloud-module-log-api</artifactId>
-      <version>${project.version}</version>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
     </dependency>
   </dependencies>
-
 </project>

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author GR
  * @date 2021-11-8 11:33
  */
-@FeignClient(value = ServiceNameConstants.UPMS_SERVICE)
+@FeignClient(contextId = "upmsFeignClientService", value = ServiceNameConstants.UPMS_SERVICE)
 public interface UpmsFeignClientService {
 
   /**
