@@ -1,6 +1,7 @@
 package com.easy.cloud.web.service.upms.biz.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.StrUtil;
@@ -8,6 +9,7 @@ import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
+import com.easy.cloud.web.service.upms.api.dto.MenuExcelDTO;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
 import com.easy.cloud.web.service.upms.api.vo.MenuVO;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
@@ -56,44 +58,38 @@ public class MenuServiceImpl implements IMenuService {
     // 未初始化过数据
     if (menuRepository.count() <= 0) {
       // 初始化菜单数据
-      List<MenuDO> menus = this.initJsonToList("json/sys_menu.json", MenuDO.class);
-      // 存储菜单信息
+      List<MenuExcelDTO> menuExcelDTOS = this
+          .initJsonToList("json/sys_menu.json", MenuExcelDTO.class);
+      // 构建存储数据
+      List<MenuDO> menus = new ArrayList<>();
+      this.recursionMenu(menuExcelDTOS, menus);
       menuRepository.saveAll(menus);
-      // 根据父级菜单获取子菜单数据
-      this.initChildrenMenu("system", menus);
-      // 根据父级菜单获取子菜单数据
-      this.initChildrenMenu("systemUser", menus);
-      // 根据父级菜单获取子菜单数据
-      this.initChildrenMenu("systemRole", menus);
-      // 根据父级菜单获取子菜单数据
-      this.initChildrenMenu("systemMenu", menus);
-      // 根据父级菜单获取子菜单数据
-      this.initChildrenMenu("systemDept", menus);
+      menus.stream()
+          .filter(menu -> StrUtil.isNotBlank(menu.getName()))
+          .forEach(menu ->
+              menus.stream()
+                  .filter(menuDO -> StrUtil.isNotBlank(menuDO.getParentId()))
+                  .filter(menuDO -> menu.getName().equals(menuDO.getParentId()))
+                  .forEach(menuDO -> menuDO.setParentId(menu.getId()))
+          );
       log.info("init platform menus content success!");
     }
   }
 
   /**
-   * 初始化子菜单数据
+   * 递归遍历所有菜单项
    *
-   * @param parentName 父级菜单名称
-   * @param menus      菜单列表
+   * @param menuExcels 导入的数据
+   * @param menus      存储集合
    */
-  private void initChildrenMenu(String parentName, List<MenuDO> menus) {
-    // 根据父级菜单获取子菜单数据
-    List<MenuDO> menuChildrenMenus = menus.stream()
-        .filter(childrenMenu -> parentName.equals(childrenMenu.getParentId()))
-        .collect(Collectors.toList());
-    // 修改系统菜单层级
-    menus.stream()
-        .filter(menuDO -> parentName.equals(menuDO.getName()))
-        .findFirst()
-        .ifPresent(menuDO -> {
-          for (MenuDO childrenMenu : menuChildrenMenus) {
-            childrenMenu.setParentId(menuDO.getId());
-          }
-          menuRepository.saveAll(menuChildrenMenus);
-        });
+  private void recursionMenu(List<MenuExcelDTO> menuExcels, List<MenuDO> menus) {
+    for (MenuExcelDTO menuExcel : menuExcels) {
+      if (CollUtil.isNotEmpty(menuExcel.getChildren())) {
+        this.recursionMenu(menuExcel.getChildren(), menus);
+      }
+      // 加入集合
+      menus.add(menuExcel.convertTo(MenuDO.class));
+    }
   }
 
   @Override
