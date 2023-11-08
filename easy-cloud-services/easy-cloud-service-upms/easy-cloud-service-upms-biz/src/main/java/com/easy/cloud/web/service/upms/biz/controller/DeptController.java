@@ -68,31 +68,31 @@ public class DeptController {
   /**
    * 根据ID移除数据
    *
-   * @param departmentId ID
+   * @param deptId ID
    * @return 是否删除成功
    */
-  @GetMapping(value = "remove/{departmentId}")
+  @GetMapping(value = "remove/{deptId}")
   @PreAuthorize("@pms.hasPermission('system:dept:delete')")
   @SysLog(value = "部门删除", action = Action.DELETE)
   @ApiOperation(value = "部门删除")
   public HttpResult<Boolean> removeById(
-      @PathVariable @NotBlank(message = "当前ID不能为空") String departmentId) {
-    return HttpResult.ok(deptService.removeById(departmentId));
+      @PathVariable @NotBlank(message = "当前ID不能为空") String deptId) {
+    return HttpResult.ok(deptService.removeById(deptId));
   }
 
   /**
    * 根据ID获取详情
    *
-   * @param departmentId ID
+   * @param deptId ID
    * @return 详情数据
    */
-  @GetMapping(value = "detail/{departmentId}")
+  @GetMapping(value = "detail/{deptId}")
   @PreAuthorize("@pms.hasPermission('system:dept:query')")
   @SysLog(value = "部门详情", action = Action.FIND)
   @ApiOperation(value = "部门详情")
   public HttpResult<DeptVO> detailById(
-      @PathVariable @NotBlank(message = "当前ID不能为空") String departmentId) {
-    return HttpResult.ok(deptService.detailById(departmentId));
+      @PathVariable @NotBlank(message = "当前ID不能为空") String deptId) {
+    return HttpResult.ok(deptService.detailById(deptId));
   }
 
   /**

@@ -34,18 +34,18 @@ public interface IDeptService extends IInitService {
   /**
    * 根据ID删除数据
    *
-   * @param departmentId 对象ID
+   * @param deptId 对象ID
    * @return java.lang.Boolean
    */
-  Boolean removeById(String departmentId);
+  Boolean removeById(String deptId);
 
   /**
    * 根据ID获取详情
    *
-   * @param departmentId 对象ID
+   * @param deptId 对象ID
    * @return java.lang.Boolean
    */
-  DeptVO detailById(String departmentId);
+  DeptVO detailById(String deptId);
 
   /**
    * 根据条件获取列表数据
