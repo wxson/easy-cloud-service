@@ -11,7 +11,7 @@ public class GlobalCommonConstants {
   /**
    * 租户字段
    */
-  public static final String TENANT_ID_FIELD = "tenant_id";
+  public static final String HEADER_TENANT = "tenant";
 
   /**
    * 默认租户ID

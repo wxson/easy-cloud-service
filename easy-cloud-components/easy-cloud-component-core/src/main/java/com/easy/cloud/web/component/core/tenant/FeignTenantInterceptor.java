@@ -20,7 +20,7 @@ public class FeignTenantInterceptor implements RequestInterceptor {
             log.debug("TTL 中的 租户ID为空，feign拦截器 >> 跳过");
             return;
         }
-        requestTemplate.header(GlobalCommonConstants.TENANT_ID_FIELD, TenantContextHolder.getTenantId().toString());
+        requestTemplate.header(GlobalCommonConstants.HEADER_TENANT, TenantContextHolder.getTenantId().toString());
     }
 
 }

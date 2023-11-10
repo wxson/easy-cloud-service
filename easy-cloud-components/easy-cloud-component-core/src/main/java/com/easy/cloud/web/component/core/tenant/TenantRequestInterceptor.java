@@ -21,7 +21,7 @@ public class TenantRequestInterceptor implements ClientHttpRequestInterceptor {
             throws IOException {
 
         if (TenantContextHolder.getTenantId() != null) {
-            request.getHeaders().set(GlobalCommonConstants.TENANT_ID_FIELD, String.valueOf(TenantContextHolder.getTenantId()));
+            request.getHeaders().set(GlobalCommonConstants.HEADER_TENANT, String.valueOf(TenantContextHolder.getTenantId()));
         }
 
         return execution.execute(request, body);
