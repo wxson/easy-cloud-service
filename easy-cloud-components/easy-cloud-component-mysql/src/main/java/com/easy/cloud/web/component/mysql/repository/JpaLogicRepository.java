@@ -2,10 +2,6 @@ package com.easy.cloud.web.component.mysql.repository;
 
 import com.easy.cloud.web.component.mysql.domain.BaseEntity;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,61 +18,41 @@ import org.springframework.transaction.annotation.Transactional;
 public interface JpaLogicRepository<T extends BaseEntity, ID extends Serializable> extends
     JpaRepository<T, ID> {
 
-  @Override
-  @Transactional(readOnly = true)
-  @Query("SELECT table FROM #{#entityName} table WHERE table.deleted = 'UN_DELETED'")
-  List<T> findAll();
-
-  @Transactional(readOnly = true)
-  @Query("SELECT table FROM #{#entityName} table WHERE table.id in ?1 AND table.deleted = 'UN_DELETED'")
-  Iterable<T> findAll(Iterable<ID> ids);
-
-  @Override
-  @Transactional(readOnly = true)
-  @Query("SELECT table FROM #{#entityName} table WHERE table.deleted = 'UN_DELETED'")
-  Page<T> findAll(Pageable pageable);
-
-  @Override
-  @Transactional(readOnly = true)
-  @Query("SELECT table FROM #{#entityName} table WHERE table.deleted = 'UN_DELETED' AND table.id in (?1)")
-  List<T> findAllById(Iterable<ID> ids);
-
-  @Override
-  @Transactional(readOnly = true)
-  @Query("SELECT table FROM #{#entityName} table WHERE table.id = ?1 AND table.deleted = 'UN_DELETED'")
-  Optional<T> findById(ID id);
-
-  @Transactional(readOnly = true)
-  @Query("SELECT table FROM #{#entityName} table WHERE table.id = ?1 AND table.deleted = 'UN_DELETED'")
-  T findOne(ID id);
-
-  @Override
-  @Transactional(readOnly = true)
-  @Query("SELECT count(table) FROM #{#entityName} table WHERE table.deleted = 'UN_DELETED'")
-  long count();
-
-  @Transactional(readOnly = true)
-  default boolean exists(ID id) {
-    return findOne(id) != null;
-  }
-
+  /**
+   * 根据ID进行逻辑删除
+   *
+   * @param id 文档ID
+   */
   @Query("UPDATE #{#entityName} table SET table.deleted = 'DELETED' WHERE table.id = ?1")
   @Transactional
   @Modifying
   void logicDelete(ID id);
 
+  /**
+   * 根据实体对象进行逻辑删除
+   *
+   * @param entity 实体对象
+   */
   @Transactional
   default void logicDelete(T entity) {
     logicDelete((ID) entity.getId());
   }
 
+  /**
+   * 根据集合进行逻辑删除
+   *
+   * @param entities
+   */
   @Transactional(rollbackFor = Exception.class)
   default void logicDelete(Iterable<? extends T> entities) {
     entities.forEach(entity -> logicDelete((ID) entity.getId()));
   }
 
-  @Query("UPDATE #{#entityName} table SET table.deleted = 'DELETED' ")
-  @Transactional
+  /**
+   * 表所有数据进行逻辑删除
+   */
   @Modifying
+  @Transactional
+  @Query("UPDATE #{#entityName} table SET table.deleted = 'DELETED' ")
   void logicDeleteAll();
 }

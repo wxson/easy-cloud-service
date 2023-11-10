@@ -4,6 +4,8 @@ import com.easy.cloud.web.component.core.constants.DateTimeConstants;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.service.IConverter;
+import com.easy.cloud.web.component.mysql.constants.MysqlConstant;
+import com.easy.cloud.web.component.mysql.listener.EntityListener;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,12 +20,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.FilterDefs;
+import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.ParamDef;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -35,7 +37,35 @@ import org.springframework.format.annotation.DateTimeFormat;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(EntityListener.class)
+@FilterDefs(
+    {
+        @FilterDef(
+            name = MysqlConstant.TENANT_FILTER_NAME,
+            defaultCondition = MysqlConstant.TENANT_FILTER_CONDITION,
+            parameters = {
+                @ParamDef(name = MysqlConstant.TENANT_ID, type = MysqlConstant.TENANT_PARAM_TYPE)
+            }
+        ),
+        @FilterDef(
+            name = MysqlConstant.LOGIC_FILTER_NAME,
+            defaultCondition = MysqlConstant.LOGIC_FILTER_CONDITION,
+            parameters = {
+                @ParamDef(name = MysqlConstant.LOGIC_DELETED, type = MysqlConstant.LOGIC_PARAM_TYPE)
+            }
+        )
+    }
+)
+@Filters({
+    @Filter(
+        name = MysqlConstant.TENANT_FILTER_NAME,
+        condition = MysqlConstant.TENANT_FILTER_CONDITION
+    ),
+    @Filter(
+        name = MysqlConstant.LOGIC_FILTER_NAME,
+        condition = MysqlConstant.LOGIC_FILTER_CONDITION
+    )
+})
 public abstract class BaseEntity implements IConverter, Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -75,14 +105,14 @@ public abstract class BaseEntity implements IConverter, Serializable {
   /**
    * 创建人
    */
-  @CreatedBy
+//  @CreatedBy
   @Column(columnDefinition = "VARCHAR(64) DEFAULT NULL COMMENT '创建人'")
   protected String createBy;
 
   /**
    * 创建时间
    */
-  @CreatedDate
+//  @CreatedDate
   @JsonFormat(pattern = DateTimeConstants.DEFAULT_FORMAT, timezone = DateTimeConstants.DEFAULT_TIMEZONE)
   @DateTimeFormat(pattern = DateTimeConstants.DEFAULT_FORMAT)
   @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '创建时间'")
@@ -91,14 +121,14 @@ public abstract class BaseEntity implements IConverter, Serializable {
   /**
    * 更新用户
    */
-  @LastModifiedBy
+//  @LastModifiedBy
   @Column(columnDefinition = "VARCHAR(64) DEFAULT NULL COMMENT '更新用户'")
   protected String updateBy;
 
   /**
    * 更新时间
    */
-  @LastModifiedDate
+//  @LastModifiedDate
   @JsonFormat(pattern = DateTimeConstants.DEFAULT_FORMAT, timezone = DateTimeConstants.DEFAULT_TIMEZONE)
   @DateTimeFormat(pattern = DateTimeConstants.DEFAULT_FORMAT)
   @Column(columnDefinition = "VARCHAR(32) DEFAULT NULL COMMENT '更新时间'")
