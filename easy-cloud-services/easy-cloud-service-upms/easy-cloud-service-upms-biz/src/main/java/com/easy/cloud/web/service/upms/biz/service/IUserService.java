@@ -32,6 +32,22 @@ public interface IUserService extends IInitService {
    */
   UserVO update(UserDTO userDTO);
 
+//  /**
+//   * 创建租户管理员
+//   *
+//   * @param userDTO 租户信息
+//   * @return
+//   */
+//  UserVO createTenantAdmin(UserDTO userDTO);
+//
+//  /**
+//   * 更新租户管理员
+//   *
+//   * @param userDTO 租户信息
+//   * @return
+//   */
+//  UserVO updateTenantAdmin(UserDTO userDTO);
+
   /**
    * 根据ID删除数据
    *

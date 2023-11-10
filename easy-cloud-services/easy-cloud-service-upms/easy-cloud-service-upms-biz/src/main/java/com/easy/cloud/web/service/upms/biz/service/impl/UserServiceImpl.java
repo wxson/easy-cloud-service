@@ -132,13 +132,13 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     // 密码编译
     user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
     // 创建租户信息
-    user.setTenantId(SecurityUtils.getAuthenticationUser().getTenant());
+//    user.setTenantId(SecurityUtils.getAuthenticationUser().getTenant());
     // 如果渠道信息不为空，且当前用户为超级管理员,则允许设置渠道信息
-    if (StrUtil.isNotBlank(userDTO.getTenantId())
-        && GlobalCommonConstants.SUPER_ADMIN_ROLE
-        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
-      user.setTenantId(userDTO.getTenantId());
-    }
+//    if (StrUtil.isNotBlank(userDTO.getTenantId())
+//        && GlobalCommonConstants.SUPER_ADMIN_ROLE
+//        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
+//      user.setTenantId(userDTO.getTenantId());
+//    }
     // 存储
     userRepository.save(user);
     // 更新用户角色信息
@@ -165,11 +165,11 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     }
 
     // 如果渠道信息不为空，且当前用户为超级管理员,则允许设置渠道信息
-    if (StrUtil.isNotBlank(userDTO.getTenantId())
-        && GlobalCommonConstants.SUPER_ADMIN_ROLE
-        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
-      userDTO.setTenantId(userDTO.getTenantId());
-    }
+//    if (StrUtil.isNotBlank(userDTO.getTenantId())
+//        && GlobalCommonConstants.SUPER_ADMIN_ROLE
+//        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
+//      userDTO.setTenantId(userDTO.getTenantId());
+//    }
 
     // 若密码为空或N/A，则禁止修改密码
     if (PASSWORD_PLACE_HOLDER.equals(userDTO.getPassword())) {
@@ -193,6 +193,20 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     // 转换对象
     return UserConverter.convertTo(user);
   }
+
+//  @Override
+//  public UserVO createTenantAdmin(UserDTO userDTO) {
+//    /**
+//     * 1、创建租户管理员账号
+//     * 2、
+//     */
+//    return null;
+//  }
+//
+//  @Override
+//  public UserVO updateTenantAdmin(UserDTO userDTO) {
+//    return null;
+//  }
 
   /**
    * 更新用户角色信息

@@ -1,16 +1,21 @@
 package com.easy.cloud.web.service.upms.api.dto;
 
+import com.easy.cloud.web.component.core.constants.DateTimeConstants;
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.service.IConverter;
+import com.easy.cloud.web.service.upms.api.enums.TenantTypeEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * Department请求数据
+ * Tenant请求数据
  *
  * @author Fast Java
  * @date 2023-08-03 15:00:02
@@ -20,24 +25,42 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeptDTO implements IConverter {
+public class TenantDTO implements IConverter {
 
   /**
    * 文档ID
    */
   private String id;
+
   /**
-   * 租户ID
-   */
-  private String tenantId;
-  /**
-   * 部门名称
+   * 租户名称
    */
   private String name;
+
   /**
-   * 上级部门
+   * 租户类型（企业和个人）
    */
-  private String parentId;
+  private TenantTypeEnum type;
+  /**
+   * 国家
+   */
+  private String country;
+  /**
+   * 省
+   */
+  private String province;
+  /**
+   * 市
+   */
+  private String city;
+  /**
+   * 区域
+   */
+  private String region;
+  /**
+   * 排序
+   */
+  private Integer sort;
   /**
    * 负责人
    */
@@ -50,14 +73,21 @@ public class DeptDTO implements IConverter {
    * 邮箱
    */
   private String email;
+
+  /**
+   * 开始时间
+   */
+  protected Date startDate;
+
+  /**
+   * 结束时间
+   */
+  protected Date endDate;
+
   /**
    * 描述
    */
   private String remark;
-  /**
-   * 排序
-   */
-  private Integer sort;
   /**
    * 状态 0 启用 1 禁用
    */

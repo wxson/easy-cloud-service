@@ -53,6 +53,8 @@ public class UserController {
   @SysLog(value = "新增用户", action = Action.ADD)
   @ApiOperation(value = "新增用户")
   public HttpResult<UserVO> save(@Validated @RequestBody UserDTO userDTO) {
+    // 该接口绑定租户为当前登录用户
+    userDTO.setTenantId(SecurityUtils.getAuthenticationUser().getTenant());
     return HttpResult.ok(userService.save(userDTO));
   }
 
@@ -67,6 +69,8 @@ public class UserController {
   @SysLog(value = "更新用户", action = Action.UPDATE)
   @ApiOperation(value = "更新用户")
   public HttpResult<UserVO> update(@Validated @RequestBody UserDTO userDTO) {
+    // 该接口绑定租户为当前登录用户
+    userDTO.setTenantId(SecurityUtils.getAuthenticationUser().getTenant());
     return HttpResult.ok(userService.update(userDTO));
   }
 

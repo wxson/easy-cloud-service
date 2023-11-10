@@ -37,6 +37,7 @@ public class DeptServiceImpl implements IDeptService {
   private DeptRepository deptRepository;
 
   @Override
+  @Transactional(rollbackOn = Exception.class)
   public void init() {
     // 未初始化过数据
     if (deptRepository.count() <= 0) {
@@ -128,7 +129,7 @@ public class DeptServiceImpl implements IDeptService {
   @Override
   public Page<DeptVO> page(int page, int size) {
     // 构建分页数据
-    Pageable pageable = PageRequest.of(page, size);
+    Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size);
     return DeptConverter.convertTo(deptRepository.findAll(pageable));
   }
 }

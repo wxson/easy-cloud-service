@@ -1,9 +1,10 @@
 package com.easy.cloud.web.service.upms.biz.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.util.BeanUtils;
+import com.easy.cloud.web.component.mysql.listener.EntityListener;
+import com.easy.cloud.web.component.mysql.utils.JpaFilterUtil;
 import com.easy.cloud.web.service.upms.api.dto.RoleDTO;
 import com.easy.cloud.web.service.upms.api.dto.RoleMenuDTO;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,8 +140,9 @@ public class RoleServiceImpl implements IRoleService {
   @Override
   @Cacheable(value = UpmsCacheConstants.SUPER_ROLE_DETAILS, key = "#code")
   public RoleVO findFirstByCode(String code) {
-    return RoleConverter
-        .convertTo(roleRepository.findFirstByCodeAndDeleted(code, DeletedEnum.UN_DELETED));
+    RoleDO roleDO = Optional.ofNullable(roleRepository.findFirstByCode(code))
+        .orElseThrow(() -> new BusinessException("当前角色信息不存在"));
+    return RoleConverter.convertTo(roleDO);
   }
 
   @Override
@@ -159,7 +162,7 @@ public class RoleServiceImpl implements IRoleService {
 
   @Override
   public List<RoleVO> findAllByCodes(List<String> roleCodes) {
-    return roleRepository.findAllByCodeInAndDeleted(roleCodes, DeletedEnum.UN_DELETED)
+    return roleRepository.findAllByCodeIn(roleCodes)
         .stream()
         .map(RoleConverter::convertTo)
         .collect(Collectors.toList());

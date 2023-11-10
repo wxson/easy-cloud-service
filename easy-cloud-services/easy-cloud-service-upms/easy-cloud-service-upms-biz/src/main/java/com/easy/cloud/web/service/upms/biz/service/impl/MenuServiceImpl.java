@@ -174,6 +174,7 @@ public class MenuServiceImpl implements IMenuService {
 
 
   @Override
+  @Transactional
   public Set<String> findPermissionsByRoleCodes(ArrayList<String> roleCodes) {
     // 若包含超管，则获取所有
     if (roleCodes.contains(GlobalCommonConstants.SUPER_ADMIN_ROLE)) {
@@ -189,6 +190,13 @@ public class MenuServiceImpl implements IMenuService {
         .map(RoleVO::getId)
         .distinct()
         .collect(Collectors.toList());
+    // 若包含租户角色，则识别租户的角色ID
+    if (roleCodes.contains(GlobalCommonConstants.TENANT_ROLE)) {
+      RoleVO roleVO = roleService.findFirstByCode(GlobalCommonConstants.TENANT_ROLE);
+      if (Objects.nonNull(roleVO)) {
+        roleIds.add(roleVO.getId());
+      }
+    }
     // 根据ID获取菜单权限
     return this.findPermissionsByRoleIds(roleIds);
   }
