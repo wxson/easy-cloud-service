@@ -41,12 +41,9 @@ public class SecurityUserAuthenticationConverter implements UserAuthenticationCo
           (String) map.get(SecurityConstants.AUTHORIZATION_USER_NAME),
           "N/A",
           (String) map.get(SecurityConstants.AUTHORIZATION_USER_CHANEL),
+          (String) map.get(SecurityConstants.AUTHORIZATION_USER_TENANT),
           true, true, true, true, authorities
       );
-      // 设置租户ID
-      String tenant = String.valueOf(map.get(SecurityConstants.AUTHORIZATION_USER_TENANT));
-      authenticationUser.setTenant(tenant);
-
       return new UsernamePasswordAuthenticationToken(authenticationUser, "N/A", authorities);
     }
     return null;

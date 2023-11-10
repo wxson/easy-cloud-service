@@ -36,12 +36,13 @@ public class AuthenticationUser extends User {
   private String tenant;
 
   public AuthenticationUser(String id, String username, String password, String channel,
-      boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired,
+      String tenant, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired,
       boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
     super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked,
         authorities);
     this.id = id;
     this.channel = channel;
+    this.tenant = tenant;
   }
 
   /**
