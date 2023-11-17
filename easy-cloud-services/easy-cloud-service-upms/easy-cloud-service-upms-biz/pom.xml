@@ -17,16 +17,16 @@
   </properties>
   <dependencies>
     <!--注册中心客户端-->
-    <!--    <dependency>-->
-    <!--      <groupId>com.alibaba.cloud</groupId>-->
-    <!--      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
-    <!--    </dependency>-->
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+    </dependency>
 
     <!--配置中心客户端-->
-    <!--    <dependency>-->
-    <!--      <groupId>com.alibaba.cloud</groupId>-->
-    <!--      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
-    <!--    </dependency>-->
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+    </dependency>
 
 
     <!-- 依赖upms api -->
@@ -51,11 +51,11 @@
     </dependency>
 
     <!--Local Route-->
-    <!--    <dependency>-->
-    <!--      <groupId>com.easy.cloud.web</groupId>-->
-    <!--      <artifactId>easy-cloud-module-route</artifactId>-->
-    <!--      <version>${project.version}</version>-->
-    <!--    </dependency>-->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-module-route</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!--Local Sms-->
     <!--        <dependency>-->
@@ -85,11 +85,11 @@
     </dependency>
 
     <!-- Local log 引入Log注解 -->
-    <dependency>
-      <groupId>com.easy.cloud.web</groupId>
-      <artifactId>easy-cloud-component-log</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+    <!--    <dependency>-->
+    <!--      <groupId>com.easy.cloud.web</groupId>-->
+    <!--      <artifactId>easy-cloud-component-log</artifactId>-->
+    <!--      <version>${project.version}</version>-->
+    <!--    </dependency>-->
 
     <!-- Local log-module 引入Log 模块组件，支持API -->
     <!--    <dependency>-->
