@@ -39,9 +39,9 @@ public class TokenEndpoint extends AbstractEndpoint {
     @RequestMapping(value = "/oauth/token", method = RequestMethod.GET)
     public ResponseEntity<OAuth2AccessToken> getAccessToken(Principal principal, @RequestParam
             Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
-        if (!allowedRequestMethods.contains(HttpMethod.GET)) {
-            throw new HttpRequestMethodNotSupportedException("GET");
-        }
+//        if (!allowedRequestMethods.contains(HttpMethod.GET)) {
+//            throw new HttpRequestMethodNotSupportedException("GET");
+//        }
         return postAccessToken(principal, parameters);
     }
 
