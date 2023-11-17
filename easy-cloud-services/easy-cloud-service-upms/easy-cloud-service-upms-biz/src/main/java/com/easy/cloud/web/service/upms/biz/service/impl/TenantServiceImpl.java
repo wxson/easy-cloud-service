@@ -1,6 +1,8 @@
 package com.easy.cloud.web.service.upms.biz.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.upms.api.dto.DeptDTO;
@@ -8,6 +10,7 @@ import com.easy.cloud.web.service.upms.api.dto.TenantDTO;
 import com.easy.cloud.web.service.upms.api.dto.UserDTO;
 import com.easy.cloud.web.service.upms.api.enums.RoleEnum;
 import com.easy.cloud.web.service.upms.api.vo.TenantVO;
+import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.converter.TenantConverter;
 import com.easy.cloud.web.service.upms.biz.domain.TenantDO;
 import com.easy.cloud.web.service.upms.biz.repository.TenantRepository;
@@ -72,8 +75,14 @@ public class TenantServiceImpl implements ITenantService {
     userDTO.setRoleCodes(CollUtil.newHashSet(RoleEnum.ROLE_TENANT.getCode()));
     // TODO 设置租户密码，默认123456；并通过短信或邮箱进行通知
     userDTO.setUserName(tenantDTO.getName());
-    userDTO.setPassword("123456");
-    userService.save(userDTO);
+    if (StrUtil.isBlank(userDTO.getPassword())) {
+      userDTO.setPassword("123456");
+    }
+    // 存储租户登录用户信息
+    UserVO userVO = userService.save(userDTO);
+    // 绑定负责人ID
+    tenant.setAccountId(userVO.getId());
+    tenantRepository.save(tenant);
     // 转换对象
     return TenantConverter.convertTo(tenant);
   }
@@ -100,9 +109,25 @@ public class TenantServiceImpl implements ITenantService {
   @Transactional
   public Boolean removeById(String tenantId) {
     // TODO 业务逻辑校验
+
     // 删除
     tenantRepository.logicDelete(tenantId);
+    // 移除租户下的所有用户
+    userService.removeTenantAllUser(tenantId);
     return true;
+  }
+
+  @Override
+  @Transactional(rollbackOn = Exception.class)
+  public TenantVO freezeTenant(String tenantId) {
+    // TODO 业务逻辑校验
+    TenantDO tenantDO = tenantRepository.findById(tenantId)
+        .orElseThrow(() -> new BusinessException("当前租户信息不存在"));
+    // 删除
+    tenantRepository.updateTenantStatus(tenantId, StatusEnum.FREEZE_STATUS);
+    // 移除租户下的所有用户
+    userService.freezeTenantAllUser(tenantId);
+    return TenantConverter.convertTo(tenantDO);
   }
 
   @Override

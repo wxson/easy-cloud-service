@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Department API
+ * Tenant API
  *
  * @author Fast Java
  * @date 2023-08-03 15:00:02
@@ -44,8 +44,8 @@ public class TenantController {
    */
   @PostMapping(value = "save")
   @PreAuthorize("@pms.hasPermission('system:tenant:add')")
-  @SysLog(value = "部门新增", action = Action.ADD)
-  @ApiOperation(value = "部门新增")
+  @SysLog(value = "租户新增", action = Action.ADD)
+  @ApiOperation(value = "租户新增")
   public HttpResult<TenantVO> save(@Validated @RequestBody TenantDTO tenantDTO) {
     return HttpResult.ok(tenantService.save(tenantDTO));
   }
@@ -58,10 +58,24 @@ public class TenantController {
    */
   @PostMapping(value = "update")
   @PreAuthorize("@pms.hasPermission('system:tenant:update')")
-  @SysLog(value = "部门更新", action = Action.UPDATE)
-  @ApiOperation(value = "部门更新")
+  @SysLog(value = "租户更新", action = Action.UPDATE)
+  @ApiOperation(value = "租户更新")
   public HttpResult<TenantVO> update(@Validated @RequestBody TenantDTO tenantDTO) {
     return HttpResult.ok(tenantService.update(tenantDTO));
+  }
+
+  /**
+   * 冻结租户
+   *
+   * @param tenantId 租户ID
+   * @return 更新数据
+   */
+  @PostMapping(value = "freeze/{tenantId}")
+  @PreAuthorize("@pms.hasPermission('system:tenant:update')")
+  @SysLog(value = "租户冻结", action = Action.UPDATE)
+  @ApiOperation(value = "租户冻结")
+  public HttpResult<TenantVO> update(@PathVariable String tenantId) {
+    return HttpResult.ok(tenantService.freezeTenant(tenantId));
   }
 
   /**
@@ -72,8 +86,8 @@ public class TenantController {
    */
   @GetMapping(value = "remove/{tenantId}")
   @PreAuthorize("@pms.hasPermission('system:tenant:delete')")
-  @SysLog(value = "部门删除", action = Action.DELETE)
-  @ApiOperation(value = "部门删除")
+  @SysLog(value = "租户删除", action = Action.DELETE)
+  @ApiOperation(value = "租户删除")
   public HttpResult<Boolean> removeById(
       @PathVariable @NotBlank(message = "当前ID不能为空") String tenantId) {
     return HttpResult.ok(tenantService.removeById(tenantId));
@@ -87,8 +101,8 @@ public class TenantController {
    */
   @GetMapping(value = "detail/{tenantId}")
   @PreAuthorize("@pms.hasPermission('system:tenant:query')")
-  @SysLog(value = "部门详情", action = Action.FIND)
-  @ApiOperation(value = "部门详情")
+  @SysLog(value = "租户详情", action = Action.FIND)
+  @ApiOperation(value = "租户详情")
   public HttpResult<TenantVO> detailById(
       @PathVariable @NotBlank(message = "当前ID不能为空") String tenantId) {
     return HttpResult.ok(tenantService.detailById(tenantId));
@@ -101,8 +115,8 @@ public class TenantController {
    */
   @GetMapping(value = "list")
   @PreAuthorize("@pms.hasPermission('system:tenant:query')")
-  @SysLog(value = "部门列表", action = Action.FIND)
-  @ApiOperation(value = "部门列表")
+  @SysLog(value = "租户列表", action = Action.FIND)
+  @ApiOperation(value = "租户列表")
   public HttpResult<List<TenantVO>> list() {
     return HttpResult.ok(tenantService.list());
   }
@@ -116,8 +130,8 @@ public class TenantController {
    */
   @GetMapping(value = "page")
   @PreAuthorize("@pms.hasPermission('system:tenant:query')")
-  @SysLog(value = "部门分页", action = Action.FIND)
-  @ApiOperation(value = "部门分页")
+  @SysLog(value = "租户分页", action = Action.FIND)
+  @ApiOperation(value = "租户分页")
   public HttpResult<Page<TenantVO>> page(
       @RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "10") int size) {

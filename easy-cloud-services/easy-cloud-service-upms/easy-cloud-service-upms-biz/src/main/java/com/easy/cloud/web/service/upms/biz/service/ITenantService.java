@@ -33,10 +33,18 @@ public interface ITenantService extends IInitService {
   /**
    * 根据ID删除数据
    *
-   * @param departmentId 对象ID
+   * @param tenantId 对象ID
    * @return java.lang.Boolean
    */
-  Boolean removeById(String departmentId);
+  Boolean removeById(String tenantId);
+
+  /**
+   * 冻结租户信息
+   *
+   * @param tenantId 对象ID
+   * @return java.lang.Boolean
+   */
+  TenantVO freezeTenant(String tenantId);
 
   /**
    * 根据ID获取详情

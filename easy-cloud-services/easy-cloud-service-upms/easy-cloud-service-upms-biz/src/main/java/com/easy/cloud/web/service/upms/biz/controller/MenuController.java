@@ -102,7 +102,6 @@ public class MenuController {
    * 获取当前用户菜单列表
    */
   @GetMapping(value = "tree")
-  @PreAuthorize("@pms.hasPermission('system:menu:query')")
   @SysLog(value = "菜单树", action = Action.FIND)
   @ApiOperation(value = "菜单树")
   public HttpResult<List<Tree<String>>> findUserMenus(

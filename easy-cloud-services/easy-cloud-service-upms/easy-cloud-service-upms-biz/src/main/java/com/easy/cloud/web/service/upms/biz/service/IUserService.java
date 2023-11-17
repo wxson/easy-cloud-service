@@ -32,22 +32,6 @@ public interface IUserService extends IInitService {
    */
   UserVO update(UserDTO userDTO);
 
-//  /**
-//   * 创建租户管理员
-//   *
-//   * @param userDTO 租户信息
-//   * @return
-//   */
-//  UserVO createTenantAdmin(UserDTO userDTO);
-//
-//  /**
-//   * 更新租户管理员
-//   *
-//   * @param userDTO 租户信息
-//   * @return
-//   */
-//  UserVO updateTenantAdmin(UserDTO userDTO);
-
   /**
    * 根据ID删除数据
    *
@@ -86,7 +70,7 @@ public interface IUserService extends IInitService {
    * @param userName 用户名
    * @return
    */
-  UserVO loadUserByUsername(String userName);
+  UserVO loadLoginUserByUsername(String userName);
 
   /**
    * Oauth2.0 code授权模式
@@ -95,7 +79,7 @@ public interface IUserService extends IInitService {
    * @param userLoginDTO 授权数据
    * @return
    */
-  UserVO loadSocialUser(String type, UserLoginDTO userLoginDTO);
+  UserVO loadLoginSocialUserByObject(String type, UserLoginDTO userLoginDTO);
 
 
   /**
@@ -151,4 +135,18 @@ public interface IUserService extends IInitService {
    * @param userBindDTO
    */
   void certification(UserBindDTO userBindDTO);
+
+  /**
+   * 移除租户下的所有用户
+   *
+   * @param tenantId 租户ID
+   */
+  void removeTenantAllUser(String tenantId);
+
+  /**
+   * 冻结租户下的所有用户
+   *
+   * @param tenantId 租户ID
+   */
+  void freezeTenantAllUser(String tenantId);
 }

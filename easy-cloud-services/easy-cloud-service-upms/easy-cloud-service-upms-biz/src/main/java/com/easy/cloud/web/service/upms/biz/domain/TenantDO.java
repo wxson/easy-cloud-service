@@ -74,6 +74,11 @@ public class TenantDO extends BaseEntity {
   @Column(columnDefinition = "INT NOT NULL DEFAULT '0' COMMENT '排序'")
   private Integer sort;
   /**
+   * 账户ID
+   */
+  @Column(columnDefinition = "VARCHAR(32) COMMENT '账户ID'")
+  private String accountId;
+  /**
    * 负责人
    */
   @Column(columnDefinition = "VARCHAR(32) COMMENT '负责人'")

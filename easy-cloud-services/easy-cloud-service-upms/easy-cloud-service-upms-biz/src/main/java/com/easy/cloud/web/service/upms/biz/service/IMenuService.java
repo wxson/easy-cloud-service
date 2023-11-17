@@ -4,7 +4,6 @@ import cn.hutool.core.lang.tree.Tree;
 import com.easy.cloud.web.component.core.service.IInitService;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.vo.MenuVO;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.domain.Page;
@@ -57,20 +56,19 @@ public interface IMenuService extends IInitService {
   List<MenuVO> list();
 
   /**
-   * 获取用户权限：此权限仅限于按钮权限
+   * 获取所有用户权限：此权限仅限于按钮权限
    *
-   * @param roleIds 角色ID
    * @return
    */
-  Set<String> findPermissionsByRoleIds(List<String> roleIds);
+  Set<String> findAllPermissions();
 
   /**
    * 获取用户权限：此权限仅限于按钮权限
    *
-   * @param roleCodes 角色ID
+   * @param roleIds   角色ID
    * @return
    */
-  Set<String> findPermissionsByRoleCodes(ArrayList<String> roleCodes);
+  Set<String> findPermissionsByRoleIds(List<String> roleIds);
 
   /**
    * 根据条件获取分页数据

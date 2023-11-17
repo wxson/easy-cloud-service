@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.core.util.BeanUtils;
+import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.upms.api.dto.MenuDTO;
 import com.easy.cloud.web.service.upms.api.dto.MenuExcelDTO;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
@@ -15,8 +16,10 @@ import com.easy.cloud.web.service.upms.api.vo.MenuVO;
 import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.biz.converter.MenuConverter;
 import com.easy.cloud.web.service.upms.biz.domain.MenuDO;
+import com.easy.cloud.web.service.upms.biz.domain.RoleDO;
 import com.easy.cloud.web.service.upms.biz.domain.RoleMenuDO;
 import com.easy.cloud.web.service.upms.biz.repository.MenuRepository;
+import com.easy.cloud.web.service.upms.biz.repository.PlatformRoleRepository;
 import com.easy.cloud.web.service.upms.biz.repository.RoleMenuRepository;
 import com.easy.cloud.web.service.upms.biz.service.IMenuService;
 import com.easy.cloud.web.service.upms.biz.service.IRoleService;
@@ -48,6 +51,9 @@ public class MenuServiceImpl implements IMenuService {
 
   @Autowired
   private RoleMenuRepository roleMenuRepository;
+
+  @Autowired
+  private PlatformRoleRepository platformRoleRepository;
 
   @Autowired
   private IRoleService roleService;
@@ -158,6 +164,15 @@ public class MenuServiceImpl implements IMenuService {
   }
 
   @Override
+  public Set<String> findAllPermissions() {
+    return menuRepository.findAll()
+        .stream()
+        .filter(menuDO -> MenuTypeEnum.BUTTON == menuDO.getType())
+        .map(MenuDO::getPerms)
+        .collect(Collectors.toSet());
+  }
+
+  @Override
   public Set<String> findPermissionsByRoleIds(List<String> roleIds) {
     // 否则根据权限获取数据
     List<String> menuIds = roleMenuRepository.findByRoleIdIn(roleIds).stream()
@@ -171,36 +186,6 @@ public class MenuServiceImpl implements IMenuService {
         .map(MenuDO::getPerms)
         .collect(Collectors.toSet());
   }
-
-
-  @Override
-  @Transactional
-  public Set<String> findPermissionsByRoleCodes(ArrayList<String> roleCodes) {
-    // 若包含超管，则获取所有
-    if (roleCodes.contains(GlobalCommonConstants.SUPER_ADMIN_ROLE)) {
-      return menuRepository.findAll()
-          .stream()
-          .filter(menuDO -> MenuTypeEnum.BUTTON == menuDO.getType())
-          .map(MenuDO::getPerms)
-          .collect(Collectors.toSet());
-    }
-    // 根据角色编码获取所有角色ID
-    List<String> roleIds = roleService.findAllByCodes(roleCodes)
-        .stream()
-        .map(RoleVO::getId)
-        .distinct()
-        .collect(Collectors.toList());
-    // 若包含租户角色，则识别租户的角色ID
-    if (roleCodes.contains(GlobalCommonConstants.TENANT_ROLE)) {
-      RoleVO roleVO = roleService.findFirstByCode(GlobalCommonConstants.TENANT_ROLE);
-      if (Objects.nonNull(roleVO)) {
-        roleIds.add(roleVO.getId());
-      }
-    }
-    // 根据ID获取菜单权限
-    return this.findPermissionsByRoleIds(roleIds);
-  }
-
 
   @Override
   public Page<MenuVO> page(int page, int size) {
@@ -225,6 +210,15 @@ public class MenuServiceImpl implements IMenuService {
           .stream()
           .map(RoleVO::getId)
           .collect(Collectors.toList());
+      // 若当前登录用户为租户，则允许查询平台角色信息
+      if (GlobalCommonConstants.TENANT_ROLE
+          .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
+        // 查询当前平台的角色信息是否存在
+        roleIds.addAll(platformRoleRepository.findAllByCodeIn(channels)
+            .stream()
+            .map(RoleDO::getId)
+            .collect(Collectors.toSet()));
+      }
       // 根据角色ID获取菜单ID
       List<String> menuIds = roleMenuRepository.findByRoleIdIn(roleIds).stream()
           .map(RoleMenuDO::getMenuId)

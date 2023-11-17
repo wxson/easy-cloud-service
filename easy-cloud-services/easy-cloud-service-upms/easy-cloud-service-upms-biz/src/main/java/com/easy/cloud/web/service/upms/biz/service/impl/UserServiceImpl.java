@@ -19,9 +19,13 @@ import com.easy.cloud.web.service.upms.api.vo.RoleVO;
 import com.easy.cloud.web.service.upms.api.vo.UserVO;
 import com.easy.cloud.web.service.upms.biz.constant.UpmsCacheConstants;
 import com.easy.cloud.web.service.upms.biz.converter.UserConverter;
+import com.easy.cloud.web.service.upms.biz.domain.RoleDO;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import com.easy.cloud.web.service.upms.biz.domain.UserDeptDO;
 import com.easy.cloud.web.service.upms.biz.domain.UserRoleDO;
+import com.easy.cloud.web.service.upms.biz.repository.LoginUserRepository;
+import com.easy.cloud.web.service.upms.biz.repository.PlatformRoleRepository;
+import com.easy.cloud.web.service.upms.biz.repository.TenantUserRepository;
 import com.easy.cloud.web.service.upms.biz.repository.UserDeptRepository;
 import com.easy.cloud.web.service.upms.biz.repository.UserRepository;
 import com.easy.cloud.web.service.upms.biz.repository.UserRoleRepository;
@@ -31,6 +35,7 @@ import com.easy.cloud.web.service.upms.biz.service.IUserService;
 import com.easy.cloud.web.service.upms.biz.social.ISocialService;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -69,6 +74,12 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   private UserRepository userRepository;
 
   @Autowired
+  private TenantUserRepository tenantUserRepository;
+
+  @Autowired
+  private LoginUserRepository loginUserRepository;
+
+  @Autowired
   private PasswordEncoder passwordEncoder;
 
   @Autowired
@@ -79,6 +90,9 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
 
   @Autowired
   private UserRoleRepository userRoleRepository;
+
+  @Autowired
+  private PlatformRoleRepository platformRoleRepository;
 
   @Autowired
   private UserDeptRepository userDeptRepository;
@@ -98,6 +112,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     if (userRepository.count() <= 0) {
       // 创建超管
       UserDO admin = this.initJsonToBean("json/sys_user.json", UserDO.class);
+      admin.setPassword(passwordEncoder.encode(admin.getPassword()));
       userRepository.save(admin);
       // 获取超级管理员角色
       RoleVO superAdminRole = roleService.findFirstByCode(GlobalCommonConstants.SUPER_ADMIN_ROLE);
@@ -131,14 +146,6 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
 
     // 密码编译
     user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-    // 创建租户信息
-//    user.setTenantId(SecurityUtils.getAuthenticationUser().getTenant());
-    // 如果渠道信息不为空，且当前用户为超级管理员,则允许设置渠道信息
-//    if (StrUtil.isNotBlank(userDTO.getTenantId())
-//        && GlobalCommonConstants.SUPER_ADMIN_ROLE
-//        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
-//      user.setTenantId(userDTO.getTenantId());
-//    }
     // 存储
     userRepository.save(user);
     // 更新用户角色信息
@@ -164,13 +171,6 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
       throw new BusinessException("当前无权限创建超级管理员账户");
     }
 
-    // 如果渠道信息不为空，且当前用户为超级管理员,则允许设置渠道信息
-//    if (StrUtil.isNotBlank(userDTO.getTenantId())
-//        && GlobalCommonConstants.SUPER_ADMIN_ROLE
-//        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
-//      userDTO.setTenantId(userDTO.getTenantId());
-//    }
-
     // 若密码为空或N/A，则禁止修改密码
     if (PASSWORD_PLACE_HOLDER.equals(userDTO.getPassword())) {
       userDTO.setPassword(null);
@@ -193,20 +193,6 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     // 转换对象
     return UserConverter.convertTo(user);
   }
-
-//  @Override
-//  public UserVO createTenantAdmin(UserDTO userDTO) {
-//    /**
-//     * 1、创建租户管理员账号
-//     * 2、
-//     */
-//    return null;
-//  }
-//
-//  @Override
-//  public UserVO updateTenantAdmin(UserDTO userDTO) {
-//    return null;
-//  }
 
   /**
    * 更新用户角色信息
@@ -292,19 +278,46 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     UserDO user = userRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("当前数据不存在"));
     // 转换
-    UserVO userVO = this.findUserInfo(user);
-    userVO.setPassword(PASSWORD_PLACE_HOLDER);
-    // 转换对象
+    UserVO userVO = user.convertTo(UserVO.class);
+    // 获取用户角色列表
+    List<String> roleIds = userRoleRepository.findByUserId(user.getId()).stream()
+        .map(UserRoleDO::getRoleId)
+        .distinct()
+        .collect(Collectors.toList());
+    // 根据角色ID获取角色编码
+    Set<String> roleCodes = roleService.findAllByIds(roleIds).stream()
+        .map(RoleVO::getCode)
+        .collect(Collectors.toSet());
+    // 如果是租户，则允许租户查询平台角色
+    if (GlobalCommonConstants.TENANT_ROLE
+        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
+      roleCodes.addAll(platformRoleRepository.findAllById(roleIds).stream()
+          .map(RoleDO::getCode)
+          .collect(Collectors.toSet()));
+    }
+    // 设置角色列表 （ID）
+    userVO.setRoleCodes(roleCodes);
+    // 获取所有有关的菜单权限标识
+    Set<String> permissions = new HashSet<>();
+    // 超管：所有权限
+    if (GlobalCommonConstants.SUPER_ADMIN_ROLE
+        .equals(SecurityUtils.getAuthenticationUser().getChannel())) {
+      permissions.addAll(menuService.findAllPermissions());
+    } else {
+      permissions.addAll(menuService.findPermissionsByRoleIds(roleIds));
+    }
+    // 设置权限列表（menu.permission）
+    userVO.setPermissions(permissions);
     return userVO;
   }
 
   /**
-   * 获取用户信息
+   * 获取登录用户信息
    *
    * @param userDO
    * @return
    */
-  private UserVO findUserInfo(UserDO userDO) {
+  private UserVO findLoginUserInfo(UserDO userDO) {
     // 转换
     UserVO userVO = userDO.convertTo(UserVO.class);
     // 获取用户角色列表
@@ -313,14 +326,18 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
         .distinct()
         .collect(Collectors.toList());
     // 根据角色ID获取角色编码
-    Set<String> roleCodes = roleService.findAllByIds(roleIds).stream()
-        .map(RoleVO::getCode)
+    Set<String> roleCodes = platformRoleRepository.findAllById(roleIds).stream()
+        .map(RoleDO::getCode)
         .collect(Collectors.toSet());
     // 设置角色列表 （ID）
     userVO.setRoleCodes(roleCodes);
     // 获取所有有关的菜单权限标识
-    Set<String> permissions = menuService
-        .findPermissionsByRoleCodes(CollUtil.newArrayList(roleCodes));
+    Set<String> permissions = new HashSet<>();
+    if (roleCodes.contains(GlobalCommonConstants.SUPER_ADMIN_ROLE)) {
+      permissions.addAll(menuService.findAllPermissions());
+    } else {
+      permissions.addAll(menuService.findPermissionsByRoleIds(roleIds));
+    }
     // 设置权限列表（menu.permission）
     userVO.setPermissions(permissions);
     return userVO;
@@ -422,22 +439,20 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
   }
 
   @Override
-  public UserVO loadUserByUsername(String userName) {
+  public UserVO loadLoginUserByUsername(String userName) {
     // 若用户名为空，则返回
     if (StrUtil.isBlank(userName)) {
       throw new BusinessException("登录名不能为空");
     }
     // 用户名
-    UserDO userDO = userRepository.findByUserName(userName);
-    if (Objects.isNull(userDO)) {
-      throw new BusinessException("当前用户不存在");
-    }
+    UserDO userDO = loginUserRepository.findByUserName(userName)
+        .orElseThrow(() -> new BusinessException("当前用户不存在"));
     // 获取详情，走缓存
-    return this.detailById(userDO.getId());
+    return this.findLoginUserInfo(userDO);
   }
 
   @Override
-  public UserVO loadSocialUser(String type, UserLoginDTO userLoginDTO) {
+  public UserVO loadLoginSocialUserByObject(String type, UserLoginDTO userLoginDTO) {
     Optional<SocialTypeEnum> socialTypeEnumOptional = SocialTypeEnum.getSocialByType(type);
     if (socialTypeEnumOptional.isPresent()) {
       throw new BusinessException("登录类型错误");
@@ -455,17 +470,16 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     }
 
     // 尝试获取是否已存在当前用户,后续新增其他平台授权，依次增加OR条件即可
-    UserDO existUser = userRepository
+    Optional<UserDO> userDOOptional = userRepository
         .findByUnionIdOrAppleId(userDO.getUnionId(), userDO.getAppleId());
-    if (Objects.isNull(existUser)) {
-      // 赋值
-      existUser = userDO;
-      // 存储新的数据
-      userRepository.save(existUser);
+    if (userDOOptional.isPresent()) {
+      // 获取详情，走缓存
+      return this.findLoginUserInfo(userDOOptional.get());
     }
-
+    // 存储新的数据
+    userRepository.save(userDO);
     // 获取详情，走缓存
-    return this.detailById(existUser.getId());
+    return this.findLoginUserInfo(userDO);
   }
 
   @Override
@@ -473,8 +487,8 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     if (StringUtils.isBlank(userDto.getUserName())) {
       throw new BusinessException("账号信息为空");
     }
-    UserDO existUser = userRepository.findByUserName(userDto.getUserName());
-    if (Objects.nonNull(existUser)) {
+    Optional<UserDO> userDOOptional = userRepository.findByUserName(userDto.getUserName());
+    if (userDOOptional.isPresent()) {
       throw new BusinessException("账号已存在");
     }
     // 新增
@@ -607,5 +621,15 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
     // 设置身份证
     userDO.setIdentity(userBindDTO.getIdentity());
     userRepository.save(userDO);
+  }
+
+  @Override
+  public void removeTenantAllUser(String tenantId) {
+    tenantUserRepository.logicDeleteTenantAllUser(tenantId);
+  }
+
+  @Override
+  public void freezeTenantAllUser(String tenantId) {
+    tenantUserRepository.updateTenantAllUser(tenantId, StatusEnum.FREEZE_STATUS.name());
   }
 }
