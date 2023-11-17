@@ -1,6 +1,7 @@
 package com.easy.cloud.web.module.log.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
+import com.easy.cloud.web.component.security.annotation.Inner;
 import com.easy.cloud.web.module.log.api.dto.SysLogDTO;
 import com.easy.cloud.web.module.log.api.vo.SysLogVO;
 import com.easy.cloud.web.module.log.biz.service.ISysLogService;
@@ -38,6 +39,7 @@ public class SysLogController {
    * @param sysLogDTO 新增数据
    * @return 新增数据
    */
+  @Inner
   @PostMapping(value = "save")
   @ApiOperation(value = "日志存储")
   public HttpResult<SysLogVO> save(@Validated @RequestBody SysLogDTO sysLogDTO) {
