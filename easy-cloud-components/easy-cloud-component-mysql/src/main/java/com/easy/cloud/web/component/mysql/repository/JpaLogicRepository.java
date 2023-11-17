@@ -24,7 +24,7 @@ public interface JpaLogicRepository<T extends BaseEntity, ID extends Serializabl
    * @param id 文档ID
    */
   @Query("UPDATE #{#entityName} table SET table.deleted = 'DELETED' WHERE table.id = ?1")
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @Modifying
   void logicDelete(ID id);
 
@@ -33,7 +33,7 @@ public interface JpaLogicRepository<T extends BaseEntity, ID extends Serializabl
    *
    * @param entity 实体对象
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   default void logicDelete(T entity) {
     logicDelete((ID) entity.getId());
   }
@@ -52,7 +52,7 @@ public interface JpaLogicRepository<T extends BaseEntity, ID extends Serializabl
    * 表所有数据进行逻辑删除
    */
   @Modifying
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   @Query("UPDATE #{#entityName} table SET table.deleted = 'DELETED' ")
   void logicDeleteAll();
 }

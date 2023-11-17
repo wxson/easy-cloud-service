@@ -1,6 +1,7 @@
 package com.easy.cloud.web.component.mysql.listener;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.mysql.domain.BaseEntity;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
@@ -27,11 +28,18 @@ public class EntityListener {
   @PrePersist
   public void prePersist(Object object) {
     if (object instanceof BaseEntity) {
-      AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
       BaseEntity baseEntity = (BaseEntity) object;
       baseEntity.setCreateAt(DateUtil.date());
-      baseEntity.setCreateBy(authenticationUser.getId());
-      baseEntity.setTenantId(authenticationUser.getTenant());
+      try {
+        // 非必须
+        AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
+        baseEntity.setCreateBy(authenticationUser.getId());
+        // 如果初始租户为空，则设置租户信息
+        if (StrUtil.isBlank(baseEntity.getTenantId())) {
+          baseEntity.setTenantId(authenticationUser.getTenant());
+        }
+      } catch (Exception exception) {
+      }
     }
   }
 
@@ -54,7 +62,11 @@ public class EntityListener {
     if (object instanceof BaseEntity) {
       BaseEntity baseEntity = (BaseEntity) object;
       baseEntity.setUpdateAt(DateUtil.date());
-      baseEntity.setUpdateBy(SecurityUtils.getAuthenticationUser().getId());
+      try {
+        // 非必须
+        baseEntity.setUpdateBy(SecurityUtils.getAuthenticationUser().getId());
+      } catch (Exception exception) {
+      }
     }
   }
 
