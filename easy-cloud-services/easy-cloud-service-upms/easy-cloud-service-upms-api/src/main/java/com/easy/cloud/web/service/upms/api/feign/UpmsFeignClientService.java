@@ -43,7 +43,7 @@ public interface UpmsFeignClientService {
    * @param userName 用户名称
    * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.upms.api.domain.User>
    */
-  @GetMapping("user/detail/{userName}")
+  @GetMapping("user/login/detail/{userName}")
   HttpResult<UserVO> loadUserByUsername(@PathVariable("userName") String userName);
 
   /**
@@ -53,7 +53,7 @@ public interface UpmsFeignClientService {
    * @param jsonObject 认证编码
    * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.upms.api.domain.User>
    */
-  @PostMapping("user/detail/{type}")
+  @PostMapping("user/login/detail/{type}")
   HttpResult<UserVO> loadSocialUser(@PathVariable(value = "type") String type,
       @RequestBody JSONObject jsonObject);
 

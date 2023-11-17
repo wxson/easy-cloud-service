@@ -110,7 +110,6 @@ public class UserController {
    * @return 详情数据
    */
   @GetMapping(value = "base/detail")
-  @PreAuthorize("@pms.hasPermission('system:user:query')")
   @SysLog(value = "获取用户基本详情", action = Action.FIND)
   @ApiOperation(value = "获取用户基本详情")
   public HttpResult<UserVO> baseDetail() {
@@ -154,11 +153,12 @@ public class UserController {
    * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.upms.biz.v1.domain.vo.UserVO>
    */
   @Inner
-  @GetMapping("detail/{userName}")
+  @GetMapping("login/detail/{userName}")
   @SysLog(value = "根据用户名获取用户详情", action = Action.FIND)
   @ApiOperation(value = "根据用户名获取用户详情")
-  public HttpResult<UserVO> loadUserByUsername(@PathVariable @ApiParam("用户账号") String userName) {
-    return HttpResult.ok(userService.loadUserByUsername(userName));
+  public HttpResult<UserVO> loadLoginUserByUsername(
+      @PathVariable @ApiParam("用户账号") String userName) {
+    return HttpResult.ok(userService.loadLoginUserByUsername(userName));
   }
 
   /**
@@ -169,12 +169,12 @@ public class UserController {
    * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.upms.biz.v1.domain.vo.UserVO>
    */
   @Inner
-  @PostMapping("detail/{type}")
+  @PostMapping("login/detail/{type}")
   @SysLog(value = "根据传入对象获取用户详情", action = Action.FIND)
   @ApiOperation(value = "根据传入对象获取用户详情")
-  public HttpResult<UserVO> loadSocialUserByObject(@PathVariable String type,
+  public HttpResult<UserVO> loadLoginSocialUserByObject(@PathVariable String type,
       @RequestBody UserLoginDTO userLoginDTO) {
-    return HttpResult.ok(userService.loadSocialUser(type, userLoginDTO));
+    return HttpResult.ok(userService.loadLoginSocialUserByObject(type, userLoginDTO));
   }
 
   /**
