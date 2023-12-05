@@ -93,7 +93,7 @@ public class SysLogAspect {
       // 存储日志，走内部接口
       sysLogModuleApi.saveLog(sysLogDTO, SecurityConstants.INNER_ORIGIN);
     } catch (Exception exception) {
-      log.error("execute remote log save fail：{}", exception.getMessage());
+      log.warn("execute remote log save fail：{}", exception.getMessage());
     }
   }
 }
