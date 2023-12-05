@@ -1,0 +1,66 @@
+[
+  {
+    "predicates": "[{\"args\": {\"_genkey_0\": \"/upms/**\"}, \"name\": \"Path\"}]",
+    "route_id": "easy-cloud-service-upms-biz",
+    "filters": "[]",
+    "uri": "lb://easy-cloud-service-upms-biz",
+    "route_name": "upms管理平台",
+    "sort": "0"
+  },
+  {
+    "predicates": "[{\"args\": {\"_genkey_0\": \"/auth/**\"}, \"name\": \"Path\"}]",
+    "route_id": "easy-cloud-oauth",
+    "filters": "[]",
+    "uri": "lb://easy-cloud-oauth",
+    "route_name": "认证管理平台",
+    "sort": "0"
+  },
+  {
+    "predicates": "[{\"args\": {\"_genkey_0\": \"/pvp/**\"}, \"name\": \"Path\"}]",
+    "route_id": "easy-cloud-service-pvp-biz",
+    "filters": "[]",
+    "uri": "lb://easy-cloud-service-pvp-biz",
+    "route_name": "游戏模块",
+    "sort": "0"
+  },
+  {
+    "predicates": "[{\"args\": {\"_genkey_0\": \"/order/**\"}, \"name\": \"Path\"}]",
+    "route_id": "easy-cloud-service-order-biz",
+    "filters": "[]",
+    "uri": "lb://easy-cloud-service-order-biz",
+    "route_name": "订单模块",
+    "sort": "0"
+  },
+  {
+    "predicates": "[{\"args\": {\"_genkey_0\": \"/pay/**\"}, \"name\": \"Path\"}]",
+    "route_id": "easy-cloud-service-pay-biz",
+    "filters": "[]",
+    "uri": "lb://easy-cloud-service-pay-biz",
+    "route_name": "支付模块",
+    "sort": "0"
+  },
+  {
+    "predicates": "[{\"args\": {\"_genkey_0\": \"/cms/**\"}, \"name\": \"Path\"}]",
+    "route_id": "easy-cloud-service-cms-biz",
+    "filters": "[]",
+    "uri": "lb://easy-cloud-service-cms-biz",
+    "route_name": "CMS模块",
+    "sort": "0"
+  },
+  {
+    "predicates": "[{\"args\": {\"_genkey_0\": \"/vip/**\"}, \"name\": \"Path\"}]",
+    "route_id": "easy-cloud-service-member-biz",
+    "filters": "[]",
+    "uri": "lb://easy-cloud-service-member-biz",
+    "route_name": "会员中心模块",
+    "sort": "0"
+  },
+  {
+    "predicates": "[{\"args\": {\"_genkey_0\": \"/charts/**\"}, \"name\": \"Path\"}]",
+    "route_id": "easy-cloud-service-charts-biz",
+    "filters": "[]",
+    "uri": "lb://easy-cloud-service-charts-biz",
+    "route_name": "统计模块",
+    "sort": "0"
+  }
+]

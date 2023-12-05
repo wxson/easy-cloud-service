@@ -7,17 +7,14 @@ import com.easy.cloud.web.module.route.service.RouteConfService;
 import java.net.URI;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -41,9 +38,13 @@ public class RouteAutoConfiguration {
   @Order
   @EventListener({WebServerInitializedEvent.class})
   public void initRoute() {
+    /**
+     * 注：初始化顺序不能乱
+     */
+    // 初始化路由信息配置
+    routeConfService.init();
     // 移除所有路由信息
-    Boolean result = redisTemplate
-        .delete(GatewayRouteConfConstants.GATEWAY_ROUTE_CONF_CACHE_REDIS_KEY);
+    redisTemplate.delete(GatewayRouteConfConstants.GATEWAY_ROUTE_CONF_CACHE_REDIS_KEY);
     // 读取数据库路由配置
     routeConfService.list().forEach(route -> {
       RouteDefinition routeDefinition = new RouteDefinition();

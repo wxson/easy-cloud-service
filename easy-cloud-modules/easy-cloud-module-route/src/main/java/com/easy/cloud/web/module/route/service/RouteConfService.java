@@ -1,12 +1,13 @@
 package com.easy.cloud.web.module.route.service;
 
+import com.easy.cloud.web.component.core.service.IInitService;
 import com.easy.cloud.web.module.route.domain.RouteConf;
 import java.util.List;
 
 /**
  * @author GR
  */
-public interface RouteConfService {
+public interface RouteConfService extends IInitService {
 
 
   /**

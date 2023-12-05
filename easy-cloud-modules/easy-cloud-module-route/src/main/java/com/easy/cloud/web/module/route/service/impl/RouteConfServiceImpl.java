@@ -32,6 +32,17 @@ public class RouteConfServiceImpl implements RouteConfService {
   private final RouteConfRepository routeConfRepository;
 
   @Override
+  public void init() {
+    if (routeConfRepository.count() <= 0) {
+      // 初始化角色数据
+      List<RouteConf> routeConfList = this.initJsonToList("json/sys_route.json", RouteConf.class);
+      // 初始化存储
+      routeConfRepository.saveAll(routeConfList);
+      log.info("init platform roles content success!");
+    }
+  }
+
+  @Override
   public boolean save(RouteConf routeConf) {
     routeConfRepository.save(routeConf);
     return true;
