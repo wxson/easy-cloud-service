@@ -49,10 +49,17 @@ public class SecurityUserDetailsServiceImpl implements ISecurityUserDetailsServi
       throw new UsernameNotFoundException("当前账号用户不存在");
     }
 
+    // 定义用户角色
+    String userChannel = null;
+    // 角色为空，设置无法识别
+    if (CollUtil.isNotEmpty(userVO.getRoleCodes())) {
+      userChannel = RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoleCodes()));
+    }
+
     // Authority 即角色，随机绑定一个其中的角色信息
     return new AuthenticationUser(userVO.getId(), userVO.getUserName(), userVO.getPassword(),
-        RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoleCodes())), userVO.getTenantId(),
-        true, true, true, userVO.getStatus() != StatusEnum.FREEZE_STATUS,
+        userChannel, userVO.getTenantId(), true, true, true,
+        userVO.getStatus() != StatusEnum.FREEZE_STATUS,
         AuthorityUtils.createAuthorityList(userVO.getPermissions().toArray(new String[0])));
   }
 
@@ -71,10 +78,17 @@ public class SecurityUserDetailsServiceImpl implements ISecurityUserDetailsServi
       throw new UsernameNotFoundException("当前账号用户不存在");
     }
 
+    // 定义用户角色
+    String userChannel = null;
+    // 角色为空，设置无法识别
+    if (CollUtil.isNotEmpty(userVO.getRoleCodes())) {
+      userChannel = RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoleCodes()));
+    }
+
     // Authority 即角色，随机绑定一个其中的角色信息
-    return new AuthenticationUser(userVO.getId(), userVO.getUserName(), "N/A",
-        RandomUtil.randomEle(CollUtil.newArrayList(userVO.getRoleCodes())), userVO.getTenantId(),
-        true, true, true, userVO.getStatus() != StatusEnum.FREEZE_STATUS,
+    return new AuthenticationUser(userVO.getId(), userVO.getUserName(), userVO.getPassword(),
+        userChannel, userVO.getTenantId(), true, true, true,
+        userVO.getStatus() != StatusEnum.FREEZE_STATUS,
         AuthorityUtils.createAuthorityList(userVO.getPermissions().toArray(new String[0])));
   }
 }
