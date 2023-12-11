@@ -1,66 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.easy.cloud.web</groupId>
-        <artifactId>easy-cloud-service-order</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
-    <artifactId>easy-cloud-service-order-biz</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.easy.cloud.web</groupId>
+    <artifactId>easy-cloud-service-order</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>easy-cloud-service-order-biz</name>
-    <description>Demo project for Spring Boot</description>
+  </parent>
+  <artifactId>easy-cloud-service-order-biz</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>easy-cloud-service-order-biz</name>
+  <description>Demo project for Spring Boot</description>
 
-    <dependencies>
-        <!--注册中心客户端-->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
+  <dependencies>
+    <!--注册中心客户端-->
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+    </dependency>
 
-        <!--配置中心客户端-->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
+    <!--配置中心客户端-->
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+    </dependency>
 
-        <!-- 认证组件 -->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-security</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+    <!-- 认证组件 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-component-security</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
 
-        <!-- mysql组件 -->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-component-mysql</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+    <!-- mysql组件 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-component-mysql</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
 
-        <!-- cms-api组件 -->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-service-cms-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+    <!-- cms-api组件 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-service-order-api</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
 
-        <!-- pay-api组件 -->
-        <dependency>
-            <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-service-pay-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+    <!-- pay-api组件 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-service-pay-api</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

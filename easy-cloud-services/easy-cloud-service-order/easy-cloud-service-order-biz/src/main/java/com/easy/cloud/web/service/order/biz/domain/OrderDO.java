@@ -1,5 +1,6 @@
-package com.easy.cloud.web.service.order.api.domain.dto;
+package com.easy.cloud.web.service.order.biz.domain;
 
+import com.easy.cloud.web.component.mysql.domain.BaseEntity;
 import com.easy.cloud.web.service.order.api.enums.AftermarketStatusEnum;
 import com.easy.cloud.web.service.order.api.enums.CommentStatusEnum;
 import com.easy.cloud.web.service.order.api.enums.CurrencyTypeEnum;
@@ -8,29 +9,32 @@ import com.easy.cloud.web.service.order.api.enums.LogisticsStatusEnum;
 import com.easy.cloud.web.service.order.api.enums.OrderStatusEnum;
 import com.easy.cloud.web.service.order.api.enums.PayStatusEnum;
 import java.math.BigDecimal;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 /**
- * Order请求数据
+ * Order 持久类
  *
  * @author Fast Java
  * @date 2023-12-11 17:45:14
  */
+@Entity
 @Data
-@Builder
+@SuperBuilder
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDTO {
-
-  /**
-   * 文档ID
-   */
-  private String id;
+@DynamicInsert
+@DynamicUpdate
+@Table(name = "db_order")
+public class OrderDO extends BaseEntity {
 
   /**
    * 订单编号

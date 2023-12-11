@@ -1,4 +1,4 @@
-package com.easy.cloud.web.service.order.biz.enums;
+package com.easy.cloud.web.service.order.api.enums;
 
 import com.easy.cloud.web.component.core.enums.IBaseEnum;
 import lombok.AllArgsConstructor;
@@ -13,12 +13,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum PayTypeEnum implements IBaseEnum {
-    /**
-     * 支付方式
-     */
-    WX_PAY(1, "微信支付"),
-    ALI_PAY(2, "阿里支付"),
-    ;
-    private final int code;
-    private final String desc;
+  /**
+   * 支付方式
+   */
+  WX_PAY(1, "微信支付"),
+  ALI_PAY(2, "阿里支付"),
+  ;
+  private final int code;
+  private final String desc;
 }

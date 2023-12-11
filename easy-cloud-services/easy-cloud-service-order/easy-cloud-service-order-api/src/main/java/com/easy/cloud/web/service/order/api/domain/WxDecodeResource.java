@@ -1,4 +1,4 @@
-package com.easy.cloud.web.service.order.biz.domain;
+package com.easy.cloud.web.service.order.api.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +12,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @NoArgsConstructor(staticName = "build")
 public class WxDecodeResource {
-    private String original_type;
-    private String algorithm;
-    private String ciphertext;
-    private String associated_data;
-    private String nonce;
+
+  private String original_type;
+  private String algorithm;
+  private String ciphertext;
+  private String associated_data;
+  private String nonce;
 }

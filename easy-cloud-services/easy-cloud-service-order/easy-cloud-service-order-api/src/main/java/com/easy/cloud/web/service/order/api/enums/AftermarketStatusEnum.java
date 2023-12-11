@@ -6,20 +6,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付状态枚举
+ * 售后状态枚举
  *
  * @author GR
  * @date 2021-8-31 22:26
  */
 @Getter
 @AllArgsConstructor
-public enum PayStatusEnum implements IBaseEnum {
+public enum AftermarketStatusEnum implements IBaseEnum {
   /**
-   * 新订单（PAY_NO），部分支付（PAY_PARTIAL），已付款（PAY_YES）
+   * 未申请（NOT_APPLY），已申请（APPLY），已失效（EXPIRED）。
    */
-  PAY_NO(1, "新订单，待支付"),
-  PAY_PARTIAL(2, "部分支付"),
-  PAY_YES(3, "已付款"),
+  NOT_APPLY(1, "未申请"),
+  APPLY(2, "已申请"),
+  EXPIRED(3, "已失效"),
   ;
   /**
    * 编码
@@ -36,8 +36,8 @@ public enum PayStatusEnum implements IBaseEnum {
    * @param code 编码
    * @return java.util.Optional<com.easy.cloud.web.service.mj.biz.enums.HuCardRuleEnum>
    */
-  public static Optional<PayStatusEnum> getInstanceByCode(int code) {
-    for (PayStatusEnum orderStatusEnum : PayStatusEnum.values()) {
+  public static Optional<AftermarketStatusEnum> getInstanceByCode(int code) {
+    for (AftermarketStatusEnum orderStatusEnum : AftermarketStatusEnum.values()) {
       if (code == orderStatusEnum.code) {
         return Optional.of(orderStatusEnum);
       }

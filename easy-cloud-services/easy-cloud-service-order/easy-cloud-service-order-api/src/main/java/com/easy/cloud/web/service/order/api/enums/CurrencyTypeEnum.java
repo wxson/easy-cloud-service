@@ -6,20 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 支付状态枚举
+ * 货币类型
  *
  * @author GR
  * @date 2021-8-31 22:26
  */
 @Getter
 @AllArgsConstructor
-public enum PayStatusEnum implements IBaseEnum {
+public enum CurrencyTypeEnum implements IBaseEnum {
   /**
-   * 新订单（PAY_NO），部分支付（PAY_PARTIAL），已付款（PAY_YES）
+   * 货币
    */
-  PAY_NO(1, "新订单，待支付"),
-  PAY_PARTIAL(2, "部分支付"),
-  PAY_YES(3, "已付款"),
+  CNY(1, "人民币"),
   ;
   /**
    * 编码
@@ -36,10 +34,10 @@ public enum PayStatusEnum implements IBaseEnum {
    * @param code 编码
    * @return java.util.Optional<com.easy.cloud.web.service.mj.biz.enums.HuCardRuleEnum>
    */
-  public static Optional<PayStatusEnum> getInstanceByCode(int code) {
-    for (PayStatusEnum orderStatusEnum : PayStatusEnum.values()) {
-      if (code == orderStatusEnum.code) {
-        return Optional.of(orderStatusEnum);
+  public static Optional<CurrencyTypeEnum> getInstanceByCode(int code) {
+    for (CurrencyTypeEnum currencyTypeEnum : CurrencyTypeEnum.values()) {
+      if (code == currencyTypeEnum.code) {
+        return Optional.of(currencyTypeEnum);
       }
     }
     return Optional.empty();

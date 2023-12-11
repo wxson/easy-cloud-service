@@ -1,7 +1,6 @@
 package com.easy.cloud.web.service.order.biz.annotation;
 
-import com.easy.cloud.web.service.order.biz.enums.PayTypeEnum;
-
+import com.easy.cloud.web.service.order.api.enums.PayTypeEnum;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,8 +13,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PayCallBackSignature {
-    /**
-     * 支付方式，默认微信支付
-     */
-    PayTypeEnum payType();
+
+  /**
+   * 支付方式，默认微信支付
+   */
+  PayTypeEnum payType();
 }
