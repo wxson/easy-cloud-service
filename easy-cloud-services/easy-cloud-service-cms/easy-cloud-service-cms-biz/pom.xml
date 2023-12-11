@@ -55,7 +55,7 @@
         <!--Local dict-->
         <dependency>
             <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-module-dict</artifactId>
+            <artifactId>easy-cloud-module-dict-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -16,7 +16,7 @@
         <!-- 日志模块 -->
         <dependency>
             <groupId>com.easy.cloud.web</groupId>
-            <artifactId>easy-cloud-module-log</artifactId>
+            <artifactId>easy-cloud-component-log</artifactId>
             <version>${project.version}</version>
         </dependency>
 

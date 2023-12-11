@@ -9,6 +9,7 @@
     </parent>
     <artifactId>easy-cloud-service-minio</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>easy-cloud-service-minio</name>
     <description>Demo project for Spring Boot</description>
 

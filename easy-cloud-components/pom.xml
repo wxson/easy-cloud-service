@@ -19,6 +19,7 @@
         <module>easy-cloud-component-data</module>
         <module>easy-cloud-component-extapi</module>
         <module>easy-cloud-component-gateway</module>
+        <module>easy-cloud-component-log</module>
         <module>easy-cloud-component-mongo</module>
         <module>easy-cloud-component-mq</module>
         <module>easy-cloud-component-mysql</module>
