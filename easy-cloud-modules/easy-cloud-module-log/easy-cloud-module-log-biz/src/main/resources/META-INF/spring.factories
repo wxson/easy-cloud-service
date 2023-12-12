@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.easy.cloud.web.module.dict.biz.configuration.DictAutoConfiguration
+  com.easy.cloud.web.module.log.biz.configuration.SysLogAutoConfiguration
 

@@ -3,6 +3,9 @@ package com.easy.cloud.web.module.log.biz;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * @author GR
+ */
 @SpringBootApplication
 public class EasyCloudModuleLogApplication {
 
