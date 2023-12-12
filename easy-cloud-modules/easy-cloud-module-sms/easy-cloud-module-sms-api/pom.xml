@@ -5,22 +5,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.easy.cloud.web</groupId>
-    <artifactId>easy-cloud-modules</artifactId>
+    <artifactId>easy-cloud-module-sms</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>easy-cloud-module-sms</artifactId>
+  <artifactId>easy-cloud-module-sms-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>easy-cloud-module-sms</name>
-  <packaging>pom</packaging>
+  <name>easy-cloud-module-sms-api</name>
   <description>Demo project for Spring Boot</description>
 
-  <modules>
-    <module>easy-cloud-module-sms-api</module>
-    <module>easy-cloud-module-sms-biz</module>
-  </modules>
-
   <dependencies>
-
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+    </dependency>
   </dependencies>
-
 </project>
