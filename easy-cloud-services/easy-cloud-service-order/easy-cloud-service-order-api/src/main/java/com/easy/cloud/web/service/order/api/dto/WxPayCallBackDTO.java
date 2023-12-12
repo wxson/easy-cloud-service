@@ -1,6 +1,6 @@
-package com.easy.cloud.web.service.order.api.domain.dto;
+package com.easy.cloud.web.service.order.api.dto;
 
-import com.easy.cloud.web.service.order.api.domain.WxDecodeResource;
+import com.easy.cloud.web.service.order.api.common.WxDecodeResource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;

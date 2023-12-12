@@ -1,4 +1,4 @@
-package com.easy.cloud.web.service.order.api.domain;
+package com.easy.cloud.web.service.order.api.common;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

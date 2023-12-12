@@ -1,7 +1,7 @@
 package com.easy.cloud.web.service.order.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.service.order.api.domain.dto.OrderDTO;
+import com.easy.cloud.web.service.order.api.dto.OrderDTO;
 import com.easy.cloud.web.service.order.biz.service.IOrderService;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.constraints.NotNull;

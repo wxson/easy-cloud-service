@@ -1,4 +1,4 @@
-package com.easy.cloud.web.service.order.api.domain.vo;
+package com.easy.cloud.web.service.order.api.vo;
 
 import com.easy.cloud.web.service.order.api.enums.AftermarketStatusEnum;
 import com.easy.cloud.web.service.order.api.enums.CommentStatusEnum;

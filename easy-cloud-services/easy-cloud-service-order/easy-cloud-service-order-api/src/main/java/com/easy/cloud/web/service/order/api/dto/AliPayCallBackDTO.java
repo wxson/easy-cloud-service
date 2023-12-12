@@ -1,4 +1,4 @@
-package com.easy.cloud.web.service.order.api.domain.dto;
+package com.easy.cloud.web.service.order.api.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

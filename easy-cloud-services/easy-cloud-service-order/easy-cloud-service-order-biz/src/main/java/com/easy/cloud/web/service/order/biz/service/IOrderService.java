@@ -1,7 +1,7 @@
 package com.easy.cloud.web.service.order.biz.service;
 
-import com.easy.cloud.web.service.order.api.domain.dto.OrderDTO;
-import com.easy.cloud.web.service.order.api.domain.vo.OrderVO;
+import com.easy.cloud.web.service.order.api.dto.OrderDTO;
+import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import java.util.List;
 import org.springframework.data.domain.Page;
 

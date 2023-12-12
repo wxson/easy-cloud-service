@@ -1,7 +1,7 @@
 package com.easy.cloud.web.service.order.biz.service;
 
-import com.easy.cloud.web.service.order.api.domain.dto.AliPayCallBackDTO;
-import com.easy.cloud.web.service.order.api.domain.dto.WxPayCallBackDTO;
+import com.easy.cloud.web.service.order.api.dto.AliPayCallBackDTO;
+import com.easy.cloud.web.service.order.api.dto.WxPayCallBackDTO;
 
 /**
  * @author GR

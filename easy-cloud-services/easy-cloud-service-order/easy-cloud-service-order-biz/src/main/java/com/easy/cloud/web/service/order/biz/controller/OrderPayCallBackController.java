@@ -1,8 +1,8 @@
 package com.easy.cloud.web.service.order.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.service.order.api.domain.dto.AliPayCallBackDTO;
-import com.easy.cloud.web.service.order.api.domain.dto.WxPayCallBackDTO;
+import com.easy.cloud.web.service.order.api.dto.AliPayCallBackDTO;
+import com.easy.cloud.web.service.order.api.dto.WxPayCallBackDTO;
 import com.easy.cloud.web.service.order.api.enums.PayTypeEnum;
 import com.easy.cloud.web.service.order.biz.annotation.PayCallBackSignature;
 import com.easy.cloud.web.service.order.biz.service.IOrderPayCallBackService;

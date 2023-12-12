@@ -2,8 +2,8 @@ package com.easy.cloud.web.service.order.api.feign;
 
 import com.easy.cloud.web.component.core.constants.ServiceNameConstants;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.service.order.api.domain.dto.OrderDTO;
-import com.easy.cloud.web.service.order.api.domain.vo.OrderVO;
+import com.easy.cloud.web.service.order.api.dto.OrderDTO;
+import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
