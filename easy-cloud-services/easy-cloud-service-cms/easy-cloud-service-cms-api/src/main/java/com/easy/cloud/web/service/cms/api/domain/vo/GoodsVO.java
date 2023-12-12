@@ -1,5 +1,6 @@
 package com.easy.cloud.web.service.cms.api.domain.vo;
 
+import com.easy.cloud.web.component.core.service.IConverter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor(staticName = "build")
-public class GoodsVO implements IConvertProxy {
+public class GoodsVO implements IConverter {
     /**
      * 商品ID
      */
