@@ -1,7 +1,5 @@
 package com.easy.cloud.web.module.log.biz.converter;
 
-import cn.hutool.core.date.DateUtil;
-import com.easy.cloud.web.component.core.constants.DateTimeConstants;
 import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.module.log.api.dto.SysLogDTO;
 import com.easy.cloud.web.module.log.api.vo.SysLogVO;
@@ -39,7 +37,6 @@ public class SysLogConverter {
   public static SysLogVO convertTo(SysLogDO sysLog) {
     SysLogVO sysLogVO = SysLogVO.builder().build();
     BeanUtils.copyProperties(sysLog, sysLogVO, true);
-    sysLogVO.setCreateAt(DateUtil.format(sysLog.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
     return sysLogVO;
   }
 
