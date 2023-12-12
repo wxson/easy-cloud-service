@@ -11,8 +11,7 @@ import com.easy.cloud.web.service.cms.api.enums.ActionEnum;
 import com.easy.cloud.web.service.cms.api.enums.CurrencyTypeEnum;
 import com.easy.cloud.web.service.cms.api.enums.GoodsTypeEnum;
 import com.easy.cloud.web.service.cms.api.feign.CmsFeignClientService;
-import com.easy.cloud.web.service.member.api.domain.dto.MemberDTO;
-import com.easy.cloud.web.service.member.api.enums.PropertyOriginEnum;
+import com.easy.cloud.web.service.member.api.dto.MemberDTO;
 import com.easy.cloud.web.service.member.api.feign.MemberFeignClientService;
 import com.easy.cloud.web.service.order.api.dto.OrderDTO;
 import com.easy.cloud.web.service.order.api.enums.PayStatusEnum;
@@ -119,7 +118,7 @@ public class PayServiceImpl implements IPayService, ApplicationContextAware {
     }
 
     // 免费支付
-    if (NumberUtil.compare(orderVO.getAmount().longValue(), GlobalCommonConstants.L_ZERO)
+    if (NumberUtil.compare(orderVO.getAmount().intValue(), GlobalCommonConstants.L_ZERO)
         == GlobalCommonConstants.ZERO) {
       // 免费直接发放奖励
       this.grantPrize(orderVO.getNo(), orderVO.getGoodsNo());
@@ -154,7 +153,7 @@ public class PayServiceImpl implements IPayService, ApplicationContextAware {
     }
 
     // 免费支付
-    if (NumberUtil.compare(goodsVO.getSalesPrice().longValue(), GlobalCommonConstants.L_ZERO)
+    if (NumberUtil.compare(goodsVO.getSalesPrice().intValue(), GlobalCommonConstants.L_ZERO)
         == GlobalCommonConstants.ZERO) {
       this.grantPrize(null, goodsVO.getNo());
       // 免费直接发放奖励
@@ -242,23 +241,21 @@ public class PayServiceImpl implements IPayService, ApplicationContextAware {
     }
 
     // 创建会员更新对象
-    MemberDTO memberDTO = MemberDTO.build()
-        .setOrigin(PropertyOriginEnum.BUY.getCode())
-        .setOrderNo(orderNo);
+    MemberDTO memberDTO = MemberDTO.builder().build();
     switch (optionalGoodsTypeEnum.get()) {
       case DIAMOND:
       case PROP_EXCHANGE:
         memberFeignClientService
-            .updateMemberProperty(memberDTO.setDiamond(goodsVO.getDiamondNum().longValue())
-                .setCoupon(goodsVO.getCouponNum().longValue()));
+            .updateMemberProperty(memberDTO.setDiamond(goodsVO.getDiamondNum())
+                .setCoupon(goodsVO.getCouponNum()));
         break;
       case GOLD_COIN:
         memberFeignClientService
-            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum().longValue()));
+            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum()));
         break;
       case COUPON:
         memberFeignClientService
-            .updateMemberProperty(memberDTO.setCoupon(goodsVO.getCouponNum().longValue()));
+            .updateMemberProperty(memberDTO.setCoupon(goodsVO.getCouponNum()));
         break;
       case TABLECLOTH:
       case CARD_BACK:
@@ -267,29 +264,29 @@ public class PayServiceImpl implements IPayService, ApplicationContextAware {
         break;
       case DIAMOND_COUPON:
         memberFeignClientService
-            .updateMemberProperty(memberDTO.setDiamond(goodsVO.getDiamondNum().longValue())
-                .setCoupon(goodsVO.getCouponNum().longValue()));
+            .updateMemberProperty(memberDTO.setDiamond(goodsVO.getDiamondNum())
+                .setCoupon(goodsVO.getCouponNum()));
         break;
       case GOLD_COIN_COUPON:
         memberFeignClientService
-            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum().longValue())
-                .setCoupon(goodsVO.getCouponNum().longValue()));
+            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum())
+                .setCoupon(goodsVO.getCouponNum()));
         break;
       case DIAMOND_GOLD_COIN:
         memberFeignClientService
-            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum().longValue())
-                .setDiamond(goodsVO.getDiamondNum().longValue()));
+            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum())
+                .setDiamond(goodsVO.getDiamondNum()));
         break;
       case GOLD_COIN_ALIVENESS:
         memberFeignClientService
-            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum().longValue()));
+            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum()));
         // 活跃度，当用户接收到支付成功后，在每日任务中，调用handle方法，将存储当天的活跃度
         break;
       case DIAMOND_GOLD_COIN_COUPON:
         memberFeignClientService
-            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum().longValue())
-                .setDiamond(goodsVO.getDiamondNum().longValue())
-                .setCoupon(goodsVO.getCouponNum().longValue()));
+            .updateMemberProperty(memberDTO.setAmount(goodsVO.getGoldCoinNum())
+                .setDiamond(goodsVO.getDiamondNum())
+                .setCoupon(goodsVO.getCouponNum()));
         break;
       default:
     }

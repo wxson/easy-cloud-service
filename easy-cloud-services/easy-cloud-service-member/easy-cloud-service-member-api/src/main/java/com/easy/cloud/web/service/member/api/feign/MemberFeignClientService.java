@@ -2,18 +2,14 @@ package com.easy.cloud.web.service.member.api.feign;
 
 import com.easy.cloud.web.component.core.constants.ServiceNameConstants;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.service.member.api.domain.dto.MemberDTO;
-import com.easy.cloud.web.service.member.api.domain.dto.MemberPropertyRecordDTO;
-import com.easy.cloud.web.service.member.api.domain.vo.MemberPropertyRecordVO;
-import com.easy.cloud.web.service.member.api.domain.vo.MemberVO;
+import com.easy.cloud.web.service.member.api.dto.MemberDTO;
+import com.easy.cloud.web.service.member.api.vo.MemberVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 /**
  * @author GR
@@ -26,7 +22,7 @@ public interface MemberFeignClientService {
      * 根据用户ID获取会员信息
      *
      * @param userId 用户ID
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.domain.vo.MemberVO>
+     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.vo.MemberVO>
      */
     @GetMapping("member/detail/{userId}")
     HttpResult<MemberVO> getMemberDetailByUserId(@PathVariable(value = "userId") String userId);
@@ -36,7 +32,7 @@ public interface MemberFeignClientService {
      * 根据用户ID获取会员信息
      *
      * @param memberDTO 用户ID
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.domain.vo.MemberVO>
+     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.vo.MemberVO>
      */
     @PostMapping("member/detail")
     HttpResult<MemberVO> getMemberDetail(@RequestBody MemberDTO memberDTO);
@@ -45,7 +41,7 @@ public interface MemberFeignClientService {
      * 修改会员信息
      *
      * @param memberDTO 会员信息
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.domain.vo.MemberVO>
+     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.vo.MemberVO>
      */
     @GetMapping("member/update")
     HttpResult<MemberVO> updateMemberInfo(@RequestBody MemberDTO memberDTO);
@@ -54,7 +50,7 @@ public interface MemberFeignClientService {
      * 修改会员资产信息
      *
      * @param memberDTO 会员信息
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.domain.vo.MemberVO>
+     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.vo.MemberVO>
      */
     @PostMapping("member/property/update")
     HttpResult<MemberVO> updateMemberProperty(@RequestBody MemberDTO memberDTO);
@@ -70,19 +66,10 @@ public interface MemberFeignClientService {
     HttpResult<MemberVO> calculateNextVipNeedDiamond(@PathVariable(value = "userId") String userId);
 
     /**
-     * 会员资产记录查询条件
-     *
-     * @param memberPropertyRecordDTO 查询条件
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.domain.vo.MemberVO>
-     */
-    @PostMapping("member/property/record/list")
-    HttpResult<List<MemberPropertyRecordVO>> memberPropertyRecordList(@RequestBody MemberPropertyRecordDTO memberPropertyRecordDTO);
-
-    /**
      * 修改会员资产信息
      *
      * @param memberDTO 会员信息
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.domain.vo.MemberVO>
+     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.vo.MemberVO>
      */
     @PostMapping("member/init")
     HttpResult<MemberVO> initMemberInfo(@RequestBody MemberDTO memberDTO);
