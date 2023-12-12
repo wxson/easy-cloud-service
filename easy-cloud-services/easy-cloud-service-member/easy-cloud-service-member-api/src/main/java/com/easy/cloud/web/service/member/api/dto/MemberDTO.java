@@ -21,7 +21,7 @@ public class MemberDTO {
     /**
      * 文档ID
      */
-    private Long id;
+    private String id;
     /**
      *
      */
