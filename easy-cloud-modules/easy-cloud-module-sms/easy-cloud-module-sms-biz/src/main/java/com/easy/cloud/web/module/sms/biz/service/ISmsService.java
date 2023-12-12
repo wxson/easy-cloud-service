@@ -35,7 +35,7 @@ public interface ISmsService {
    * @param smsId 对象ID
    * @return java.lang.Boolean
    */
-  Boolean removeById(Long smsId);
+  Boolean removeById(String smsId);
 
   /**
    * 根据ID获取详情
@@ -43,7 +43,7 @@ public interface ISmsService {
    * @param smsId 对象ID
    * @return java.lang.Boolean
    */
-  SmsVO detailById(Long smsId);
+  SmsVO detailById(String smsId);
 
   /**
    * 根据条件获取列表数据

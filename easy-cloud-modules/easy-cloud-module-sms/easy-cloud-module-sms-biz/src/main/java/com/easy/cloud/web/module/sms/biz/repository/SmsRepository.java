@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * @date 2023-12-11 18:43:48
  */
 @Repository
-public interface SmsRepository extends JpaRepository<SmsDO, Long> {
+public interface SmsRepository extends JpaRepository<SmsDO, String> {
 
 }

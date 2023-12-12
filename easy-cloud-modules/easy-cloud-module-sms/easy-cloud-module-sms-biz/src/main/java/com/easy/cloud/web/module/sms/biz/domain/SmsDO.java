@@ -1,6 +1,7 @@
 package com.easy.cloud.web.module.sms.biz.domain;
 
 import com.easy.cloud.web.component.mysql.domain.BaseEntity;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -31,13 +32,16 @@ public class SmsDO extends BaseEntity {
   /**
    * 短信验证码
    */
+  @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '短信验证码'")
   private String code;
   /**
    * 电话
    */
+  @Column(columnDefinition = "VARCHAR(11) NOT NULL COMMENT '电话'")
   private String tel;
   /**
    * 短信内容
    */
+  @Column(columnDefinition = "VARCHAR(255) NOT NULL COMMENT '短信内容'")
   private String content;
 }

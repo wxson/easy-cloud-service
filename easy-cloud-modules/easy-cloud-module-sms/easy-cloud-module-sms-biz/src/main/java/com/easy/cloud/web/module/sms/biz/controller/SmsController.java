@@ -61,7 +61,7 @@ public class SmsController {
    * @return 是否删除成功
    */
   @GetMapping(value = "remove/{smsId}")
-  public HttpResult<Boolean> removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long smsId) {
+  public HttpResult<Boolean> removeById(@PathVariable @NotNull(message = "当前ID不能为空") String smsId) {
     return HttpResult.ok(smsService.removeById(smsId));
   }
 
@@ -72,7 +72,7 @@ public class SmsController {
    * @return 详情数据
    */
   @GetMapping(value = "detail/{smsId}")
-  public HttpResult<SmsVO> detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long smsId) {
+  public HttpResult<SmsVO> detailById(@PathVariable @NotNull(message = "当前ID不能为空") String smsId) {
     return HttpResult.ok(smsService.detailById(smsId));
   }
 

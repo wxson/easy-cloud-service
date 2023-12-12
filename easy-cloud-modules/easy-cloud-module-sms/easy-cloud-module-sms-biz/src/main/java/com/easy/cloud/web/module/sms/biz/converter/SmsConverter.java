@@ -1,5 +1,6 @@
 package com.easy.cloud.web.module.sms.biz.converter;
 
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.module.sms.api.dto.SmsDTO;
 import com.easy.cloud.web.module.sms.api.vo.SmsVO;
 import com.easy.cloud.web.module.sms.biz.domain.SmsDO;
@@ -22,12 +23,9 @@ public class SmsConverter {
    * @return com.easy.cloud.web.module.sms.domain.db.SmsDO
    */
   public static SmsDO convertTo(SmsDTO sms) {
-    return SmsDO.builder()
-        .id(sms.getId())
-        .code(sms.getCode())
-        .tel(sms.getTel())
-        .content(sms.getContent())
-        .build();
+    SmsDO smsDO = SmsDO.builder().build();
+    BeanUtils.copyProperties(sms, smsDO, true);
+    return smsDO;
   }
 
   /**
@@ -37,12 +35,9 @@ public class SmsConverter {
    * @return com.easy.cloud.web.module.sms.domain.vo.SmsVO
    */
   public static SmsVO convertTo(SmsDO sms) {
-    return SmsVO.builder()
-        .id(sms.getId())
-        .code(sms.getCode())
-        .tel(sms.getTel())
-        .content(sms.getContent())
-        .build();
+    SmsVO smsVO = SmsVO.builder().build();
+    BeanUtils.copyProperties(sms, smsVO, true);
+    return smsVO;
   }
 
   /**

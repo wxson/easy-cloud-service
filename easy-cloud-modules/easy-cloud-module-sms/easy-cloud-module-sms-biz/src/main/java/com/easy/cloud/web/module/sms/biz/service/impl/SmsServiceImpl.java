@@ -60,7 +60,7 @@ public class SmsServiceImpl implements ISmsService {
 
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public Boolean removeById(Long smsId) {
+  public Boolean removeById(String smsId) {
     // TODO 业务逻辑校验
 
     // 删除
@@ -69,7 +69,7 @@ public class SmsServiceImpl implements ISmsService {
   }
 
   @Override
-  public SmsVO detailById(Long smsId) {
+  public SmsVO detailById(String smsId) {
     // TODO 业务逻辑校验
 
     // 删除
