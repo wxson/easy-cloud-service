@@ -1,5 +1,6 @@
 package com.easy.cloud.web.service.order.biz.converter;
 
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.order.api.dto.OrderDTO;
 import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import com.easy.cloud.web.service.order.biz.domain.OrderDO;
@@ -22,37 +23,9 @@ public class OrderConverter {
    * @return com.easy.cloud.web.service.order.biz.domain.db.OrderDO
    */
   public static OrderDO convertTo(OrderDTO order) {
-    return OrderDO.builder()
-        .id(order.getId())
-        .currencyType(order.getCurrencyType())
-        .no(order.getNo())
-        .originalPrice(order.getOriginalPrice())
-        .salesPrice(order.getSalesPrice())
-        .orderStatus(order.getOrderStatus())
-        .purchasePrice(order.getPurchasePrice())
-        .completeCommentAt(order.getCompleteCommentAt())
-        .goodsContent(order.getGoodsContent())
-        .createCommentAt(order.getCreateCommentAt())
-        .goodsName(order.getGoodsName())
-        .goodsNum(order.getGoodsNum())
-        .aftermarketStatus(order.getAftermarketStatus())
-        .completeAftermarketAt(order.getCompleteAftermarketAt())
-        .goodsNo(order.getGoodsNo())
-        .createLogisticsAt(order.getCreateLogisticsAt())
-        .amount(order.getAmount())
-        .createAftermarketAt(order.getCreateAftermarketAt())
-        .createPayAt(order.getCreatePayAt())
-        .completePayAt(order.getCompletePayAt())
-        .userId(order.getUserId())
-        .commentStatus(order.getCommentStatus())
-        .createOrderAt(order.getCreateOrderAt())
-        .finishStatus(order.getFinishStatus())
-        .completeOrderAt(order.getCompleteOrderAt())
-        .discountsAmount(order.getDiscountsAmount())
-        .logisticsStatus(order.getLogisticsStatus())
-        .payStatus(order.getPayStatus())
-        .finishAt(order.getFinishAt())
-        .build();
+    OrderDO orderDO = OrderDO.builder().build();
+    BeanUtils.copyProperties(order, orderDO, true);
+    return orderDO;
   }
 
   /**
@@ -62,37 +35,9 @@ public class OrderConverter {
    * @return com.easy.cloud.web.service.order.biz.domain.vo.OrderVO
    */
   public static OrderVO convertTo(OrderDO order) {
-    return OrderVO.builder()
-        .id(order.getId())
-        .currencyType(order.getCurrencyType())
-        .no(order.getNo())
-        .originalPrice(order.getOriginalPrice())
-        .salesPrice(order.getSalesPrice())
-        .orderStatus(order.getOrderStatus())
-        .purchasePrice(order.getPurchasePrice())
-        .completeCommentAt(order.getCompleteCommentAt())
-        .goodsContent(order.getGoodsContent())
-        .createCommentAt(order.getCreateCommentAt())
-        .goodsName(order.getGoodsName())
-        .goodsNum(order.getGoodsNum())
-        .aftermarketStatus(order.getAftermarketStatus())
-        .completeAftermarketAt(order.getCompleteAftermarketAt())
-        .goodsNo(order.getGoodsNo())
-        .createLogisticsAt(order.getCreateLogisticsAt())
-        .amount(order.getAmount())
-        .createAftermarketAt(order.getCreateAftermarketAt())
-        .createPayAt(order.getCreatePayAt())
-        .completePayAt(order.getCompletePayAt())
-        .userId(order.getUserId())
-        .commentStatus(order.getCommentStatus())
-        .createOrderAt(order.getCreateOrderAt())
-        .finishStatus(order.getFinishStatus())
-        .completeOrderAt(order.getCompleteOrderAt())
-        .discountsAmount(order.getDiscountsAmount())
-        .logisticsStatus(order.getLogisticsStatus())
-        .payStatus(order.getPayStatus())
-        .finishAt(order.getFinishAt())
-        .build();
+    OrderVO orderVO = OrderVO.builder().build();
+    BeanUtils.copyProperties(order, orderVO, true);
+    return orderVO;
   }
 
   /**

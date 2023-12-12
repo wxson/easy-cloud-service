@@ -35,7 +35,7 @@ public interface IOrderService {
    * @param orderId 对象ID
    * @return java.lang.Boolean
    */
-  Boolean removeById(Long orderId);
+  Boolean removeById(String orderId);
 
   /**
    * 根据ID获取详情
@@ -43,7 +43,7 @@ public interface IOrderService {
    * @param orderId 对象ID
    * @return java.lang.Boolean
    */
-  OrderVO detailById(Long orderId);
+  OrderVO detailById(String orderId);
 
   /**
    * 根据条件获取列表数据

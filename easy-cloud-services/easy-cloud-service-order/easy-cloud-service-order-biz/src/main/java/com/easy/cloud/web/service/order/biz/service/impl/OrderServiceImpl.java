@@ -4,9 +4,9 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.service.order.api.dto.OrderDTO;
-import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import com.easy.cloud.web.service.order.api.enums.OrderStatusEnum;
 import com.easy.cloud.web.service.order.api.enums.PayStatusEnum;
+import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import com.easy.cloud.web.service.order.biz.converter.OrderConverter;
 import com.easy.cloud.web.service.order.biz.domain.OrderDO;
 import com.easy.cloud.web.service.order.biz.repository.OrderRepository;
@@ -65,7 +65,7 @@ public class OrderServiceImpl implements IOrderService {
 
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public Boolean removeById(Long orderId) {
+  public Boolean removeById(String orderId) {
     // TODO 业务逻辑校验
 
     // 删除
@@ -74,7 +74,7 @@ public class OrderServiceImpl implements IOrderService {
   }
 
   @Override
-  public OrderVO detailById(Long orderId) {
+  public OrderVO detailById(String orderId) {
     // TODO 业务逻辑校验
 
     // 删除

@@ -2,11 +2,14 @@ package com.easy.cloud.web.service.order.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
 import com.easy.cloud.web.service.order.api.dto.OrderDTO;
+import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import com.easy.cloud.web.service.order.biz.service.IOrderService;
 import io.swagger.annotations.ApiOperation;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,8 +40,8 @@ public class OrderController {
    * @return 新增数据
    */
   @PostMapping(value = "save")
-  public Object save(@Validated @RequestBody OrderDTO orderDTO) {
-    return orderService.save(orderDTO);
+  public HttpResult<OrderVO> save(@Validated @RequestBody OrderDTO orderDTO) {
+    return HttpResult.ok(orderService.save(orderDTO));
   }
 
   /**
@@ -48,8 +51,8 @@ public class OrderController {
    * @return 更新数据
    */
   @PostMapping(value = "update")
-  public Object update(@Validated @RequestBody OrderDTO orderDTO) {
-    return orderService.update(orderDTO);
+  public HttpResult<OrderVO> update(@Validated @RequestBody OrderDTO orderDTO) {
+    return HttpResult.ok(orderService.update(orderDTO));
   }
 
   /**
@@ -59,8 +62,9 @@ public class OrderController {
    * @return 是否删除成功
    */
   @GetMapping(value = "remove/{orderId}")
-  public Object removeById(@PathVariable @NotNull(message = "当前ID不能为空") Long orderId) {
-    return orderService.removeById(orderId);
+  public HttpResult<Boolean> removeById(
+      @PathVariable @NotNull(message = "当前ID不能为空") String orderId) {
+    return HttpResult.ok(orderService.removeById(orderId));
   }
 
   /**
@@ -70,8 +74,9 @@ public class OrderController {
    * @return 详情数据
    */
   @GetMapping(value = "detail/{orderId}")
-  public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long orderId) {
-    return orderService.detailById(orderId);
+  public HttpResult<OrderVO> detailById(
+      @PathVariable @NotNull(message = "当前ID不能为空") String orderId) {
+    return HttpResult.ok(orderService.detailById(orderId));
   }
 
   /**
@@ -80,8 +85,8 @@ public class OrderController {
    * @return 查询列表
    */
   @GetMapping(value = "list")
-  public Object list() {
-    return orderService.list();
+  public HttpResult<List<OrderVO>> list() {
+    return HttpResult.ok(orderService.list());
   }
 
   /**
@@ -92,9 +97,10 @@ public class OrderController {
    * @return 查询分页数据
    */
   @GetMapping(value = "page")
-  public Object page(@RequestParam(required = false, defaultValue = "0") int page,
+  public HttpResult<Page<OrderVO>> page(
+      @RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "10") int size) {
-    return orderService.page(page, size);
+    return HttpResult.ok(orderService.page(page, size));
   }
 
 

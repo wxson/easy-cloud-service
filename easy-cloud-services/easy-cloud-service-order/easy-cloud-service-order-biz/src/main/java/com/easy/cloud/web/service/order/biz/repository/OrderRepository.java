@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @date 2023-12-11 17:45:14
  */
 @Repository
-public interface OrderRepository extends JpaRepository<OrderDO, Long> {
+public interface OrderRepository extends JpaRepository<OrderDO, String> {
 
   /**
    * 根据订单编码查询订单
