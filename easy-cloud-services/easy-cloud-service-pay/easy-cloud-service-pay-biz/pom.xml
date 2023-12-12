@@ -32,6 +32,13 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- pay-api组件 -->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-service-pay-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
         <!-- order-api组件 -->
         <dependency>
             <groupId>com.easy.cloud.web</groupId>

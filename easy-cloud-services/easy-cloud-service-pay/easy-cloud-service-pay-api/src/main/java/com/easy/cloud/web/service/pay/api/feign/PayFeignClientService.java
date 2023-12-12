@@ -2,8 +2,8 @@ package com.easy.cloud.web.service.pay.api.feign;
 
 import com.easy.cloud.web.component.core.constants.ServiceNameConstants;
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.service.pay.api.domain.dto.PayDTO;
-import com.easy.cloud.web.service.pay.api.domain.vo.PayVO;
+import com.easy.cloud.web.service.pay.api.dto.PayDTO;
+import com.easy.cloud.web.service.pay.api.vo.PayVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

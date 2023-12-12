@@ -1,8 +1,8 @@
 package com.easy.cloud.web.service.pay.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.service.pay.biz.domain.dto.PayDTO;
-import com.easy.cloud.web.service.pay.biz.domain.vo.PayVO;
+import com.easy.cloud.web.service.pay.api.dto.PayDTO;
+import com.easy.cloud.web.service.pay.api.vo.PayVO;
 import com.easy.cloud.web.service.pay.biz.service.IPayService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,43 +24,43 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "支付管理", tags = "支付管理")
 public class PayController {
 
-    private final IPayService payService;
+  private final IPayService payService;
 
-    /**
-     * 支付回调
-     *
-     * @param payDTO 支付参数
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.pay.biz.domain.vo.PayVO>
-     */
-    @PostMapping("callback/handler")
-    @ApiOperation(value = "支付回调")
-    public HttpResult<Object> payCallbackHandler(@RequestBody PayDTO payDTO) {
-        log.info("接收到支付的订单回调通知：{}", payDTO);
-        return HttpResult.ok(payService.payCallbackHandler(payDTO));
-    }
+  /**
+   * 支付回调
+   *
+   * @param payDTO 支付参数
+   * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.pay.biz.domain.vo.PayVO>
+   */
+  @PostMapping("callback/handler")
+  @ApiOperation(value = "支付回调")
+  public HttpResult<Object> payCallbackHandler(@RequestBody PayDTO payDTO) {
+    log.info("接收到支付的订单回调通知：{}", payDTO);
+    return HttpResult.ok(payService.payCallbackHandler(payDTO));
+  }
 
-    /**
-     * 订单支付
-     *
-     * @param payDTO 支付参数
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.pay.biz.domain.vo.PayVO>
-     */
-    @PostMapping("order")
-    @ApiOperation(value = "订单支付")
-    public HttpResult<PayVO> payOrder(@RequestBody PayDTO payDTO) {
-        return HttpResult.ok(payService.payOrder(payDTO));
-    }
+  /**
+   * 订单支付
+   *
+   * @param payDTO 支付参数
+   * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.pay.biz.domain.vo.PayVO>
+   */
+  @PostMapping("order")
+  @ApiOperation(value = "订单支付")
+  public HttpResult<PayVO> payOrder(@RequestBody PayDTO payDTO) {
+    return HttpResult.ok(payService.payOrder(payDTO));
+  }
 
-    /**
-     * 商品支付
-     *
-     * @param payDTO 支付参数
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.pay.biz.domain.vo.PayVO>
-     */
-    @PostMapping("goods")
-    @ApiOperation(value = "商品支付")
-    public HttpResult<PayVO> payGoods(@RequestBody PayDTO payDTO) {
-        return HttpResult.ok(payService.payGoods(payDTO));
-    }
+  /**
+   * 商品支付
+   *
+   * @param payDTO 支付参数
+   * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.pay.biz.domain.vo.PayVO>
+   */
+  @PostMapping("goods")
+  @ApiOperation(value = "商品支付")
+  public HttpResult<PayVO> payGoods(@RequestBody PayDTO payDTO) {
+    return HttpResult.ok(payService.payGoods(payDTO));
+  }
 
 }

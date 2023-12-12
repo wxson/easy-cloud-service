@@ -1,6 +1,6 @@
-package com.easy.cloud.web.service.pay.biz.domain.dto;
+package com.easy.cloud.web.service.pay.api.dto;
 
-import com.easy.cloud.web.service.pay.biz.enums.PayTypeEnum;
+import com.easy.cloud.web.service.pay.api.enums.PayTypeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -16,9 +16,9 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor(staticName = "build")
 public class BillDTO {
 
-    /**
-     * 支付方式
-     */
-    private PayTypeEnum payType;
+  /**
+   * 支付方式
+   */
+  private PayTypeEnum payType;
 
 }

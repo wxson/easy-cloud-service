@@ -2,6 +2,7 @@ package com.easy.cloud.web.service.pay.biz.service;
 
 import com.easy.cloud.web.service.pay.api.dto.BillDTO;
 import com.easy.cloud.web.service.pay.api.dto.PayDTO;
+import com.easy.cloud.web.service.pay.api.enums.PayTypeEnum;
 import com.easy.cloud.web.service.pay.api.vo.BillVO;
 import com.easy.cloud.web.service.pay.api.vo.PayVO;
 
@@ -9,23 +10,14 @@ import com.easy.cloud.web.service.pay.api.vo.PayVO;
  * @author GR
  * @date 2021-11-12 14:41
  */
-public interface IPayService {
+public interface IPayHandleService {
 
   /**
-   * 支付回调
+   * 支付类型
    *
-   * @param payDTO 回调信息
-   * @return java.lang.Object
+   * @return
    */
-  Object payCallbackHandler(PayDTO payDTO);
-
-  /**
-   * 支付
-   *
-   * @param payDTO 支付信息
-   * @return com.easy.cloud.web.service.pay.api.vo.PayVO
-   */
-  PayVO payOrder(PayDTO payDTO);
+  PayTypeEnum type();
 
   /**
    * 支付
@@ -33,15 +25,7 @@ public interface IPayService {
    * @param payDTO 支付信息
    * @return com.easy.cloud.web.service.pay.api.vo.PayVO
    */
-  PayVO payGoods(PayDTO payDTO);
-
-  /**
-   * 发放奖励
-   *
-   * @param orderNo 订单编号
-   * @param goodsNo 商品编号
-   */
-  void grantPrize(String orderNo, String goodsNo);
+  PayVO pay(PayDTO payDTO);
 
 
   /**

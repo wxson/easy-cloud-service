@@ -1,4 +1,4 @@
-package com.easy.cloud.web.service.pay.biz.domain.vo;
+package com.easy.cloud.web.service.pay.api.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

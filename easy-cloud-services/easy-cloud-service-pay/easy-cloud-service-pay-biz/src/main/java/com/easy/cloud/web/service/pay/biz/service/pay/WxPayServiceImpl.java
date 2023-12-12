@@ -1,4 +1,4 @@
-package com.easy.cloud.web.service.pay.biz.service.impl;
+package com.easy.cloud.web.service.pay.biz.service.pay;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.StrBuilder;
@@ -11,16 +11,17 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
 import com.easy.cloud.web.component.core.exception.BusinessException;
-import com.easy.cloud.web.service.order.api.domain.vo.OrderVO;
 import com.easy.cloud.web.service.order.api.enums.PayStatusEnum;
 import com.easy.cloud.web.service.order.api.feign.OrderFeignClientService;
+import com.easy.cloud.web.service.order.api.vo.OrderVO;
+import com.easy.cloud.web.service.pay.api.dto.BillDTO;
+import com.easy.cloud.web.service.pay.api.dto.PayDTO;
+import com.easy.cloud.web.service.pay.api.enums.PayTypeEnum;
+import com.easy.cloud.web.service.pay.api.vo.BillVO;
+import com.easy.cloud.web.service.pay.api.vo.PayVO;
 import com.easy.cloud.web.service.pay.biz.constants.PayConstants;
 import com.easy.cloud.web.service.pay.biz.domain.PrePayBody;
-import com.easy.cloud.web.service.pay.biz.domain.dto.BillDTO;
-import com.easy.cloud.web.service.pay.biz.domain.dto.PayDTO;
-import com.easy.cloud.web.service.pay.biz.domain.vo.BillVO;
-import com.easy.cloud.web.service.pay.biz.domain.vo.PayVO;
-import com.easy.cloud.web.service.pay.biz.service.IPayProxyService;
+import com.easy.cloud.web.service.pay.biz.service.IPayHandleService;
 import com.easy.cloud.web.service.pay.biz.utils.MD5Util;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +39,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class WxPayServiceImpl implements IPayProxyService {
+public class WxPayServiceImpl implements IPayHandleService {
 
   private final OrderFeignClientService orderFeignClientService;
 
@@ -55,6 +56,11 @@ public class WxPayServiceImpl implements IPayProxyService {
    * 服务地址
    */
   private final String SERVICE_HOST = "https://IP";
+
+  @Override
+  public PayTypeEnum type() {
+    return PayTypeEnum.WX_PAY;
+  }
 
   @Override
   public PayVO pay(PayDTO payDTO) {
@@ -77,7 +83,7 @@ public class WxPayServiceImpl implements IPayProxyService {
    *
    * @param payDTO       请求支付参数
    * @param responseBody 预支付信息
-   * @return com.easy.cloud.web.service.pay.biz.domain.vo.PayVO
+   * @return com.easy.cloud.web.service.pay.api.vo.PayVO
    */
   private PayVO buildPreOrderResponseBody(PayDTO payDTO, String responseBody) {
     // 预支付信息不能为空
@@ -114,7 +120,7 @@ public class WxPayServiceImpl implements IPayProxyService {
    * 构建预支付订单请求参数
    *
    * @param orderVO 订单详情
-   * @return com.easy.cloud.web.service.pay.biz.domain.PrePayBody
+   * @return com.easy.cloud.web.service.pay.api.PrePayBody
    */
   private PrePayBody buildPreOrderRequestBody(OrderVO orderVO) {
     // 构建预支付对象
