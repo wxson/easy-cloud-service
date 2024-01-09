@@ -1,0 +1,70 @@
+server:
+  port: 9595
+
+spring:
+  application:
+    name: @artifactId@
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false
+  #Redis相关配置
+  redis:
+    host: easy-cloud-redis
+    # password: redis
+    port: 6379
+    # cluster:
+    #   enable: true
+    #   max-redirects: 10
+    #   nodes: 127.0.0.1:6379,127.0.0.1:6380,127.0.0.1:6381
+    # sentinel:
+    #   master: master
+    #   password: redis
+    #   nodes: 127.0.0.1:6379
+    #Redis连接池配置
+    jedis:
+      pool:
+        max-idle: 20
+        max-active: 20
+        max-wait: -1
+        min-idle: 0
+    timeout: 5000
+    #选择Redis库 Redis共16个库
+    database: 0
+  jpa:
+    #配置数据库类型
+    database: mysql
+    #配置是否打印sql
+    show-sql: false
+    generate-ddl: false
+    #Hibernate相关配置
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+  #MySQL数据源配置
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL-USER:root}
+    password: ${MYSQL-PWD:wangguiren}
+    url: jdbc:mysql://${MYSQL-HOST:easy-cloud-mysql}:${MYSQL-PORT:3306}/${MYSQL-DB:ec_upms}?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true
+    ### Hkari数据库连接池配置
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 0
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      auto-commit: true
+      idle-timeout: 60000
+      pool-name: DatebookHikariCP
+      connection-timeout: 60000
+      connection-test-query: SELECT 1
+      validation-timeout: 30000
+      max-lifetime: 1800000
+
+  #bean会覆盖之前定义的相同名称的bean
+  main:
+    allow-bean-definition-overriding: true

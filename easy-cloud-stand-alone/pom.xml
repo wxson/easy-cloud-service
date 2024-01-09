@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.easy.cloud.web</groupId>
+  <artifactId>easy-cloud-service-stand-alone</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>easy-cloud-service-stand-alone</name>
+  <description>An easy to develop microservice architecture</description>
+
+  <!-- licenses -->
+  <licenses>
+    <license>
+      <name>The ApacheSoftware License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <!-- developers -->
+  <developers>
+    <developer>
+      <name>GR</name>
+      <email>easy_cloud_code@163.com</email>
+    </developer>
+  </developers>
+
+  <!-- organization -->
+  <organization>
+    <name>easy-cloud-service</name>
+    <url>https://www.anseon.cn</url>
+  </organization>
+
+  <!-- properties -->
+  <properties>
+    <!--java version-->
+    <java.version>1.8</java.version>
+    <!--easy-cloud version-->
+    <easy-cloud.version>0.0.1-SNAPSHOT</easy-cloud.version>
+    <!--springboot版本号-->
+    <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
+    <!--springcloud版本号-->
+    <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+    <!--springcloud Alibaba版本号-->
+    <spring-cloud-alibaba.version>2.2.5.RELEASE</spring-cloud-alibaba.version>
+    <!--编码-->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!--Minio版本好-->
+    <minio.version>6.0.8</minio.version>
+    <!--Hutool工具类版本号-->
+    <hutool.version>5.4.4</hutool.version>
+    <!--guava依赖版本号-->
+    <guava.version>29.0-jre</guava.version>
+    <!--MongoDB版本号-->
+    <mongodb-plus.version>1.0.0.RELEASE</mongodb-plus.version>
+    <!--<spring-boot-data-mongodb.version>2.3.3.RELEASE</spring-boot-data-mongodb.version>-->
+    <spring-boot-data-mongodb.version>2.4.0</spring-boot-data-mongodb.version>
+    <!--swagger-api相关依赖版本号-->
+    <swagger.core.version>1.5.22</swagger.core.version>
+    <!--maven相关依赖版本号-->
+    <maven.compiler.version>3.8.1</maven.compiler.version>
+    <!--JDK版本号-->
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <!-- 公共依赖 -->
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-component-mysql</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+    <!-- 认证服务 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-oauth</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- 基础服务 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-service-upms-biz</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- 内容管理服务 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-service-cms-biz</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <!--spring boot 公共版本定义-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!--spring cloud 公共版本定义-->
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!--spring cloud alibaba-->
+      <dependency>
+        <groupId>com.alibaba.cloud</groupId>
+        <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+        <version>${spring-cloud-alibaba.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <finalName>${project.name}</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>*.yml</include>
+          <include>**/*.yml</include>
+        </includes>
+      </resource>
+    </resources>
+    <pluginManagement>
+      <plugins>
+        <!--spring boot 默认插件-->
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>repackage</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <!--代码编译指定版本插件-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.version}</version>
+        <configuration>
+          <target>${maven.compiler.target}</target>
+          <source>${maven.compiler.source}</source>
+          <encoding>UTF-8</encoding>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- 环境标识，需要与配置文件的名称相对应 dev为开发环境 test为测试环境  prod为生产环境 -->
+    <profile>
+      <id>dev</id>
+      <properties>
+        <profiles.active>dev</profiles.active>
+      </properties>
+      <activation>
+        <!-- 默认环境 -->
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+    <profile>
+      <id>test</id>
+      <properties>
+        <profiles.active>test</profiles.active>
+      </properties>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties>
+        <profiles.active>prod</profiles.active>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>
