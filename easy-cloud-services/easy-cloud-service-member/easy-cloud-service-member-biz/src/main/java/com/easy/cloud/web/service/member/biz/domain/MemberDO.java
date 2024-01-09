@@ -45,11 +45,6 @@ public class MemberDO extends BaseEntity {
   @Column(columnDefinition = "INT NOT NULL DEFAULT '0' COMMENT '钻石'")
   private Integer diamond;
   /**
-   * 是否删除
-   */
-  @Column(columnDefinition = "tinyint NOT NULL DEFAULT '0' COMMENT '是否删除'")
-  private Integer deleted;
-  /**
    * 点券
    */
   @Column(columnDefinition = "INT NOT NULL DEFAULT '0' COMMENT '点券'")

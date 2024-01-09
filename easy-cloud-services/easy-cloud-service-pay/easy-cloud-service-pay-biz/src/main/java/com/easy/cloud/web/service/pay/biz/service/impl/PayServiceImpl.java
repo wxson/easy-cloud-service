@@ -241,7 +241,7 @@ public class PayServiceImpl implements IPayService, ApplicationContextAware {
     }
 
     // 创建会员更新对象
-    MemberDTO memberDTO = MemberDTO.builder().build();
+    MemberDTO memberDTO = MemberDTO.build();
     switch (optionalGoodsTypeEnum.get()) {
       case DIAMOND:
       case PROP_EXCHANGE:

@@ -5,10 +5,10 @@ import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.cms.api.domain.vo.GoodsVO;
 import com.easy.cloud.web.service.cms.api.enums.CurrencyTypeEnum;
 import com.easy.cloud.web.service.cms.api.feign.CmsFeignClientService;
-import com.easy.cloud.web.service.member.api.domain.dto.MemberDTO;
-import com.easy.cloud.web.service.member.api.domain.vo.MemberVO;
+import com.easy.cloud.web.service.member.api.dto.MemberDTO;
 import com.easy.cloud.web.service.member.api.enums.PropertyOriginEnum;
 import com.easy.cloud.web.service.member.api.feign.MemberFeignClientService;
+import com.easy.cloud.web.service.member.api.vo.MemberVO;
 import com.easy.cloud.web.service.order.api.enums.PayStatusEnum;
 import com.easy.cloud.web.service.pay.api.dto.BillDTO;
 import com.easy.cloud.web.service.pay.api.dto.PayDTO;
@@ -62,9 +62,7 @@ public class VirtualPayServiceImpl implements IPayHandleService {
     this.allowPay(goodsVO, memberVO);
 
     // 构建扣减的货币数据
-    MemberDTO memberDTO = MemberDTO.build()
-        // 此时钻石为支付货币
-        .setOrigin(PropertyOriginEnum.PAY.getCode());
+    MemberDTO memberDTO = MemberDTO.build();
     // 根据类型设置扣减货币数据
     this.deductionCurrency(goodsVO, memberDTO);
     // 扣减钻石
@@ -113,17 +111,17 @@ public class VirtualPayServiceImpl implements IPayHandleService {
   private void deductionCurrency(GoodsVO goodsVO, MemberDTO memberDTO) {
     // 金币
     if (CurrencyTypeEnum.GOLD_COIN.getCode() == goodsVO.getCurrencyType()) {
-      memberDTO.setAmount(-1 * goodsVO.getSalesPrice().longValue());
+      memberDTO.setAmount(-1 * goodsVO.getSalesPrice().intValue());
     }
 
     // 钻石
     if (CurrencyTypeEnum.DIAMOND.getCode() == goodsVO.getCurrencyType()) {
-      memberDTO.setDiamond(-1 * goodsVO.getSalesPrice().longValue());
+      memberDTO.setDiamond(-1 * goodsVO.getSalesPrice().intValue());
     }
 
     // 点券
     if (CurrencyTypeEnum.COUPON.getCode() == goodsVO.getCurrencyType()) {
-      memberDTO.setCoupon(-1 * goodsVO.getSalesPrice().longValue());
+      memberDTO.setCoupon(-1 * goodsVO.getSalesPrice().intValue());
     }
   }
 
