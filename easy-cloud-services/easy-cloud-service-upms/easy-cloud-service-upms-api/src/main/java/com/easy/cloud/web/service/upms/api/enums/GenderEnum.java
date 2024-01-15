@@ -1,5 +1,6 @@
 package com.easy.cloud.web.service.upms.api.enums;
 
+import com.easy.cloud.web.component.core.enums.IBaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum GenderEnum {
+public enum GenderEnum implements IBaseEnum {
   /**
    * 未知的性别
    */
