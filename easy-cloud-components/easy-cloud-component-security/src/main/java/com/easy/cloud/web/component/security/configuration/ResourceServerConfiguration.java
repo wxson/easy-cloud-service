@@ -27,6 +27,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @Autowired
     private PermitAllUrlProperties permitAllUrlProperties;
 
+    @Autowired
+    private PermitAllSecurityConfiguration permitAllSecurityConfiguration;
+
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
         //允许使用iframe 嵌套，避免swagger-ui 不被加载的问题
@@ -40,7 +43,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         registry.antMatchers(SwaggerApiConstants.API_URI).permitAll();
         // 剩余拦截
         registry.anyRequest().authenticated()
-                .and().csrf().disable();
+                .and()
+                .apply(permitAllSecurityConfiguration)
+                .and()
+                .csrf().disable();
     }
 
     @Override
