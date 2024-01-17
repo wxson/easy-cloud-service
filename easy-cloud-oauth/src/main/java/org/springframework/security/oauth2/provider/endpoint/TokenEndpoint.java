@@ -14,10 +14,7 @@ import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestValidator;
 import org.springframework.util.StringUtils;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Collections;
@@ -46,7 +43,7 @@ public class TokenEndpoint extends AbstractEndpoint {
     }
 
     @RequestMapping(value = "/oauth/token", method = RequestMethod.POST)
-    public ResponseEntity<OAuth2AccessToken> postAccessToken(Principal principal, @RequestParam
+    public ResponseEntity<OAuth2AccessToken> postAccessToken(Principal principal, @RequestBody
             Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
 
         if (!(principal instanceof Authentication)) {
