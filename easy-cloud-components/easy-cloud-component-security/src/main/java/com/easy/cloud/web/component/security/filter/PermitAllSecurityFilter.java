@@ -29,7 +29,7 @@ public class PermitAllSecurityFilter extends OncePerRequestFilter {
 
     private final String AUTHORIZATION_HEADER = "Authorization";
 
-    private final String MATCH_STR = "*";
+    private final String _MATCH_STR = "*";
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class PermitAllSecurityFilter extends OncePerRequestFilter {
         String requestUrl = httpServletRequest.getRequestURI();
         // 是否存在匹配路径
         Optional<String> matchPermitAllUrlOptional = permitAllUrlProperties.getIgnoreUrls().stream()
-                .map(url -> url.contains(MATCH_STR) ? url.substring(0, url.indexOf(MATCH_STR)) : url)
+                .map(url -> url.contains(_MATCH_STR) ? url.substring(0, url.indexOf(_MATCH_STR)) : url)
                 .filter(requestUrl::startsWith)
                 .findFirst();
         if (!matchPermitAllUrlOptional.isPresent()) {

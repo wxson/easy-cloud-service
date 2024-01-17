@@ -1,9 +1,3 @@
 spring:
   application:
     name: ${project.name}
-# seata配置
-seata:
-  enabled: true
-  enable-auto-data-source-proxy: false
-  application-id: ${spring.application.name}
-  tx-service-group: easy_cloud_tx_group
