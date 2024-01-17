@@ -29,8 +29,8 @@ import org.springframework.context.annotation.Primary;
  * @author liuqiufeng
  */
 //@Primary
-//@Configuration(proxyBeanMethods = false)
-public class JacksonConfig {
+@Configuration(proxyBeanMethods = false)
+public class SeataJacksonConfig {
 
     /**
      * convert long to string for return to the front end
