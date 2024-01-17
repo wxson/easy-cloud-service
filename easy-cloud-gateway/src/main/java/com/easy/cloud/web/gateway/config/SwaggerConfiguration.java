@@ -12,6 +12,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
+ * Swagger API 文档：http://localhost:9527/swagger-ui/index.html
+ *
  * @author GR
  * @date 2021-12-1 16:02
  */
