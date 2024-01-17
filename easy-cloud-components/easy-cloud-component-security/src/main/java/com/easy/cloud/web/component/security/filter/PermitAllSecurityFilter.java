@@ -34,11 +34,11 @@ public class PermitAllSecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         // 请求地址
-        String requestURI = httpServletRequest.getRequestURI();
+        String requestUrl = httpServletRequest.getRequestURI();
         // 是否存在匹配路径
         Optional<String> matchPermitAllUrlOptional = permitAllUrlProperties.getIgnoreUrls().stream()
                 .map(url -> url.contains(_MATCH_STR) ? url.substring(0, url.indexOf(_MATCH_STR)) : url)
-                .filter(url -> requestURI.startsWith(url) || requestURI.equals(url))
+                .filter(requestUrl::startsWith)
                 .findFirst();
         if (!matchPermitAllUrlOptional.isPresent()) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
