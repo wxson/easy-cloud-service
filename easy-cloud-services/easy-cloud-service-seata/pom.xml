@@ -17,12 +17,23 @@
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/io.seata/seata-spring-boot-starter -->
+<!--        <dependency>-->
+<!--            <groupId>io.seata</groupId>-->
+<!--            <artifactId>seata-spring-boot-starter</artifactId>-->
+<!--            <version>1.4.2</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-spring-boot-starter</artifactId>
-            <version>1.4.2</version>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-security</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.2</version>
+        </dependency>
     </dependencies>
 
     <build>
