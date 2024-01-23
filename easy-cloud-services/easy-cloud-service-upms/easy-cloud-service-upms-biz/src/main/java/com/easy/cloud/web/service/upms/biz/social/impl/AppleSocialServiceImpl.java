@@ -10,6 +10,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.easy.cloud.web.component.core.exception.BusinessException;
+import com.easy.cloud.web.service.upms.api.dto.UserLoginDTO;
 import com.easy.cloud.web.service.upms.api.enums.SocialTypeEnum;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import com.easy.cloud.web.service.upms.biz.social.ISocialService;
@@ -39,17 +40,17 @@ public class AppleSocialServiceImpl implements ISocialService {
     }
 
     @Override
-    public UserDO loadSocialUser(String code) {
+    public UserDO loadSocialUser(UserLoginDTO userLogin) {
         /*
          * https://juejin.cn/post/6844903914051993607
          * code格式：user_id&token
          */
-        if (StrUtil.isBlank(code)) {
+        if (StrUtil.isBlank(userLogin.getCode())) {
             throw new BusinessException("apple 授权登录码不能为空");
         }
 
         // 拆分
-        String[] split = code.split("&");
+        String[] split = userLogin.getCode().split("&");
         String appleId = split[0];
         String identityToken = split[1];
 

@@ -4,8 +4,9 @@ import com.easy.cloud.web.component.mysql.annotation.EnableLogic;
 import com.easy.cloud.web.component.mysql.annotation.EnableTenant;
 import com.easy.cloud.web.component.mysql.repository.JpaLogicRepository;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
-import java.util.Optional;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * User持久化
@@ -18,20 +19,27 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaLogicRepository<UserDO, String> {
 
-  /**
-   * 根据账号获取用户信息
-   *
-   * @param userName 账号信息
-   * @return
-   */
-  Optional<UserDO> findByUserName(String userName);
+    /**
+     * 根据账号获取用户信息
+     *
+     * @param userName 账号信息
+     * @return
+     */
+    Optional<UserDO> findByUserName(String userName);
 
-  /**
-   * 匹配数据，任意一个条件符合即可
-   *
-   * @param unionId 唯一标识
-   * @param appleId 唯一标识
-   * @return
-   */
-  Optional<UserDO> findByUnionIdOrAppleId(String unionId, String appleId);
+    /**
+     * 匹配数据，任意一个条件符合即可
+     *
+     * @param unionId 唯一标识
+     * @return
+     */
+    Optional<UserDO> findByUnionId(String unionId);
+
+    /**
+     * 匹配数据，任意一个条件符合即可
+     *
+     * @param tel 电话
+     * @return
+     */
+    Optional<UserDO> findByTel(String tel);
 }

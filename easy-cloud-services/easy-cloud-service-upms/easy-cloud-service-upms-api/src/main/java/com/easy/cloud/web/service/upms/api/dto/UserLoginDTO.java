@@ -1,6 +1,5 @@
 package com.easy.cloud.web.service.upms.api.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,14 +19,38 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 public class UserLoginDTO {
 
-  /**
-   * 文档ID
-   */
-  private String id;
+    /**
+     * 文档ID
+     */
+    private String id;
 
-  /**
-   * Oauth2.0 code授权模式
-   */
-  private String code;
+    /**
+     * Oauth2.0 code授权模式
+     */
+    private String code;
 
+    /**
+     * 电话编码
+     */
+    private String phoneCode;
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
+     * 昵称
+     */
+    private String nickName;
+
+    /**
+     * unionId
+     */
+    private String unionId;
+
+    /**
+     * 电话
+     */
+    private String tel;
 }

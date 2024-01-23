@@ -1,5 +1,6 @@
 package com.easy.cloud.web.service.upms.biz.social;
 
+import com.easy.cloud.web.service.upms.api.dto.UserLoginDTO;
 import com.easy.cloud.web.service.upms.api.enums.SocialTypeEnum;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 
@@ -11,18 +12,18 @@ import com.easy.cloud.web.service.upms.biz.domain.UserDO;
  */
 public interface ISocialService {
 
-  /**
-   * 获取实现类型
-   *
-   * @return
-   */
-  SocialTypeEnum getType();
+    /**
+     * 获取实现类型
+     *
+     * @return
+     */
+    SocialTypeEnum getType();
 
-  /**
-   * 根据认证编码获取用户信息
-   *
-   * @param code 认证编码
-   * @return UserDO
-   */
-  UserDO loadSocialUser(String code);
+    /**
+     * 根据认证编码获取用户信息
+     *
+     * @param userLogin 用户信息
+     * @return UserDO
+     */
+    UserDO loadSocialUser(UserLoginDTO userLogin);
 }
