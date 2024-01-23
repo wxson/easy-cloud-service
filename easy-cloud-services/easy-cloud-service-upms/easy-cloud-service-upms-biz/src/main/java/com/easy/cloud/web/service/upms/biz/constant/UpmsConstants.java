@@ -8,8 +8,13 @@ package com.easy.cloud.web.service.upms.biz.constant;
  */
 public interface UpmsConstants {
 
-  /**
-   * 超管密码
-   */
-  String SUPER_ADMIN_PASSWORD = "123456";
+    /**
+     * 默认密码
+     */
+    String DEFAULT_PASSWORD = "123456";
+
+    /**
+     * 超管密码
+     */
+    String SUPER_ADMIN_PASSWORD = "123456";
 }
