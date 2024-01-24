@@ -1,5 +1,6 @@
 package com.easy.cloud.web.service.upms.biz.social.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
@@ -65,6 +66,12 @@ public class WxSocialServiceImpl implements ISocialService {
     // 电话和unionId都为空，用户授权登录失败
     if (StrUtil.isBlank(userDO.getTel()) && StrUtil.isBlank(userDO.getUnionId())) {
       throw new BusinessException("用户授权登录失败");
+    }
+
+    // 初始化，避免初始化错误
+    if (StrUtil.isBlank(userDO.getUserName())) {
+      userDO.setUserName(RandomUtil.randomString(6));
+      userDO.setNickName(userDO.getUserName());
     }
 
     return userDO;
