@@ -607,11 +607,10 @@ public class SpecificationWrapper implements Specification {
                         case IS_NOT_NULL:
                             return cb.isNotNull(root.get(queryCondition.key));
                         case BETWEEN:
-//                            return cb.between(root.get(queryCondition.key), queryCondition.getMinObj(), queryCondition.getMaxObj());
+                            return cb.between(root.get(queryCondition.key), (String) queryCondition.minObj, (String) queryCondition.maxObj);
                         case NOT_BETWEEN:
-//                            return cb.n(root.get(queryCondition.key), queryCondition.getMinObj(), queryCondition.getMaxObj());
+                            return cb.between(root.get(queryCondition.key), (String) queryCondition.minObj, (String) queryCondition.maxObj).not();
                         case JOIN:
-                            root.join("db_user_role",JoinType.INNER).on().on();
                             return null;
                         case LEFT_JOIN:
                             return null;
@@ -628,13 +627,19 @@ public class SpecificationWrapper implements Specification {
                     return null;
                 }).filter(Objects::nonNull).collect(Collectors.toList());
         // 查询数据
-        query.where(predicates.toArray(new Predicate[predicates.size()]));
+        if (Objects.nonNull(predicates) && predicates.size() > 0) {
+            query.where(predicates.toArray(new Predicate[predicates.size()]));
+        }
         // 分组
-        query.groupBy(groupByKeys.stream().map(root::get).collect(Collectors.toList()));
+        if (Objects.nonNull(groupByKeys) && groupByKeys.size() > 0) {
+            query.groupBy(groupByKeys.stream().map(root::get).collect(Collectors.toList()));
+        }
         // 排序
-        query.orderBy((List<Order>) orderConditions.stream()
-                .map(queryCondition -> Sort.Direction.ASC == queryCondition.direction
-                        ? cb.asc(root.get(queryCondition.key)) : cb.desc(root.get(queryCondition.key))));
+        if (Objects.nonNull(orderConditions) && orderConditions.size() > 0) {
+            query.orderBy((List<Order>) orderConditions.stream()
+                    .map(queryCondition -> Sort.Direction.ASC == queryCondition.direction
+                            ? cb.asc(root.get(queryCondition.key)) : cb.desc(root.get(queryCondition.key))));
+        }
         return query.getRestriction();
     }
 
