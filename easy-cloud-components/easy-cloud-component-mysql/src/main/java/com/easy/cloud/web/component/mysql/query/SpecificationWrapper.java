@@ -610,6 +610,13 @@ public class SpecificationWrapper implements Specification {
 //                            return cb.between(root.get(queryCondition.key), queryCondition.getMinObj(), queryCondition.getMaxObj());
                         case NOT_BETWEEN:
 //                            return cb.n(root.get(queryCondition.key), queryCondition.getMinObj(), queryCondition.getMaxObj());
+                        case JOIN:
+                            root.join("db_user_role",JoinType.INNER).on().on();
+                            return null;
+                        case LEFT_JOIN:
+                            return null;
+                        case RIGHT_JOIN:
+                            return null;
                         case EXISTS:
                             return null;
                         case NOT_EXISTS:
@@ -636,7 +643,7 @@ public class SpecificationWrapper implements Specification {
      */
     private enum QueryOperator {
         EQ, NE, GT, GE, LT, LE, LIKE, NOT_LIKE, IN, NOT_IN, IS_NULL, IS_NOT_NULL,
-        BETWEEN, NOT_BETWEEN, GROUP_BY, EXISTS, NOT_EXISTS, OR
+        BETWEEN, NOT_BETWEEN, JOIN, LEFT_JOIN, RIGHT_JOIN, GROUP_BY, EXISTS, NOT_EXISTS, OR
     }
 
     /**
