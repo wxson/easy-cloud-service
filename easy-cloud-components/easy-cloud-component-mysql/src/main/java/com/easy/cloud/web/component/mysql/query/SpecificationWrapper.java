@@ -1,12 +1,15 @@
 package com.easy.cloud.web.component.mysql.query;
 
-import cn.hutool.core.collection.CollUtil;
 import com.easy.cloud.web.component.core.funinterface.SFunction;
 import com.easy.cloud.web.component.core.util.FieldUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.CollectionUtils;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,31 +18,28 @@ import java.util.stream.Collectors;
  *
  * <p>语法说明：</p>
  * <p>基本语法：SpecificationWrapper.where(User::getName,"admin").like(User::getNickName,"Ec")</p>
+ * <p>OR语法：.or(SpecificationWrapper.query().eq(UserDO::getUserName, "11")</p>
+ * <p>groupBy语法：.groupBy(UserDO::getStatus)</p>
+ * <p>orderBy语法:.orderDesc(UserDO::getUserName)</p>
+ * <p>join语法: TODO 未实现</p>
  *
  * @author GR
  * @date 2024/1/23 15:05
  */
 public class SpecificationWrapper implements Specification {
 
-    /**
-     * 查询条件
-     */
-    private LinkedHashMap<QueryOperator, QueryCondition> queryConditions;
-    /**
-     * 排序
-     */
-    private LinkedList<QueryCondition> orderConditions;
-    /**
-     * 分组
-     */
-    private LinkedList<String> groupByKeys;
+    private SpecificationBuilder specificationBuilder;
+
+    private Map<QueryOperator, List<SpecificationWrapper>> specificationWrapperMap;
 
     public SpecificationWrapper() {
-        this.queryConditions = new LinkedHashMap<>();
+        this.specificationBuilder = new SpecificationBuilder();
+        this.specificationWrapperMap = new HashMap<>(1);
     }
 
     protected <T> SpecificationWrapper(QueryOperator operator, SFunction<T, ?> func, Object obj) {
-        this.queryConditions = new LinkedHashMap<>();
+        this.specificationBuilder = new SpecificationBuilder();
+        this.specificationWrapperMap = new HashMap<>(1);
         this.addQueryCondition(operator, func, obj);
     }
 
@@ -61,7 +61,7 @@ public class SpecificationWrapper implements Specification {
      * @param obj      obj
      */
     private <T> SpecificationWrapper addQueryCondition(QueryOperator operator, SFunction<T, ?> func, Object obj) {
-        this.queryConditions.put(operator, new QueryCondition(this.getKey(func), obj));
+        this.specificationBuilder.getQueryConditions().add(new QueryCondition(operator, this.getKey(func), obj));
         return this;
     }
 
@@ -72,14 +72,10 @@ public class SpecificationWrapper implements Specification {
      * @param direction Sort.Direction
      */
     private <T> void addOrderCondition(SFunction<T, ?> func, Sort.Direction direction) {
-        // 初始化
-        if (CollUtil.isEmpty(orderConditions)) {
-            this.orderConditions = new LinkedList<>();
-        }
         // 创建排序条件
-        QueryCondition queryCondition = new QueryCondition(this.getKey(func), null);
+        QueryCondition queryCondition = new QueryCondition(null, this.getKey(func), null);
         queryCondition.direction = direction;
-        this.orderConditions.add(queryCondition);
+        this.specificationBuilder.getOrderConditions().add(queryCondition);
     }
 
     /**
@@ -433,10 +429,10 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper between(SFunction<T, ?> func, Object min, Object max) {
-        QueryCondition queryCondition = new QueryCondition(this.getKey(func), null);
+        QueryCondition queryCondition = new QueryCondition(QueryOperator.BETWEEN, this.getKey(func), null);
         queryCondition.minObj = min;
         queryCondition.maxObj = max;
-        this.queryConditions.put(QueryOperator.BETWEEN, queryCondition);
+        this.specificationBuilder.getQueryConditions().add(queryCondition);
         return this;
     }
 
@@ -449,10 +445,10 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper notBetween(SFunction<T, ?> func, Object min, Object max) {
-        QueryCondition queryCondition = new QueryCondition(this.getKey(func), null);
+        QueryCondition queryCondition = new QueryCondition(QueryOperator.NOT_BETWEEN, this.getKey(func), null);
         queryCondition.minObj = min;
         queryCondition.maxObj = max;
-        this.queryConditions.put(QueryOperator.NOT_BETWEEN, queryCondition);
+        this.specificationBuilder.getQueryConditions().add(queryCondition);
         return this;
     }
 
@@ -463,10 +459,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper groupBy(SFunction<T, ?>... funcs) {
-        if (CollUtil.isEmpty(groupByKeys)) {
-            this.groupByKeys = new LinkedList<>();
-        }
-        this.groupByKeys.addAll(Arrays.stream(funcs).map(this::getKey).collect(Collectors.toList()));
+        this.specificationBuilder.getGroupByKeys().addAll(Arrays.stream(funcs).map(this::getKey).collect(Collectors.toList()));
         return this;
     }
 
@@ -541,15 +534,45 @@ public class SpecificationWrapper implements Specification {
         return this;
     }
 
+    /**
+     * or
+     *
+     * @param specificationWrapper SpecificationWrapper
+     * @return
+     */
+    public <T> SpecificationWrapper or(SpecificationWrapper specificationWrapper) {
+        List<SpecificationWrapper> orDefault = this.specificationWrapperMap.getOrDefault(QueryOperator.OR, new LinkedList<>());
+        orDefault.add(specificationWrapper);
+        this.specificationWrapperMap.put(QueryOperator.OR, orDefault);
+        return this;
+    }
+
     @Override
     public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-        // 基本数据
-        List<Predicate> predicates = this.queryConditions.entrySet().stream()
-                // 过滤掉分组
-                .filter(entry -> QueryOperator.GROUP_BY != entry.getKey())
-                .map(queryConditionEntry -> {
-                    QueryCondition queryCondition = queryConditionEntry.getValue();
-                    switch (queryConditionEntry.getKey()) {
+        // 构建query
+        this.buildQueryPredicate(root, query, cb);
+        // 构建GroupBy
+        this.buildGroupByPredicate(root, query, cb);
+        // 构建OrderBy
+        this.buildOrderByPredicate(root, query, cb);
+        // 构建Join
+        this.buildJoinPredicate(root, query, cb);
+
+        return query.getRestriction();
+    }
+
+    /**
+     * 查询条件
+     *
+     * @param root
+     * @param query
+     * @param cb
+     * @return
+     */
+    private List<Predicate> buildBaseQueryPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+        return this.specificationBuilder.getQueryConditions().stream()
+                .map(queryCondition -> {
+                    switch (queryCondition.operator) {
                         case EQ:
                             return cb.equal(root.get(queryCondition.key), queryCondition.value);
                         case NE:
@@ -588,27 +611,90 @@ public class SpecificationWrapper implements Specification {
                             return null;
                         case NOT_EXISTS:
                             return null;
-                        case OR:
-                            return null;
                         default:
                     }
                     return null;
                 }).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    /**
+     * 查询条件
+     *
+     * @param root
+     * @param query
+     * @param cb
+     * @return
+     */
+    private void buildQueryPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+        // 基本数据
+        List<Predicate> queryPredicates = this.buildBaseQueryPredicate(root, query, cb);
         // 查询数据
-        if (Objects.nonNull(predicates) && predicates.size() > 0) {
+        List<Predicate> predicates = new ArrayList<>();
+        // query
+        if (!CollectionUtils.isEmpty(queryPredicates)) {
+            predicates.add(cb.and(queryPredicates.toArray(new Predicate[queryPredicates.size()])));
+        }
+
+        // or
+        if (this.specificationWrapperMap.containsKey(QueryOperator.OR)) {
+            // OR Query
+            List<Predicate> orPredicates = Optional.ofNullable(this.specificationWrapperMap.get(QueryOperator.OR))
+                    .orElse(new LinkedList<>())
+                    .stream()
+                    .map(sw -> cb.and(sw.buildBaseQueryPredicate(root, query, cb).toArray(new Predicate[]{})))
+                    .collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(orPredicates)) {
+                predicates.add(cb.or(orPredicates.toArray(new Predicate[orPredicates.size()])));
+            }
+        }
+
+        if (!CollectionUtils.isEmpty(predicates)) {
             query.where(predicates.toArray(new Predicate[predicates.size()]));
         }
+    }
+
+    /**
+     * 构建GroupBy
+     *
+     * @param root
+     * @param query
+     * @param cb
+     */
+    private void buildGroupByPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+        if (CollectionUtils.isEmpty(this.specificationBuilder.getGroupByKeys())) {
+            return;
+        }
         // 分组
-        if (Objects.nonNull(groupByKeys) && groupByKeys.size() > 0) {
-            query.groupBy(groupByKeys.stream().map(root::get).collect(Collectors.toList()));
+        query.groupBy(this.specificationBuilder.getGroupByKeys().stream().map(root::get).collect(Collectors.toList()));
+    }
+
+    /**
+     * 构建OrderBy
+     *
+     * @param root
+     * @param query
+     * @param cb
+     */
+    private void buildOrderByPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+        if (CollectionUtils.isEmpty(this.specificationBuilder.getOrderConditions())) {
+            return;
         }
         // 排序
-        if (Objects.nonNull(orderConditions) && orderConditions.size() > 0) {
-            query.orderBy((List<Order>) orderConditions.stream()
-                    .map(queryCondition -> Sort.Direction.ASC == queryCondition.direction
-                            ? cb.asc(root.get(queryCondition.key)) : cb.desc(root.get(queryCondition.key))));
-        }
-        return query.getRestriction();
+        query.orderBy(this.specificationBuilder.getOrderConditions().stream()
+                .map(queryCondition -> Sort.Direction.ASC == queryCondition.direction
+                        ? cb.asc(root.get(queryCondition.key)) : cb.desc(root.get(queryCondition.key)))
+                .collect(Collectors.toList()));
+    }
+
+    /**
+     * TODO Join 查询
+     *
+     * @param root
+     * @param query
+     * @param cb
+     */
+    private void buildJoinPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+
     }
 
     /**
@@ -624,6 +710,10 @@ public class SpecificationWrapper implements Specification {
      */
     private class QueryCondition {
         /**
+         * 类型
+         */
+        QueryOperator operator;
+        /**
          * 查询字段
          */
         String key;
@@ -631,10 +721,6 @@ public class SpecificationWrapper implements Specification {
          * 查询值
          */
         Object value;
-        /**
-         * 格式化
-         */
-        String format;
 
         /**
          * 最小值
@@ -651,9 +737,49 @@ public class SpecificationWrapper implements Specification {
          */
         Sort.Direction direction;
 
-        public QueryCondition(String key, Object value) {
+        public QueryCondition(QueryOperator operator, String key, Object value) {
+            this.operator = operator;
             this.key = key;
             this.value = value;
+        }
+    }
+
+    private class SpecificationBuilder {
+        /**
+         * 查询条件
+         */
+        private LinkedList<QueryCondition> queryConditions;
+        /**
+         * 排序
+         */
+        private LinkedList<QueryCondition> orderConditions;
+        /**
+         * 分组
+         */
+        private LinkedList<String> groupByKeys;
+
+        public SpecificationBuilder() {
+        }
+
+        public LinkedList<QueryCondition> getQueryConditions() {
+            if (CollectionUtils.isEmpty(this.queryConditions)) {
+                this.queryConditions = new LinkedList<>();
+            }
+            return queryConditions;
+        }
+
+        public LinkedList<QueryCondition> getOrderConditions() {
+            if (CollectionUtils.isEmpty(this.orderConditions)) {
+                this.orderConditions = new LinkedList<>();
+            }
+            return orderConditions;
+        }
+
+        public LinkedList<String> getGroupByKeys() {
+            if (CollectionUtils.isEmpty(this.groupByKeys)) {
+                this.groupByKeys = new LinkedList<>();
+            }
+            return groupByKeys;
         }
     }
 }
