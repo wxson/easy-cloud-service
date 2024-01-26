@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 /**
  * SpecificationWrapper Jpa 查询
  *
+ * <p>语法说明：</p>
+ * <p>基本语法：SpecificationWrapper.where(User::getName,"admin").like(User::getNickName,"Ec")</p>
+ *
  * @author GR
  * @date 2024/1/23 15:05
  */
@@ -57,8 +60,9 @@ public class SpecificationWrapper implements Specification {
      * @param func     func
      * @param obj      obj
      */
-    private <T> void addQueryCondition(QueryOperator operator, SFunction<T, ?> func, Object obj) {
+    private <T> SpecificationWrapper addQueryCondition(QueryOperator operator, SFunction<T, ?> func, Object obj) {
         this.queryConditions.put(operator, new QueryCondition(this.getKey(func), obj));
+        return this;
     }
 
     /**
@@ -131,10 +135,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper eq(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.EQ, func, obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.EQ, func, obj) : this;
     }
 
     /**
@@ -158,10 +159,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper ne(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.NE, func, obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.NE, func, obj) : this;
     }
 
     /**
@@ -185,10 +183,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper gt(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.GT, func, obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.GT, func, obj) : this;
     }
 
     /**
@@ -212,10 +207,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper gte(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.GE, func, obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.GE, func, obj) : this;
     }
 
     /**
@@ -239,10 +231,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper lt(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.LT, func, obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.LT, func, obj) : this;
     }
 
     /**
@@ -266,10 +255,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper lte(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.LE, func, obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.LE, func, obj) : this;
     }
 
     /**
@@ -293,10 +279,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper like(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.LIKE, func, "%" + obj + "%");
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.LIKE, func, "%" + obj + "%") : this;
     }
 
     /**
@@ -320,10 +303,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper leftLike(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.LIKE, func, "%" + obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.LIKE, func, "%" + obj) : this;
     }
 
     /**
@@ -347,10 +327,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper rightLike(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.LIKE, func, obj + "%");
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.LIKE, func, obj + "%") : this;
     }
 
     /**
@@ -374,10 +351,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper notLike(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.NOT_LIKE, func, "%" + obj + "%");
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.NOT_LIKE, func, "%" + obj + "%") : this;
     }
 
     /**
@@ -401,10 +375,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper in(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.IN, func, obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.IN, func, obj) : this;
     }
 
     /**
@@ -428,10 +399,7 @@ public class SpecificationWrapper implements Specification {
      * @return
      */
     public <T> SpecificationWrapper notIn(Boolean bool, SFunction<T, ?> func, Object obj) {
-        if (bool) {
-            this.addQueryCondition(QueryOperator.NOT_IN, func, obj);
-        }
-        return this;
+        return bool ? this.addQueryCondition(QueryOperator.NOT_IN, func, obj) : this;
     }
 
     /**
