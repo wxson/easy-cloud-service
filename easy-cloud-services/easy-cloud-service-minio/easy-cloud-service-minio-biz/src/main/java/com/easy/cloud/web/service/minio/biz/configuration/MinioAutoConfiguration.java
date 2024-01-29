@@ -2,7 +2,7 @@ package com.easy.cloud.web.service.minio.biz.configuration;
 
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,18 +16,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MinioAutoConfiguration {
 
-  @Value("${minio.url}")
-  private String url;
-  @Value("${minio.accessKey}")
-  private String accessKey;
-  @Value("${minio.secretKey}")
-  private String secretKey;
+    @Autowired
+    private MinioProperties minioProperties;
 
-  @Bean
-  public MinioClient getMinioClient() {
-    return MinioClient.builder()
-        .endpoint(url)
-        .credentials(accessKey, secretKey)
-        .build();
-  }
+    @Bean
+    public MinioClient getMinioClient() {
+        return MinioClient.builder()
+                .endpoint(minioProperties.getEndpoint())
+                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
+                .build();
+    }
 }

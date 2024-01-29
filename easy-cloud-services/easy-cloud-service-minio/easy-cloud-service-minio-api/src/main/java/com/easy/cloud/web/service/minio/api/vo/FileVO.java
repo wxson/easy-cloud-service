@@ -19,25 +19,29 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 public class FileVO {
 
-  /**
-   * 文档ID
-   */
-  private String id;
-  /**
-   * 文档名称
-   */
-  private String name;
-  /**
-   * 文档地址
-   */
-  private String url;
-  /**
-   * 文档地址
-   */
-  private Long size;
-  /**
-   * 是否为目录
-   */
-  private Boolean isDir;
+    /**
+     * 文档ID
+     */
+    private String id;
+    /**
+     * 文档名称
+     */
+    private String name;
+    /**
+     * 文档地址
+     */
+    private String url;
+    /**
+     * 文档路径
+     */
+    private String path;
+    /**
+     * 文档地址
+     */
+    private Long size;
+    /**
+     * 是否为目录
+     */
+    private Boolean isDir;
 
 }
