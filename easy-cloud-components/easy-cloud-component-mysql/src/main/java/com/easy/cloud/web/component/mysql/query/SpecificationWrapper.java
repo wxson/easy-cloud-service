@@ -6,10 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +28,8 @@ public class SpecificationWrapper implements Specification {
     private SpecificationBuilder specificationBuilder;
 
     private Map<QueryOperator, List<SpecificationWrapper>> specificationWrapperMap;
+
+    private String joinTable;
 
     public SpecificationWrapper() {
         this.specificationBuilder = new SpecificationBuilder();
@@ -525,18 +524,6 @@ public class SpecificationWrapper implements Specification {
     /**
      * or
      *
-     * @param func func
-     * @param obj  obj
-     * @return
-     */
-    public <T> SpecificationWrapper or(SFunction<T, ?> func, Object obj) {
-        this.addQueryCondition(QueryOperator.OR, func, obj);
-        return this;
-    }
-
-    /**
-     * or
-     *
      * @param specificationWrapper SpecificationWrapper
      * @return
      */
@@ -547,6 +534,60 @@ public class SpecificationWrapper implements Specification {
         return this;
     }
 
+    /**
+     * 追加连表查询
+     *
+     * @param operator
+     * @param func
+     * @param specificationWrapper
+     * @param <T>
+     * @return
+     */
+    private <T> SpecificationWrapper putJoinCondition(QueryOperator operator, SFunction<T, ?> func, SpecificationWrapper specificationWrapper) {
+        // 设置joinTable
+        specificationWrapper.joinTable = getKey(func);
+        List<SpecificationWrapper> orDefault = this.specificationWrapperMap.getOrDefault(QueryOperator.OR, new LinkedList<>());
+        orDefault.add(specificationWrapper);
+        this.specificationWrapperMap.put(operator, orDefault);
+        return this;
+    }
+
+    /**
+     * JOIN 查询 TODO 当前结果验证不正确，暂不使用
+     *
+     * @param func                 joinTable
+     * @param specificationWrapper SpecificationWrapper
+     * @return
+     */
+    @Deprecated
+    public <T> SpecificationWrapper join(SFunction<T, ?> func, SpecificationWrapper specificationWrapper) {
+        return this.putJoinCondition(QueryOperator.JOIN, func, specificationWrapper);
+    }
+
+    /**
+     * LEFT JOIN 查询 TODO 当前结果验证不正确，暂不使用
+     *
+     * @param func                 joinTable
+     * @param specificationWrapper SpecificationWrapper
+     * @return
+     */
+    @Deprecated
+    public <T> SpecificationWrapper leftJoin(SFunction<T, ?> func, SpecificationWrapper specificationWrapper) {
+        return this.putJoinCondition(QueryOperator.LEFT_JOIN, func, specificationWrapper);
+    }
+
+    /**
+     * RIGHT JOIN 查询 TODO 当前结果验证不正确，暂不使用
+     *
+     * @param func                 joinTable
+     * @param specificationWrapper SpecificationWrapper
+     * @return
+     */
+    @Deprecated
+    public <T> SpecificationWrapper rightJoin(SFunction<T, ?> func, SpecificationWrapper specificationWrapper) {
+        return this.putJoinCondition(QueryOperator.RIGHT_JOIN, func, specificationWrapper);
+    }
+
     @Override
     public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
         // 构建query
@@ -555,8 +596,6 @@ public class SpecificationWrapper implements Specification {
         this.buildGroupByPredicate(root, query, cb);
         // 构建OrderBy
         this.buildOrderByPredicate(root, query, cb);
-        // 构建Join
-        this.buildJoinPredicate(root, query, cb);
 
         return query.getRestriction();
     }
@@ -569,7 +608,7 @@ public class SpecificationWrapper implements Specification {
      * @param cb
      * @return
      */
-    private List<Predicate> buildBaseQueryPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+    private List<Predicate> buildBaseQueryPredicate(From root, CriteriaQuery query, CriteriaBuilder cb) {
         return this.specificationBuilder.getQueryConditions().stream()
                 .map(queryCondition -> {
                     switch (queryCondition.operator) {
@@ -598,15 +637,9 @@ public class SpecificationWrapper implements Specification {
                         case IS_NOT_NULL:
                             return cb.isNotNull(root.get(queryCondition.key));
                         case BETWEEN:
-                            return cb.between(root.get(queryCondition.key), (String) queryCondition.minObj, (String) queryCondition.maxObj);
+                            return cb.between(root.get(queryCondition.key), (Comparable<Object>) queryCondition.minObj, (Comparable<Object>) queryCondition.maxObj);
                         case NOT_BETWEEN:
-                            return cb.between(root.get(queryCondition.key), (String) queryCondition.minObj, (String) queryCondition.maxObj).not();
-                        case JOIN:
-                            return null;
-                        case LEFT_JOIN:
-                            return null;
-                        case RIGHT_JOIN:
-                            return null;
+                            return cb.between(root.get(queryCondition.key), (Comparable<Object>) queryCondition.minObj, (Comparable<Object>) queryCondition.maxObj).not();
                         case EXISTS:
                             return null;
                         case NOT_EXISTS:
@@ -635,16 +668,50 @@ public class SpecificationWrapper implements Specification {
             predicates.add(cb.and(queryPredicates.toArray(new Predicate[queryPredicates.size()])));
         }
 
-        // or
-        if (this.specificationWrapperMap.containsKey(QueryOperator.OR)) {
-            // OR Query
-            List<Predicate> orPredicates = Optional.ofNullable(this.specificationWrapperMap.get(QueryOperator.OR))
-                    .orElse(new LinkedList<>())
-                    .stream()
-                    .map(sw -> cb.and(sw.buildBaseQueryPredicate(root, query, cb).toArray(new Predicate[]{})))
-                    .collect(Collectors.toList());
-            if (!CollectionUtils.isEmpty(orPredicates)) {
-                predicates.add(cb.or(orPredicates.toArray(new Predicate[orPredicates.size()])));
+        // 遍历特殊操作
+        for (Map.Entry<QueryOperator, List<SpecificationWrapper>> entry : this.specificationWrapperMap.entrySet()) {
+            switch (entry.getKey()) {
+                case OR:
+                    List<Predicate> orPredicates = Optional.ofNullable(this.specificationWrapperMap.get(QueryOperator.OR))
+                            .orElse(new LinkedList<>())
+                            .stream()
+                            .map(sw -> cb.and(sw.buildBaseQueryPredicate(root, query, cb).toArray(new Predicate[]{})))
+                            .collect(Collectors.toList());
+                    if (!CollectionUtils.isEmpty(orPredicates)) {
+                        predicates.add(cb.or(orPredicates.toArray(new Predicate[orPredicates.size()])));
+                    }
+                    break;
+                case JOIN:
+                    Optional.ofNullable(this.specificationWrapperMap.get(QueryOperator.JOIN))
+                            .orElse(new LinkedList<>())
+                            .stream()
+                            .forEach(sw -> {
+                                Join join = root.join(sw.joinTable, JoinType.INNER);
+                                List<Predicate> joinPredicates = sw.buildBaseQueryPredicate(join, query, cb);
+                                join.on(joinPredicates.toArray(new Predicate[joinPredicates.size()]));
+                            });
+                    break;
+                case LEFT_JOIN:
+                    Optional.ofNullable(this.specificationWrapperMap.get(QueryOperator.JOIN))
+                            .orElse(new LinkedList<>())
+                            .stream()
+                            .forEach(sw -> {
+                                Join join = root.join(sw.joinTable, JoinType.LEFT);
+                                List<Predicate> joinPredicates = sw.buildBaseQueryPredicate(join, query, cb);
+                                join.on(joinPredicates.toArray(new Predicate[joinPredicates.size()]));
+                            });
+                    break;
+                case RIGHT_JOIN:
+                    Optional.ofNullable(this.specificationWrapperMap.get(QueryOperator.JOIN))
+                            .orElse(new LinkedList<>())
+                            .stream()
+                            .forEach(sw -> {
+                                Join join = root.join(sw.joinTable, JoinType.RIGHT);
+                                List<Predicate> joinPredicates = sw.buildBaseQueryPredicate(join, query, cb);
+                                join.on(joinPredicates.toArray(new Predicate[joinPredicates.size()]));
+                            });
+                    break;
+                default:
             }
         }
 
@@ -684,17 +751,6 @@ public class SpecificationWrapper implements Specification {
                 .map(queryCondition -> Sort.Direction.ASC == queryCondition.direction
                         ? cb.asc(root.get(queryCondition.key)) : cb.desc(root.get(queryCondition.key)))
                 .collect(Collectors.toList()));
-    }
-
-    /**
-     * TODO Join 查询
-     *
-     * @param root
-     * @param query
-     * @param cb
-     */
-    private void buildJoinPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-
     }
 
     /**
