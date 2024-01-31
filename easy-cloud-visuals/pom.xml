@@ -15,6 +15,7 @@
 
     <modules>
         <module>easy-cloud-visual-sentinel</module>
+        <module>easy-cloud-visual-job</module>
     </modules>
 
     <dependencies>
