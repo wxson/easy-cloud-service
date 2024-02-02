@@ -1,5 +1,6 @@
 package com.easy.cloud.web.module.sms.api.dto;
 
+import com.easy.cloud.web.module.sms.api.enums.SmsSendStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,32 +20,32 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 public class SmsDTO {
 
-  /**
-   * 文档ID
-   */
-  private String id;
-  /**
-   *
-   */
-  private String code;
-  /**
-   *
-   */
-  private String tel;
-  /**
-   *
-   */
-  private String content;
-  /**
-   * 创建用户
-   */
-  private String creatorAt;
-  /**
-   * 创建时间
-   */
-  private String createAt;
-  /**
-   * 更新时间
-   */
-  private String updateAt;
+    /**
+     * 文档ID
+     */
+    private String id;
+    /**
+     * 短信验证码
+     */
+    private String code;
+    /**
+     * 短信接收电话
+     */
+    private String tel;
+    /**
+     * 短信内容
+     */
+    private String content;
+    /**
+     * 是否已使用，默认未使用
+     */
+    private Boolean used;
+    /**
+     * 短信发送状态，默认未发送
+     */
+    private SmsSendStatusEnum sendStatus;
+    /**
+     * 备注描述
+     */
+    private String remark;
 }

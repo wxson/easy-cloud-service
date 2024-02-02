@@ -1,36 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.easy.cloud.web</groupId>
-    <artifactId>easy-cloud-module-sms</artifactId>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.easy.cloud.web</groupId>
+        <artifactId>easy-cloud-module-sms</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>easy-cloud-module-sms-biz</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>easy-cloud-module-sms-biz</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>easy-cloud-module-sms-biz</name>
-  <description>Demo project for Spring Boot</description>
+    <name>easy-cloud-module-sms-biz</name>
+    <description>Demo project for Spring Boot</description>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.easy.cloud.web</groupId>
-      <artifactId>easy-cloud-component-mysql</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-mysql</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
-    <!-- 依赖Sms Api-->
-    <dependency>
-      <groupId>com.easy.cloud.web</groupId>
-      <artifactId>easy-cloud-module-sms-api</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
+        <!-- 依赖Sms Api-->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-module-sms-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
-    <!-- 参数校验框架 -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-validation</artifactId>
-    </dependency>
-  </dependencies>
+        <!-- 参数校验框架 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- 短信（阿里云） -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>4.6.4</version>
+        </dependency>
+        <!-- 短信（阿里云） -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+
+        <!-- 短信（腾讯云） -->
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+            <version>3.1.442</version>
+        </dependency>
+    </dependencies>
 </project>
