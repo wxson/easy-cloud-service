@@ -1,5 +1,6 @@
 package com.easy.cloud.web.component.pay.domain;
 
+import com.easy.cloud.web.component.pay.enums.PayTypeEnum;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,6 +13,11 @@ import java.math.BigDecimal;
  */
 @Data
 public abstract class PayRequestBody {
+
+    /**
+     * 支付类型
+     */
+    private PayTypeEnum payType;
 
     /**
      * 订单编码

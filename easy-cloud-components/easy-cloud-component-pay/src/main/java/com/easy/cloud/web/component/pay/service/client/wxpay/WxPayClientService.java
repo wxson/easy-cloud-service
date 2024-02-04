@@ -82,27 +82,27 @@ public class WxPayClientService implements IPayClientService {
         JSONObject responseBodyJsonObject = JSONUtil.parseFromXml(responseBody);
         // 获取预支付结果
         JSONObject resultJsonObject = responseBodyJsonObject.getJSONObject("xml");
-        PayResponseBody payResponseBody = JSONUtil.toBean(resultJsonObject, PayResponseBody.class);
-        log.info("获取预支付订单ID：{}", payResponseBody.getPrepayId());
-        payResponseBody.setAppId(APP_ID);
-        payResponseBody.setPackageValue("Sign=WXPay");
-        payResponseBody.setPartnerId(MCH_ID);
-        payResponseBody.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+        WxPrePayResponseBody wxPrePayResponseBody = JSONUtil.toBean(resultJsonObject, WxPrePayResponseBody.class);
+        log.info("获取预支付订单ID：{}", wxPrePayResponseBody.getPrepayId());
+        wxPrePayResponseBody.setAppId(APP_ID);
+        wxPrePayResponseBody.setPackageValue("Sign=WXPay");
+        wxPrePayResponseBody.setPartnerId(MCH_ID);
+        wxPrePayResponseBody.setTimeStamp(String.valueOf(System.currentTimeMillis()));
         JSONObject jsonObject = new JSONObject();
-        jsonObject.putOpt("appid", payResponseBody.getAppId());
-        jsonObject.putOpt("noncestr", payResponseBody.getNonceStr());
-        jsonObject.putOpt("package", payResponseBody.getPackageValue());
-        jsonObject.putOpt("partnerid", payResponseBody.getPartnerId());
-        jsonObject.putOpt("prepayid", payResponseBody.getPrepayId());
-        jsonObject.putOpt("timestamp", payResponseBody.getTimeStamp());
+        jsonObject.putOpt("appid", wxPrePayResponseBody.getAppId());
+        jsonObject.putOpt("noncestr", wxPrePayResponseBody.getNonceStr());
+        jsonObject.putOpt("package", wxPrePayResponseBody.getPackageValue());
+        jsonObject.putOpt("partnerid", wxPrePayResponseBody.getPartnerId());
+        jsonObject.putOpt("prepayid", wxPrePayResponseBody.getPrepayId());
+        jsonObject.putOpt("timestamp", wxPrePayResponseBody.getTimeStamp());
         // 构建Map对象
         Map<String, Object> payBeanMap = BeanUtil.beanToMap(jsonObject);
         log.info("待签名对象：{}", jsonObject);
         // 参数签名
-        payResponseBody.setSign(this.createSign(payBeanMap));
-        payResponseBody.setPayStatus(PayStatusEnum.PAY_NO);
-        log.info("返回发起微信支付信息：{}", payResponseBody);
-        return payResponseBody;
+        wxPrePayResponseBody.setSign(this.createSign(payBeanMap));
+        wxPrePayResponseBody.setPayStatus(PayStatusEnum.PAY_NO);
+        log.info("返回发起微信支付信息：{}", wxPrePayResponseBody);
+        return wxPrePayResponseBody;
     }
 
     /**
