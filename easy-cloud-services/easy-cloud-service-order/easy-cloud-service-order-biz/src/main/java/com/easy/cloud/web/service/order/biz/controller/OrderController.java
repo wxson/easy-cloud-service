@@ -1,118 +1,93 @@
 package com.easy.cloud.web.service.order.biz.controller;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
-import com.easy.cloud.web.service.order.api.dto.OrderDTO;
+import com.easy.cloud.web.service.order.api.dto.OrderCreateDTO;
+import com.easy.cloud.web.service.order.api.dto.OrderQueryDTO;
 import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import com.easy.cloud.web.service.order.biz.service.IOrderService;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
-import javax.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotNull;
 
 /**
- * Order API
+ * Order Admin API
  *
  * @author Fast Java
  * @date 2023-12-11 17:45:14
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "order")
+@Tag(name = "Order", description = "订单管理")
 public class OrderController {
 
-  @Autowired
-  private IOrderService orderService;
-
-  /**
-   * 新增
-   *
-   * @param orderDTO 新增数据
-   * @return 新增数据
-   */
-  @PostMapping(value = "save")
-  public HttpResult<OrderVO> save(@Validated @RequestBody OrderDTO orderDTO) {
-    return HttpResult.ok(orderService.save(orderDTO));
-  }
-
-  /**
-   * 更新
-   *
-   * @param orderDTO 新增数据
-   * @return 更新数据
-   */
-  @PostMapping(value = "update")
-  public HttpResult<OrderVO> update(@Validated @RequestBody OrderDTO orderDTO) {
-    return HttpResult.ok(orderService.update(orderDTO));
-  }
-
-  /**
-   * 根据ID移除数据
-   *
-   * @param orderId ID
-   * @return 是否删除成功
-   */
-  @GetMapping(value = "remove/{orderId}")
-  public HttpResult<Boolean> removeById(
-      @PathVariable @NotNull(message = "当前ID不能为空") String orderId) {
-    return HttpResult.ok(orderService.removeById(orderId));
-  }
-
-  /**
-   * 根据ID获取详情
-   *
-   * @param orderId ID
-   * @return 详情数据
-   */
-  @GetMapping(value = "detail/{orderId}")
-  public HttpResult<OrderVO> detailById(
-      @PathVariable @NotNull(message = "当前ID不能为空") String orderId) {
-    return HttpResult.ok(orderService.detailById(orderId));
-  }
-
-  /**
-   * TODO 所有数据列表，查询参数自定义
-   *
-   * @return 查询列表
-   */
-  @GetMapping(value = "list")
-  public HttpResult<List<OrderVO>> list() {
-    return HttpResult.ok(orderService.list());
-  }
-
-  /**
-   * TODO 根据条件查询分页数据，查询参数自定义
-   *
-   * @param page 当前页
-   * @param size 每页大小
-   * @return 查询分页数据
-   */
-  @GetMapping(value = "page")
-  public HttpResult<Page<OrderVO>> page(
-      @RequestParam(required = false, defaultValue = "0") int page,
-      @RequestParam(required = false, defaultValue = "10") int size) {
-    return HttpResult.ok(orderService.page(page, size));
-  }
+    @Autowired
+    private IOrderService orderService;
 
 
-  /**
-   * 支付成功回调
-   *
-   * @param orderNo 订单编号
-   * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.order.biz.domain.vo.OrderVO>
-   */
-  @PostMapping("pay/success/handler/{orderNo}")
-  @ApiOperation(value = "支付成功回调")
-  public HttpResult<Boolean> paySuccessHandler(@PathVariable String orderNo) {
-    return HttpResult.ok(orderService.paySuccessHandler(orderNo));
-  }
+    /**
+     * 创建订单
+     *
+     * @param orderCreateDTO 创建订单信息
+     * @return 新增数据
+     */
+    @PostMapping(value = "create")
+    @ApiOperation(value = "创建订单")
+    public HttpResult<OrderVO> createOrder(@Validated @RequestBody OrderCreateDTO orderCreateDTO) {
+        return HttpResult.ok(orderService.createOrder(orderCreateDTO));
+    }
+
+    /**
+     * 根据ID获取详情
+     *
+     * @param orderId ID
+     * @return 详情数据
+     */
+    @GetMapping(value = "detail/{orderId}")
+    @ApiOperation(value = "根据订单ID获取订单详情")
+    public HttpResult<OrderVO> detailById(
+            @PathVariable @NotNull(message = "当前ID不能为空") String orderId) {
+        return HttpResult.ok(orderService.detailById(orderId));
+    }
+
+    /**
+     * 根据订单号获取详情
+     *
+     * @param orderNo 订单号
+     * @return 详情数据
+     */
+    @GetMapping(value = "detail/{orderNo}")
+    @ApiOperation(value = "根据订单号获取订单详情")
+    public HttpResult<OrderVO> detailByNo(
+            @PathVariable @NotNull(message = "当前订单编码不能为空") String orderNo) {
+        return HttpResult.ok(orderService.detailByNo(orderNo));
+    }
+
+    /**
+     * TODO 根据条件查询分页数据，查询参数自定义
+     *
+     * @param orderQueryDTO 订单查询参数
+     * @return 查询分页数据
+     */
+    @GetMapping(value = "page")
+    @ApiOperation(value = "根据订单分页列表")
+    public HttpResult<Page<OrderVO>> page(OrderQueryDTO orderQueryDTO) {
+        return HttpResult.ok(orderService.page(orderQueryDTO));
+    }
+
+    /**
+     * 订单确认
+     *
+     * @param orderId 订单ID
+     * @return 返回订单信息
+     */
+    @PostMapping(value = "confirm/{orderId}")
+    public HttpResult<OrderVO> confirmOrder(@PathVariable String orderId) {
+        return HttpResult.ok(orderService.confirmOrder(orderId));
+    }
 }

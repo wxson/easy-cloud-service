@@ -2,9 +2,15 @@ package com.easy.cloud.web.service.order.biz.service.impl;
 
 import com.easy.cloud.web.service.order.api.dto.AliPayCallBackDTO;
 import com.easy.cloud.web.service.order.api.dto.WxPayCallBackDTO;
+import com.easy.cloud.web.service.order.api.enums.OrderStatusEnum;
+import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import com.easy.cloud.web.service.order.biz.service.IOrderPayCallBackService;
+import com.easy.cloud.web.service.order.biz.service.IOrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * 订单回调逻辑
@@ -16,13 +22,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderPayCallBackServiceImpl implements IOrderPayCallBackService {
 
-  @Override
-  public void wxPayCallBack(WxPayCallBackDTO wxPayCallBackDTO) {
+    @Autowired
+    private IOrderService orderService;
 
-  }
+    @Override
+    public void wxPayCallBack(WxPayCallBackDTO wxPayCallBackDTO) {
+        log.info("接收到微信支付订单：{} 回调信息：{}", wxPayCallBackDTO.getOutTradeNo(), wxPayCallBackDTO);
+        // 获取订单信息
+        OrderVO orderVO = orderService.detailByNo(wxPayCallBackDTO.getOutTradeNo());
+        if (Objects.isNull(orderVO)) {
+            log.error("接收到微信支付订单：{} 回调信息,获取订单信息为空", wxPayCallBackDTO.getOutTradeNo());
+            return;
+        }
 
-  @Override
-  public void aliPayCallBack(AliPayCallBackDTO aliPayCallBackDTO) {
+        // 订单存在且当前订单状态为已预付，则支付回调有效
+        if (OrderStatusEnum.PRE_PAID != orderVO.getOrderStatus()) {
+            log.warn("接收到微信支付订单：{} 回调信息重复,当前订单状态：{}，", wxPayCallBackDTO.getOutTradeNo(), orderVO.getOrderStatus());
+            return;
+        }
 
-  }
+        orderService.paySuccessHandler(wxPayCallBackDTO.getOutTradeNo());
+    }
+
+    @Override
+    public void aliPayCallBack(AliPayCallBackDTO aliPayCallBackDTO) {
+
+    }
 }

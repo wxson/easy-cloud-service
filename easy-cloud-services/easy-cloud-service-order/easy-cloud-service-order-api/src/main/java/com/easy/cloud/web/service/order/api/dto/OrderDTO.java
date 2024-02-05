@@ -6,7 +6,7 @@ import com.easy.cloud.web.service.order.api.enums.CurrencyTypeEnum;
 import com.easy.cloud.web.service.order.api.enums.FinishStatusEnum;
 import com.easy.cloud.web.service.order.api.enums.LogisticsStatusEnum;
 import com.easy.cloud.web.service.order.api.enums.OrderStatusEnum;
-import com.easy.cloud.web.service.order.api.enums.PayStatusEnum;
+
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -136,10 +136,6 @@ public class OrderDTO {
    * 完成订单时间
    */
   private String completeOrderAt;
-  /**
-   * 支付状态
-   */
-  private PayStatusEnum payStatus;
   /**
    * 创建支付时间
    */

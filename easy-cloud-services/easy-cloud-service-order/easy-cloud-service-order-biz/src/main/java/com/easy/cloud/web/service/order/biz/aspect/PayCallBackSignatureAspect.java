@@ -1,7 +1,6 @@
 package com.easy.cloud.web.service.order.biz.aspect;
 
 import com.easy.cloud.web.component.core.exception.BusinessException;
-import com.easy.cloud.web.service.order.api.enums.PayTypeEnum;
 import com.easy.cloud.web.service.order.biz.annotation.PayCallBackSignature;
 import java.nio.charset.StandardCharsets;
 import java.security.Signature;

@@ -23,7 +23,7 @@ public interface OrderFeignClientService {
      * 支付成功回调
      *
      * @param orderNo 订单编号
-     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.order.biz.domain.vo.OrderVO>
+     * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.order.api.vo.OrderVO>
      */
     @PostMapping("order/pay/success/handler/{orderNo}")
     HttpResult<Boolean> paySuccessHandler(@PathVariable(value = "orderNo") String orderNo);

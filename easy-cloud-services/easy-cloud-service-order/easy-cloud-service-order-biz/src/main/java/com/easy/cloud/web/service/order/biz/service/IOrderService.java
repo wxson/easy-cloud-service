@@ -1,9 +1,11 @@
 package com.easy.cloud.web.service.order.biz.service;
 
-import com.easy.cloud.web.service.order.api.dto.OrderDTO;
+import com.easy.cloud.web.service.order.api.dto.OrderCreateDTO;
+import com.easy.cloud.web.service.order.api.dto.OrderQueryDTO;
 import com.easy.cloud.web.service.order.api.vo.OrderVO;
-import java.util.List;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * Order interface
@@ -13,59 +15,66 @@ import org.springframework.data.domain.Page;
  */
 public interface IOrderService {
 
-  /**
-   * 新增数据
-   *
-   * @param orderDTO 保存参数
-   * @return com.easy.cloud.web.service.order.biz.domain.vo.OrderVO
-   */
-  OrderVO save(OrderDTO orderDTO);
+    /**
+     * 新增数据
+     *
+     * @param orderCreateDTO 订单创建数据
+     * @return com.easy.cloud.web.service.order.api.vo.OrderVO
+     */
+    OrderVO createOrder(OrderCreateDTO orderCreateDTO);
 
-  /**
-   * 更新数据，默认全量更新
-   *
-   * @param orderDTO 保存参数
-   * @return com.easy.cloud.web.service.order.biz.domain.vo.OrderVO
-   */
-  OrderVO update(OrderDTO orderDTO);
+    /**
+     * 根据ID获取详情
+     *
+     * @param orderId 对象ID
+     * @return java.lang.Boolean
+     */
+    OrderVO detailById(String orderId);
 
-  /**
-   * 根据ID删除数据
-   *
-   * @param orderId 对象ID
-   * @return java.lang.Boolean
-   */
-  Boolean removeById(String orderId);
+    /**
+     * 根据订单号获取详情
+     *
+     * @param orderNo 订单号
+     * @return java.lang.Boolean
+     */
+    OrderVO detailByNo(String orderNo);
 
-  /**
-   * 根据ID获取详情
-   *
-   * @param orderId 对象ID
-   * @return java.lang.Boolean
-   */
-  OrderVO detailById(String orderId);
+    /**
+     * 根据条件获取列表数据
+     *
+     * @return List<com.easy.cloud.web.service.order.api.vo.OrderVO> 返回列表数据
+     */
+    List<OrderVO> list();
 
-  /**
-   * 根据条件获取列表数据
-   *
-   * @return List<com.easy.cloud.web.service.order.biz.domain.vo.OrderVO> 返回列表数据
-   */
-  List<OrderVO> list();
+    /**
+     * 根据条件获取分页数据
+     *
+     * @param orderQueryDTO 订单查询参数
+     * @return List<com.easy.cloud.web.service.order.api.vo.OrderVO> 返回列表数据
+     */
+    Page<OrderVO> page(OrderQueryDTO orderQueryDTO);
 
-  /**
-   * 根据条件获取分页数据
-   *
-   * @param page 当前页
-   * @param size 每页大小
-   * @return List<com.easy.cloud.web.service.order.biz.domain.vo.OrderVO> 返回列表数据
-   */
-  Page<OrderVO> page(int page, int size);
+    /**
+     * 支付成功回调
+     *
+     * @param orderNo 订单编号
+     * @return
+     */
+    Boolean paySuccessHandler(String orderNo);
 
-  /**
-   * 支付成功回调
-   *
-   * @param orderNo 订单编号
-   * @return
-   */
-  Boolean paySuccessHandler(String orderNo);
+    /**
+     * 订单确认
+     *
+     * @param orderId 订单ID
+     * @return 返回确认后的订单
+     */
+    OrderVO confirmOrder(String orderId);
+
+    /**
+     * 已生成预付订单
+     *
+     * @param orderNo 订单号
+     * @return 返回确认后的订单
+     */
+    OrderVO prePayOrder(String orderNo);
 }

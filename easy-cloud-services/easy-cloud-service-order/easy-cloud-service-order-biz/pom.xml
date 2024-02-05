@@ -33,6 +33,20 @@
       <version>${project.parent.version}</version>
     </dependency>
 
+    <!-- pay组件 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-component-pay</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
+    <!-- Job组件 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-component-job</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
     <!-- mysql组件 -->
     <dependency>
       <groupId>com.easy.cloud.web</groupId>
