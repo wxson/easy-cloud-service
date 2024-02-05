@@ -1,12 +1,14 @@
 package com.easy.cloud.web.service.order.biz.converter;
 
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.order.api.dto.InvoiceDTO;
-import com.easy.cloud.web.service.order.biz.domain.InvoiceDO;
 import com.easy.cloud.web.service.order.api.vo.InvoiceVO;
+import com.easy.cloud.web.service.order.biz.domain.InvoiceDO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 /**
  * Invoice转换器
  *
@@ -21,21 +23,10 @@ public class InvoiceConverter {
      * @param invoice 转换数据
      * @return com.easy.cloud.web.service.order.biz.domain.InvoiceDO
      */
-    public static InvoiceDO convertTo(InvoiceDTO invoice){
-        return InvoiceDO.builder()
-                .id(invoice.getId())
-                .bankAccount(invoice.getBankAccount())
-                .address(invoice.getAddress())
-                .province(invoice.getProvince())
-                .depositBank(invoice.getDepositBank())
-                .city(invoice.getCity())
-                .street(invoice.getStreet())
-                .district(invoice.getDistrict())
-                .header(invoice.getHeader())
-                .tel(invoice.getTel())
-                .type(invoice.getType())
-                .taxNo(invoice.getTaxNo())
-                .build();
+    public static InvoiceDO convertTo(InvoiceDTO invoice) {
+        InvoiceDO invoiceDO = InvoiceDO.builder().build();
+        BeanUtils.copyProperties(invoice, invoiceDO, true);
+        return invoiceDO;
     }
 
     /**
@@ -44,24 +35,10 @@ public class InvoiceConverter {
      * @param invoice 转换数据
      * @return com.easy.cloud.web.service.order.api.vo.InvoiceVO
      */
-    public static InvoiceVO convertTo(InvoiceDO invoice){
-        return InvoiceVO.builder()
-                .id(invoice.getId())
-                .creatorAt(invoice.getCreatorAt())
-                .createAt(invoice.getCreateAt())
-                .updateAt(invoice.getUpdateAt())
-                .bankAccount(invoice.getBankAccount())
-                .address(invoice.getAddress())
-                .province(invoice.getProvince())
-                .depositBank(invoice.getDepositBank())
-                .city(invoice.getCity())
-                .street(invoice.getStreet())
-                .district(invoice.getDistrict())
-                .header(invoice.getHeader())
-                .tel(invoice.getTel())
-                .type(invoice.getType())
-                .taxNo(invoice.getTaxNo())
-                .build();
+    public static InvoiceVO convertTo(InvoiceDO invoice) {
+        InvoiceVO invoiceVO = InvoiceVO.builder().build();
+        BeanUtils.copyProperties(invoice, invoiceVO, true);
+        return invoiceVO;
     }
 
     /**
@@ -70,7 +47,7 @@ public class InvoiceConverter {
      * @param invoices 转换数据
      * @return com.easy.cloud.web.service.order.api.vo.InvoiceVO
      */
-    public static List<InvoiceVO> convertTo(List<InvoiceDO> invoices){
+    public static List<InvoiceVO> convertTo(List<InvoiceDO> invoices) {
         return invoices.stream()
                 .map(InvoiceConverter::convertTo)
                 .collect(Collectors.toList());
@@ -82,7 +59,7 @@ public class InvoiceConverter {
      * @param page 转换数据
      * @return com.easy.cloud.web.service.order.api.vo.InvoiceVO
      */
-    public static Page<InvoiceVO> convertTo(Page<InvoiceDO> page){
+    public static Page<InvoiceVO> convertTo(Page<InvoiceDO> page) {
         return page.map(InvoiceConverter::convertTo);
     }
 }
