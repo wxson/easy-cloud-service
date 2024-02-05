@@ -20,7 +20,6 @@
         <module>easy-cloud-service-upms</module>
         <module>easy-cloud-service-cms</module>
         <module>easy-cloud-service-order</module>
-        <module>easy-cloud-service-pay</module>
         <module>easy-cloud-service-seata</module>
     </modules>
 
