@@ -1,12 +1,14 @@
 package com.easy.cloud.web.service.order.biz.converter;
 
+import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.service.order.api.dto.InvoiceRecordDTO;
-import com.easy.cloud.web.service.order.biz.domain.InvoiceRecordDO;
 import com.easy.cloud.web.service.order.api.vo.InvoiceRecordVO;
+import com.easy.cloud.web.service.order.biz.domain.InvoiceRecordDO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 /**
  * InvoiceRecord转换器
  *
@@ -21,18 +23,10 @@ public class InvoiceRecordConverter {
      * @param invoiceRecord 转换数据
      * @return com.easy.cloud.web.service.order.biz.domain.InvoiceRecordDO
      */
-    public static InvoiceRecordDO convertTo(InvoiceRecordDTO invoiceRecord){
-        return InvoiceRecordDO.builder()
-                .id(invoiceRecord.getId())
-                .amount(invoiceRecord.getAmount())
-                .orderNo(invoiceRecord.getOrderNo())
-                .address(invoiceRecord.getAddress())
-                .header(invoiceRecord.getHeader())
-                .tel(invoiceRecord.getTel())
-                .type(invoiceRecord.getType())
-                .taxNo(invoiceRecord.getTaxNo())
-                .goodsName(invoiceRecord.getGoodsName())
-                .build();
+    public static InvoiceRecordDO convertTo(InvoiceRecordDTO invoiceRecord) {
+        InvoiceRecordDO invoiceRecordDO = InvoiceRecordDO.builder().build();
+        BeanUtils.copyProperties(invoiceRecord, invoiceRecordDO, true);
+        return invoiceRecordDO;
     }
 
     /**
@@ -41,21 +35,10 @@ public class InvoiceRecordConverter {
      * @param invoiceRecord 转换数据
      * @return com.easy.cloud.web.service.order.api.vo.InvoiceRecordVO
      */
-    public static InvoiceRecordVO convertTo(InvoiceRecordDO invoiceRecord){
-        return InvoiceRecordVO.builder()
-                .id(invoiceRecord.getId())
-                .creatorAt(invoiceRecord.getCreatorAt())
-                .createAt(invoiceRecord.getCreateAt())
-                .updateAt(invoiceRecord.getUpdateAt())
-                .amount(invoiceRecord.getAmount())
-                .orderNo(invoiceRecord.getOrderNo())
-                .address(invoiceRecord.getAddress())
-                .header(invoiceRecord.getHeader())
-                .tel(invoiceRecord.getTel())
-                .type(invoiceRecord.getType())
-                .taxNo(invoiceRecord.getTaxNo())
-                .goodsName(invoiceRecord.getGoodsName())
-                .build();
+    public static InvoiceRecordVO convertTo(InvoiceRecordDO invoiceRecord) {
+        InvoiceRecordVO invoiceRecordVO = InvoiceRecordVO.builder().build();
+        BeanUtils.copyProperties(invoiceRecord, invoiceRecordVO, true);
+        return invoiceRecordVO;
     }
 
     /**
@@ -64,7 +47,7 @@ public class InvoiceRecordConverter {
      * @param invoiceRecords 转换数据
      * @return com.easy.cloud.web.service.order.api.vo.InvoiceRecordVO
      */
-    public static List<InvoiceRecordVO> convertTo(List<InvoiceRecordDO> invoiceRecords){
+    public static List<InvoiceRecordVO> convertTo(List<InvoiceRecordDO> invoiceRecords) {
         return invoiceRecords.stream()
                 .map(InvoiceRecordConverter::convertTo)
                 .collect(Collectors.toList());
@@ -76,7 +59,7 @@ public class InvoiceRecordConverter {
      * @param page 转换数据
      * @return com.easy.cloud.web.service.order.api.vo.InvoiceRecordVO
      */
-    public static Page<InvoiceRecordVO> convertTo(Page<InvoiceRecordDO> page){
+    public static Page<InvoiceRecordVO> convertTo(Page<InvoiceRecordDO> page) {
         return page.map(InvoiceRecordConverter::convertTo);
     }
 }
