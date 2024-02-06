@@ -2,6 +2,7 @@ package com.easy.cloud.web.component.pay.domain;
 
 import com.easy.cloud.web.component.pay.enums.PayTypeEnum;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
  * @date 2024/2/4 15:55
  */
 @Data
-public abstract class PayRequestBody {
+public class PayRequestBody {
 
     /**
      * 支付类型
