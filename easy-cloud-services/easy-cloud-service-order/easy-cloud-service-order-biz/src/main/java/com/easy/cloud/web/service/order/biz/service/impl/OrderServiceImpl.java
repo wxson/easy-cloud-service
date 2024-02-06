@@ -68,7 +68,6 @@ public class OrderServiceImpl implements IOrderService {
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
-                .content(JSONUtil.toJsonStr(orderDO))
                 .remark(JSONUtil.toJsonStr(orderCreateDTO))
                 .build());
 
@@ -129,7 +128,6 @@ public class OrderServiceImpl implements IOrderService {
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
-                .content(JSONUtil.toJsonStr(orderDO))
                 .remark(String.format("接收到订单确认，订单号：%s", orderDO.getNo()))
                 .build());
         return OrderConverter.convertTo(orderDO);
@@ -149,7 +147,6 @@ public class OrderServiceImpl implements IOrderService {
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
-                .content(JSONUtil.toJsonStr(orderDO))
                 .remark(String.format("订单已发起后端预支付逻辑，订单号：%s", orderDO.getNo()))
                 .build());
         return OrderConverter.convertTo(orderDO);
@@ -175,7 +172,6 @@ public class OrderServiceImpl implements IOrderService {
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
-                .content(JSONUtil.toJsonStr(orderDO))
                 .remark(String.format("接收到支付成功回调函数：%s", orderNo))
                 .build());
         return true;

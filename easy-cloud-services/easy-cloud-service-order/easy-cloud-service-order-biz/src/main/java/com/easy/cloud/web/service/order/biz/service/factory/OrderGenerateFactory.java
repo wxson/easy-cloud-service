@@ -45,14 +45,16 @@ public class OrderGenerateFactory {
     public OrderDO generateOrder(OrderTypeEnum orderType, OrderCreateDTO orderCreateDTO) {
         // 默认商品订单
         orderType = Objects.isNull(orderType) ? OrderTypeEnum.GOODS : orderType;
+        // 设置订单来源：默认APP端
+        orderCreateDTO.setSourceType(Optional.ofNullable(orderCreateDTO.getSourceType()).orElse(SourceTypeEnum.APP));
         // 根据订单类型生成对应的订单数据
         IOrderGenerateHandle orderGenerateHandle = Optional
                 .ofNullable(SpringContextHolder.getBean(orderGenerateMaps.get(orderType)))
                 .orElseThrow(() -> new BusinessException("获取订单生成器失败"));
         // 根据生成器生成对应的订单信息
         OrderDO orderDO = orderGenerateHandle.generateOrder(orderCreateDTO);
-        // 设置订单号
-        orderDO.setNo(generateOrderNo(orderDO));
+        // 设置订单来源
+        orderDO.setSourceType(orderCreateDTO.getSourceType());
         // 新订单
         orderDO.setOrderStatus(OrderStatusEnum.WAI_CONFIRM);
         // 待付款
@@ -65,11 +67,13 @@ public class OrderGenerateFactory {
         orderDO.setAftermarketStatus(AftermarketStatusEnum.NOT_APPLY);
         // 订单未完成
         orderDO.setFinishStatus(FinishStatusEnum.UNFINISHED);
+        // 设置订单号
+        orderDO.setNo(generateOrderNo(orderDO));
         return orderDO;
     }
 
     /**
-     * 生成18位订单编号:8位日期+2位订单类型+2位支付方式+6位以上自增id
+     * 生成18位订单编号:8位日期+2位订单类型+2位支付平台+2+6位以上自增id
      *
      * @param order 订单数据
      * @return 返回订单号
@@ -85,7 +89,7 @@ public class OrderGenerateFactory {
         Long increment = redisTemplate.opsForValue().increment(key, 1);
         builder.append(date)
                 .append(String.format("%02d", order.getOrderType().getCode()))
-                .append(String.format("%02d", order.getPayType().getCode()));
+                .append(String.format("%02d", order.getSourceType().getCode()));
         String incrementStr = increment.toString();
         if (incrementStr.length() <= 6) {
             builder.append(String.format("%06d", increment));

@@ -70,6 +70,12 @@ public class OrderDO extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(32) DEFAULT 'CNY' COMMENT '货币类型'")
     private CurrencyTypeEnum currencyType;
     /**
+     * 订单来源：1：APP；2：PC；3：小程序
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(32) DEFAULT 'APP' COMMENT '订单来源：1：APP；2：PC；3：小程序'")
+    private SourceTypeEnum sourceType;
+    /**
      * 支付金额
      */
     @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0.00' COMMENT '支付金额'")
