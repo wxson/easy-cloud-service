@@ -54,5 +54,5 @@ public class OrderQueryDTO extends BasePage {
     /**
      * 支付状态
      */
-    private PayStatusEnum payStatus;
+    private Integer payStatus;
 }
