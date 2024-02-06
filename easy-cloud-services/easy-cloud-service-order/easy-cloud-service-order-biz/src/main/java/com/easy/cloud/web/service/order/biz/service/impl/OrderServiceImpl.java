@@ -157,7 +157,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean paySuccessHandler(String orderNo) {
+    public Boolean paySuccessHandler(String orderNo, String tradeNo) {
         // 获取订单详情
         OrderDO orderDO = orderRepository.findByNo(orderNo)
                 .orElseThrow(() -> new BusinessException("当前订单信息不存在"));
@@ -167,6 +167,8 @@ public class OrderServiceImpl implements IOrderService {
         orderDO.setPayStatus(PayStatusEnum.PAY_YES);
         // 创建支付时间
         orderDO.setCompletePayAt(DateUtil.now());
+        // 绑定第三方支付单号
+        orderDO.setTradeNo(tradeNo);
         // 修改订单数据
         orderRepository.save(orderDO);
         // 存储订单变化记录

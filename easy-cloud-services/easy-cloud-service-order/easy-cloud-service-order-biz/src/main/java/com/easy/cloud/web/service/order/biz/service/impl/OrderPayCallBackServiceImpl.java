@@ -41,7 +41,7 @@ public class OrderPayCallBackServiceImpl implements IOrderPayCallBackService {
             return;
         }
 
-        orderService.paySuccessHandler(wxPayCallBackDTO.getOutTradeNo());
+        orderService.paySuccessHandler(wxPayCallBackDTO.getOutTradeNo(), wxPayCallBackDTO.getTransactionId());
     }
 
     @Override
