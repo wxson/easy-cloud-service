@@ -45,13 +45,6 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
 
-        <!-- 加载hutool -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.7.6</version>
-        </dependency>
-
         <!--Local dict-->
         <dependency>
             <groupId>com.easy.cloud.web</groupId>
