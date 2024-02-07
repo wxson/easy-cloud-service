@@ -28,7 +28,7 @@ public class WxAppSocialServiceImpl implements ISocialService {
     /**
      * APP_ID
      */
-    private final String APP_ID = "wxe51ae9c0adc39103";
+    private final String APP_ID = "xxxxx";
     /**
      * SECRET
      */
@@ -63,7 +63,7 @@ public class WxAppSocialServiceImpl implements ISocialService {
         String userApi = StrUtil.format(wxUserApi, accessToken, openId);
         // 用户响应体
         String userResponseBody = HttpUtil.get(userApi);
-        log.info("wx app userResponseBody：{}", userResponseBody);
+        log.info("---- 微信登录：请求UserInfo 响应报文：{}", userResponseBody);
         // 解析返回数据
         JSONObject userResponseJsonObject = JSONUtil.parseObj(userResponseBody);
         return UserDO.builder()
