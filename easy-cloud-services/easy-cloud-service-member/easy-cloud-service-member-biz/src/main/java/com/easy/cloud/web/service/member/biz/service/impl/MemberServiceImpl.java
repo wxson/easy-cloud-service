@@ -116,7 +116,7 @@ public class MemberServiceImpl implements IMemberService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public MemberVO initMember() {
+    public MemberVO createMember() {
         // 获取登录用户信息
         AuthenticationUser authenticationUser = SecurityUtils.getAuthenticationUser();
         // 根据用户ID获取会员信息
@@ -124,6 +124,7 @@ public class MemberServiceImpl implements IMemberService {
         if (memberOptional.isPresent()) {
             return MemberConverter.convertTo(memberOptional.get());
         }
+
         // 获取会员信息
         MemberDO memberDO = MemberDO.builder()
                 .userId(authenticationUser.getId())

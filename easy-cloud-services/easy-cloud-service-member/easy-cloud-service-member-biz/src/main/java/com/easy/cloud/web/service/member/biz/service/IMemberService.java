@@ -75,5 +75,5 @@ public interface IMemberService {
      *
      * @return
      */
-    MemberVO initMember();
+    MemberVO createMember();
 }

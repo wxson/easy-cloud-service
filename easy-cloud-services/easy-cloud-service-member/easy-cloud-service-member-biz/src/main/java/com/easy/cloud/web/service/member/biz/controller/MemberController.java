@@ -129,9 +129,9 @@ public class MemberController {
      * @return com.easy.cloud.web.component.core.response.HttpResult<com.easy.cloud.web.service.member.api.vo.MemberVO>
      */
     @Inner
-    @PostMapping("init")
-    @ApiOperation(value = "初始化会员信息")
-    public HttpResult<MemberVO> initMember() {
-        return HttpResult.ok(memberService.initMember());
+    @PostMapping("create")
+    @ApiOperation(value = "创建会员信息")
+    public HttpResult<MemberVO> createMember() {
+        return HttpResult.ok(memberService.createMember());
     }
 }
