@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -30,15 +31,18 @@ import javax.persistence.Table;
 public class MemberLevelDO extends BaseEntity {
 
     /**
-     * 会会员等级
+     * 会员等级
      */
+    @Column(columnDefinition = "INT NOT NULL DEFAULT '0' COMMENT 'VIP 等级'")
     private Integer level;
     /**
-     * 会员名称
+     * 等级名称
      */
+    @Column(columnDefinition = "VARCHAR(64) NOT NULL COMMENT '等级名称'")
     private String name;
     /**
      * 会员经验边界，即超出该经验值自动升级
      */
+    @Column(columnDefinition = "INT NOT NULL DEFAULT '0' COMMENT '会员经验边界，即超出该经验值自动升级'")
     private Integer limitExperience;
 }
