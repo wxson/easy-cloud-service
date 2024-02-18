@@ -1,9 +1,10 @@
 package com.easy.cloud.web.service.member.api.dto;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.math.BigDecimal;
 
 /**
  * Member请求数据
@@ -16,60 +17,37 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor(staticName = "build")
 public class MemberDTO {
 
-  /**
-   * 文档ID
-   */
-  private String id;
-  /**
-   *
-   */
-  private Integer vipLevel;
-  /**
-   *
-   */
-  private Integer amount;
-  /**
-   *
-   */
-  private Integer diamond;
-  /**
-   *
-   */
-  private Integer coupon;
-  /**
-   *
-   */
-  private Integer level;
-  /**
-   *
-   */
-  private String ip;
-  /**
-   *
-   */
-  private String profile;
-  /**
-   *
-   */
-  private Integer experience;
-  /**
-   *
-   */
-  private Integer totalRecharge;
-  /**
-   *
-   */
-  private String userId;
-  /**
-   * 创建用户
-   */
-  private String creatorAt;
-  /**
-   * 创建时间
-   */
-  private String createAt;
-  /**
-   * 更新时间
-   */
-  private String updateAt;
+    /**
+     * 会员ID
+     */
+    private String id;
+
+    /**
+     * 用户ID
+     */
+    private String userId;
+    /**
+     * 会员昵称
+     */
+    private String nickName;
+    /**
+     * VIP 等级
+     */
+    private Integer vipLevel;
+    /**
+     * 积分
+     */
+    private Integer points;
+    /**
+     * 经验值
+     */
+    private Integer experience;
+    /**
+     * 总的充值
+     */
+    private BigDecimal totalRecharge;
+    /**
+     * 个性签名
+     */
+    private String profile;
 }
