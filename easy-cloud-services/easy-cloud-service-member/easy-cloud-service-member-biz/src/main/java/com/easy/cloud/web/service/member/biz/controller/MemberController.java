@@ -33,18 +33,6 @@ public class MemberController {
     private IMemberService memberService;
 
     /**
-     * 新增
-     *
-     * @param memberDTO 新增数据
-     * @return 新增数据
-     */
-    @PostMapping(value = "save")
-    @ApiOperation(value = "新增会员信息")
-    public HttpResult<MemberVO> save(@Validated @RequestBody MemberDTO memberDTO) {
-        return HttpResult.ok(memberService.save(memberDTO));
-    }
-
-    /**
      * 更新
      *
      * @param memberDTO 新增数据
