@@ -4,7 +4,7 @@
 ```xml
 <dependency>
    <groupId>com.easy.cloud.web</groupId>
-   <artifactId>easy-cloud-module-certification-api</artifactId>
+   <artifactId>easy-cloud-module-certification-biz</artifactId>
    <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
