@@ -30,7 +30,7 @@ public class AuthenticationRecordController {
      * @return 详情数据
      */
     @GetMapping(value = "detail/{authenticationRecordId}")
-    public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") Long authenticationRecordId) {
+    public Object detailById(@PathVariable @NotNull(message = "当前ID不能为空") String authenticationRecordId) {
         return authenticationRecordService.detailById(authenticationRecordId);
     }
 
