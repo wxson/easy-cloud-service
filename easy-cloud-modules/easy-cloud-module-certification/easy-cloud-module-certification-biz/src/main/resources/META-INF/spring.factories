@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.easy.cloud.web.module.certification.biz.configuration.CertificationAutoConfiguration
+

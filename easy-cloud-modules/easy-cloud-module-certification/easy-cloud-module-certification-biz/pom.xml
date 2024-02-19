@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.easy.cloud.web</groupId>
+        <artifactId>easy-cloud-module-certification</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>easy-cloud-module-certification-biz</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>easy-cloud-module-certification-biz</name>
+    <description>Demo project for Spring Boot</description>
+
+    <dependencies>
+        <!-- Local Mysql -->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-component-mysql</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- 依赖Certification Api-->
+        <dependency>
+            <groupId>com.easy.cloud.web</groupId>
+            <artifactId>easy-cloud-module-certification-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
