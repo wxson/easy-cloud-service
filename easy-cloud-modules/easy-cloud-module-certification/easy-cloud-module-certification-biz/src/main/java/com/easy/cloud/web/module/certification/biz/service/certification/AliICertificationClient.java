@@ -3,6 +3,7 @@ package com.easy.cloud.web.module.certification.biz.service.certification;
 import com.easy.cloud.web.component.core.response.HttpResult;
 import com.easy.cloud.web.module.certification.api.enums.CertificationClientEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class AliICertificationClient implements ICertificationClient {
+
+    @Autowired
+    private CertificationProperties certificationProperties;
 
     @Override
     public CertificationClientEnum client() {
