@@ -14,6 +14,7 @@
     <description>easy cloud modules</description>
 
     <modules>
+        <module>easy-cloud-module-certification</module>
         <module>easy-cloud-module-dict</module>
         <module>easy-cloud-module-log</module>
         <module>easy-cloud-module-online</module>
