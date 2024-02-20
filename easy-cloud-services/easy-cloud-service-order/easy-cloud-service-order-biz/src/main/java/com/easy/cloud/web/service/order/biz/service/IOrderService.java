@@ -58,9 +58,10 @@ public interface IOrderService {
      * 支付成功回调
      *
      * @param orderNo 订单编号
+     * @param tradeNo 支付平台交易单号
      * @return
      */
-    Boolean paySuccessHandler(String orderNo);
+    Boolean paySuccessHandler(String orderNo, String tradeNo);
 
     /**
      * 订单确认

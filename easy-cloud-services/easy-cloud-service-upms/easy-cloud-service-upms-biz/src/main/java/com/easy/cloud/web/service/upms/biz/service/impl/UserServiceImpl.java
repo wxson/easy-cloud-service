@@ -443,43 +443,47 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
 
     @Override
     public UserVO loadLoginSocialUserByObject(String type, UserLoginDTO userLoginDTO) {
-      Optional<SocialTypeEnum> socialTypeEnumOptional = SocialTypeEnum.getSocialByType(type);
-      if (!socialTypeEnumOptional.isPresent()) {
-        throw new BusinessException("登录类型错误");
-      }
-      // 授权类型
-      SocialTypeEnum socialType = socialTypeEnumOptional.get();
-      // 获取处理类
-      ISocialService socialService = socialServices.get(socialType);
-      UserDO userDO;
-      // Oauth2.0 code授权模式
-      if (StrUtil.isNotBlank(userLoginDTO.getCode())) {
-        userDO = socialService.loadSocialUser(userLoginDTO);
-      } else {
-        // 默认解析当前数据作为存储对象
-        userDO = JSONUtil.toBean(JSONUtil.toJsonStr(userLoginDTO), UserDO.class);
-      }
+        Optional<SocialTypeEnum> socialTypeEnumOptional = SocialTypeEnum.getSocialByType(type);
+        if (!socialTypeEnumOptional.isPresent()) {
+            throw new BusinessException("登录类型错误");
+        }
+        // 授权类型
+        SocialTypeEnum socialType = socialTypeEnumOptional.get();
+        // 获取处理类
+        ISocialService socialService = socialServices.get(socialType);
+        UserDO userDO;
+        // Oauth2.0 code授权模式
+        if (StrUtil.isNotBlank(userLoginDTO.getCode())) {
+            userDO = socialService.loadSocialUser(userLoginDTO);
+        } else {
+            // 默认解析当前数据作为存储对象
+            userDO = JSONUtil.toBean(JSONUtil.toJsonStr(userLoginDTO), UserDO.class);
+        }
 
-      // 尝试获取是否已存在当前用户,后续新增其他平台授权，依次增加OR条件即可
-      Optional<UserDO> userDOOptional = userRepository.findByUnionId(userDO.getUnionId());
-      if (userDOOptional.isPresent()) {
+        // 尝试获取是否已存在当前用户,后续新增其他平台授权，依次增加OR条件即可
+        if (StrUtil.isNotBlank(userDO.getUnionId())) {
+            Optional<UserDO> userDOOptional = userRepository.findByUnionId(userDO.getUnionId());
+            if (userDOOptional.isPresent()) {
+                // 获取详情，走缓存
+                return UserConverter.convertTo(userDOOptional.get());
+            }
+        }
+
+        // 尝试获取是否已存在当前用户,后续新增其他平台授权，依次增加OR条件即可
+        if (StrUtil.isNotBlank(userDO.getTel())) {
+            Optional<UserDO> userDOOptional = userRepository.findByTel(userDO.getTel());
+            if (userDOOptional.isPresent()) {
+                // 获取详情，走缓存
+                return UserConverter.convertTo(userDOOptional.get());
+            }
+        }
+
+        // 设置默认密码
+        userDO.setPassword(passwordEncoder.encode(UpmsConstants.DEFAULT_PASSWORD));
+        // 存储新的数据
+        userRepository.save(userDO);
         // 获取详情，走缓存
-        return this.findLoginUserInfo(userDOOptional.get());
-      }
-
-      // 尝试获取是否已存在当前用户,后续新增其他平台授权，依次增加OR条件即可
-      userDOOptional = userRepository.findByTel(userDO.getTel());
-      if (userDOOptional.isPresent()) {
-        // 获取详情，走缓存
-        return this.findLoginUserInfo(userDOOptional.get());
-      }
-
-      // 设置默认密码
-      userDO.setPassword(passwordEncoder.encode(UpmsConstants.DEFAULT_PASSWORD));
-      // 存储新的数据
-      userRepository.save(userDO);
-      // 获取详情，走缓存
-      return this.findLoginUserInfo(userDO);
+        return UserConverter.convertTo(userDO);
     }
 
     @Override

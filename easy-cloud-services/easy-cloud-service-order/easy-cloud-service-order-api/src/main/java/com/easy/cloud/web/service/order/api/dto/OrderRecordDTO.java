@@ -29,10 +29,6 @@ public class OrderRecordDTO {
      */
     private OrderStatusEnum orderStatus;
     /**
-     * 订单内容
-     */
-    private String content;
-    /**
      * 订单备注
      */
     private String remark;

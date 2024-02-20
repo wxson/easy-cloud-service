@@ -21,10 +21,6 @@ import lombok.experimental.Accessors;
 public class OrderRecordVO {
 
     /**
-     * 订单ID
-     */
-    private String orderId;
-    /**
      * 订单编号
      */
     private String orderNo;
@@ -32,10 +28,6 @@ public class OrderRecordVO {
      * 订单状态
      */
     private OrderStatusEnum orderStatus;
-    /**
-     * 订单内容
-     */
-    private String content;
     /**
      * 订单备注
      */

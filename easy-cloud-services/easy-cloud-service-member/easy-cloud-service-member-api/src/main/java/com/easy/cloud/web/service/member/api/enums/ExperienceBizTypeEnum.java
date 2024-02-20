@@ -7,20 +7,18 @@ import lombok.Getter;
 import java.util.Optional;
 
 /**
- * 资产来源
+ * 经验业务类型枚举
  *
  * @author GR
  * @date 2021-8-31 22:26
  */
 @Getter
 @AllArgsConstructor
-public enum PropertyOriginEnum implements IBaseEnum {
+public enum ExperienceBizTypeEnum implements IBaseEnum {
     /**
-     * 资产来源
+     * 签到...
      */
-    BUY(1, "购买"),
-    PAY(2, "支付"),
-    PLAY(3, "对局"),
+    SIGN_IN(1, "签到"),
     ;
     /**
      * 编码
@@ -37,10 +35,10 @@ public enum PropertyOriginEnum implements IBaseEnum {
      * @param code 编码
      * @return java.util.Optional<com.easy.cloud.web.service.mj.biz.enums.HuCardRuleEnum>
      */
-    public static Optional<PropertyOriginEnum> getInstanceByCode(int code) {
-        for (PropertyOriginEnum goodsTypeEnum : PropertyOriginEnum.values()) {
-            if (code == goodsTypeEnum.code) {
-                return Optional.of(goodsTypeEnum);
+    public static Optional<ExperienceBizTypeEnum> getInstanceByCode(int code) {
+        for (ExperienceBizTypeEnum experienceBizTypeEnum : ExperienceBizTypeEnum.values()) {
+            if (code == experienceBizTypeEnum.code) {
+                return Optional.of(experienceBizTypeEnum);
             }
         }
         return Optional.empty();

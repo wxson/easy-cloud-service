@@ -25,6 +25,7 @@ public class GoodsOrderGenerateHandle implements IOrderGenerateHandle {
 
         // 2、根据商品信息创建订单
         OrderDO orderDO = OrderDO.builder()
+                .goodsNo(orderCreateDTO.getGoodsNo())
                 .goodsName("测试商品")
                 .goodsContent("测试商品内容")
                 .goodsNum(orderCreateDTO.getGoodsNum())
@@ -34,6 +35,7 @@ public class GoodsOrderGenerateHandle implements IOrderGenerateHandle {
                 .discountsAmount(new BigDecimal(0))
                 .salesPrice(new BigDecimal(0))
                 .purchasePrice(new BigDecimal(0))
+                .originalPrice(new BigDecimal(0))
                 .build();
         return orderDO;
     }

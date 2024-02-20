@@ -68,7 +68,6 @@ public class OrderServiceImpl implements IOrderService {
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
-                .content(JSONUtil.toJsonStr(orderDO))
                 .remark(JSONUtil.toJsonStr(orderCreateDTO))
                 .build());
 
@@ -129,7 +128,6 @@ public class OrderServiceImpl implements IOrderService {
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
-                .content(JSONUtil.toJsonStr(orderDO))
                 .remark(String.format("接收到订单确认，订单号：%s", orderDO.getNo()))
                 .build());
         return OrderConverter.convertTo(orderDO);
@@ -149,7 +147,6 @@ public class OrderServiceImpl implements IOrderService {
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
-                .content(JSONUtil.toJsonStr(orderDO))
                 .remark(String.format("订单已发起后端预支付逻辑，订单号：%s", orderDO.getNo()))
                 .build());
         return OrderConverter.convertTo(orderDO);
@@ -157,7 +154,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean paySuccessHandler(String orderNo) {
+    public Boolean paySuccessHandler(String orderNo, String tradeNo) {
         // 获取订单详情
         OrderDO orderDO = orderRepository.findByNo(orderNo)
                 .orElseThrow(() -> new BusinessException("当前订单信息不存在"));
@@ -167,13 +164,14 @@ public class OrderServiceImpl implements IOrderService {
         orderDO.setPayStatus(PayStatusEnum.PAY_YES);
         // 创建支付时间
         orderDO.setCompletePayAt(DateUtil.now());
+        // 绑定第三方支付单号
+        orderDO.setTradeNo(tradeNo);
         // 修改订单数据
         orderRepository.save(orderDO);
         // 存储订单变化记录
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
-                .content(JSONUtil.toJsonStr(orderDO))
                 .remark(String.format("接收到支付成功回调函数：%s", orderNo))
                 .build());
         return true;

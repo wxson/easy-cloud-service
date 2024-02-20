@@ -36,16 +36,20 @@ public class WxPayClientService implements IPayClientService {
     /**
      * 应用ID
      */
-    private final String APP_ID = "APP_ID";
+    private final String APP_ID = "xxx";
     /**
      * 商户号
      */
-    private final String MCH_ID = "商户号";
+    private final String MCH_ID = "xxxx";
+    /**
+     * 秘钥
+     */
+    private final String SECRET_KEY = "xxxxx";
 
     /**
      * 服务地址
      */
-    private final String SERVICE_HOST = "https://IP";
+    private final String SERVICE_HOST = "https://IP:PORT";
 
     @Override
     public PayTypeEnum type() {
@@ -164,7 +168,7 @@ public class WxPayClientService implements IPayClientService {
             }
         }
         // 移除最后一位
-        String md5Str = builder.append("key").append("=").append("xxxxxxx")
+        String md5Str = builder.append("key").append("=").append(SECRET_KEY)
                 .toString().trim();
         log.info("md5Str= {}", md5Str);
         // MD5加密

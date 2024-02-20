@@ -60,10 +60,8 @@ public class OrderRecordServiceImpl implements IOrderRecordService {
     public List<OrderRecordVO> list(OrderRecordQueryDTO orderRecordQueryDTO) {
         // 获取列表数据
         List<OrderRecordDO> orderRecords = orderRecordRepository.findAll(SpecificationWrapper
-                // orderId eq
-                .where(StrUtil.isNotBlank(orderRecordQueryDTO.getOrderId()), OrderRecordDO::getOrderId, orderRecordQueryDTO.getOrderId())
                 // orderNo eq
-                .eq(StrUtil.isNotBlank(orderRecordQueryDTO.getOrderNo()), OrderRecordDO::getOrderNo, orderRecordQueryDTO.getOrderNo())
+                .where(StrUtil.isNotBlank(orderRecordQueryDTO.getOrderNo()), OrderRecordDO::getOrderNo, orderRecordQueryDTO.getOrderNo())
                 // 时间降序
                 .orderDesc(OrderRecordDO::getCreateAt)
         );

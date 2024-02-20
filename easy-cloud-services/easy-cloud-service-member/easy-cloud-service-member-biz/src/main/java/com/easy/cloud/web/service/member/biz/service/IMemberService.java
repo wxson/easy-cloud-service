@@ -1,10 +1,10 @@
 package com.easy.cloud.web.service.member.biz.service;
 
-import com.easy.cloud.web.service.member.api.dto.MemberBalanceDTO;
 import com.easy.cloud.web.service.member.api.dto.MemberDTO;
 import com.easy.cloud.web.service.member.api.vo.MemberVO;
-import java.util.List;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * Member interface
@@ -14,83 +14,66 @@ import org.springframework.data.domain.Page;
  */
 public interface IMemberService {
 
-  /**
-   * 新增数据
-   *
-   * @param memberDTO 保存参数
-   * @return com.easy.cloud.web.service.member.biz.domain.vo.MemberVO
-   */
-  MemberVO save(MemberDTO memberDTO);
+    /**
+     * 新增数据
+     *
+     * @param memberDTO 保存参数
+     * @return com.easy.cloud.web.service.member.api.vo.MemberVO
+     */
+    MemberVO save(MemberDTO memberDTO);
 
-  /**
-   * 更新数据，默认全量更新
-   *
-   * @param memberDTO 保存参数
-   * @return com.easy.cloud.web.service.member.biz.domain.vo.MemberVO
-   */
-  MemberVO update(MemberDTO memberDTO);
+    /**
+     * 更新数据，默认全量更新
+     *
+     * @param memberDTO 保存参数
+     * @return com.easy.cloud.web.service.member.api.vo.MemberVO
+     */
+    MemberVO update(MemberDTO memberDTO);
 
-  /**
-   * 更新用户个性签名
-   *
-   * @param memberDTO
-   * @return
-   */
-  MemberVO updateProfile(MemberDTO memberDTO);
+    /**
+     * 根据ID删除数据
+     *
+     * @param memberId 对象ID
+     * @return java.lang.Boolean
+     */
+    Boolean removeById(String memberId);
 
-  /**
-   * 根据ID删除数据
-   *
-   * @param memberId 对象ID
-   * @return java.lang.Boolean
-   */
-  Boolean removeById(String memberId);
+    /**
+     * 根据ID获取详情
+     *
+     * @param memberId 对象ID
+     * @return java.lang.Boolean
+     */
+    MemberVO detailById(String memberId);
 
-  /**
-   * 根据ID获取详情
-   *
-   * @param memberId 对象ID
-   * @return java.lang.Boolean
-   */
-  MemberVO detailById(String memberId);
+    /**
+     * 根据用户ID获取会员信息
+     *
+     * @param userId
+     * @return
+     */
+    MemberVO detailByUserId(String userId);
 
-  /**
-   * 根据用户ID获取会员信息
-   *
-   * @param userId
-   * @return
-   */
-  MemberVO getMemberDetailByUserId(String userId);
+    /**
+     * 根据条件获取列表数据
+     *
+     * @return List<com.easy.cloud.web.service.member.api.vo.MemberVO> 返回列表数据
+     */
+    List<MemberVO> list();
 
-  /**
-   * 根据条件获取列表数据
-   *
-   * @return List<com.easy.cloud.web.service.member.biz.domain.vo.MemberVO> 返回列表数据
-   */
-  List<MemberVO> list();
+    /**
+     * 根据条件获取分页数据
+     *
+     * @param page 当前页
+     * @param size 每页大小
+     * @return List<com.easy.cloud.web.service.member.api.vo.MemberVO> 返回列表数据
+     */
+    Page<MemberVO> page(int page, int size);
 
-  /**
-   * 根据条件获取分页数据
-   *
-   * @param page 当前页
-   * @param size 每页大小
-   * @return List<com.easy.cloud.web.service.member.biz.domain.vo.MemberVO> 返回列表数据
-   */
-  Page<MemberVO> page(int page, int size);
-
-  /**
-   * 初始化会员信息
-   *
-   * @param memberDTO
-   * @return
-   */
-  MemberVO initMemberInfo(MemberDTO memberDTO);
-
-  /**
-   * 会员资产变动
-   *
-   * @param memberBalanceDTO 资产变动信息
-   * @return
-   */
-  MemberVO updateMemberProperty(MemberBalanceDTO memberBalanceDTO);
+    /**
+     * 初始化会员信息
+     *
+     * @return
+     */
+    MemberVO createMember();
 }

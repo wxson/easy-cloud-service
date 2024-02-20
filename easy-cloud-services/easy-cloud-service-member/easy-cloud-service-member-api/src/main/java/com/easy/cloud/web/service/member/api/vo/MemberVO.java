@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+
 /**
  * Member展示数据
  *
@@ -19,70 +21,32 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 public class MemberVO {
 
-  /**
-   * 文档ID
-   */
-  private String id;
-  /**
-   * vip等级
-   */
-  private Integer vipLevel;
-  /**
-   * 金币
-   */
-  private Integer amount;
-  /**
-   * 钻石
-   */
-  private Integer diamond;
-  /**
-   * 点券
-   */
-  private Integer coupon;
-  /**
-   * 等级
-   */
-  private Integer level;
-  /**
-   * IP形象：可是文字，也可是图片
-   */
-  private String ip;
-  /**
-   * 签名
-   */
-  private String profile;
-  /**
-   * 经验
-   */
-  private Integer experience;
-  /**
-   * 总资产
-   */
-  private Integer totalRecharge;
-  /**
-   * 用户ID
-   */
-  private String userId;
-
-
-  /**
-   * 账号
-   */
-  private String account;
-
-  /**
-   * 昵称
-   */
-  private String nickName;
-
-  /**
-   * 头像
-   */
-  private String avatar;
-
-  /**
-   * 性别
-   */
-  private Integer sex;
-
+    /**
+     * 用户ID
+     */
+    private String userId;
+    /**
+     * 会员昵称
+     */
+    private String nickName;
+    /**
+     * VIP 等级
+     */
+    private Integer vipLevel;
+    /**
+     * 积分
+     */
+    private Integer points;
+    /**
+     * 经验值
+     */
+    private Integer experience;
+    /**
+     * 总的充值
+     */
+    private BigDecimal totalRecharge;
+    /**
+     * 个性签名
+     */
+    private String profile;
 }

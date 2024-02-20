@@ -7,27 +7,18 @@ import lombok.Getter;
 import java.util.Optional;
 
 /**
- * VIP等级
+ * 积分业务类型枚举
  *
  * @author GR
  * @date 2021-8-31 22:26
  */
 @Getter
 @AllArgsConstructor
-public enum VipLevelEnum implements IBaseEnum {
+public enum PointsBizTypeEnum implements IBaseEnum {
     /**
-     * VIP等级
+     * 交易...
      */
-    VIP_1(1, "VIP 1"),
-    VIP_2(2, "VIP 2"),
-    VIP_3(3, "VIP 3"),
-    VIP_4(4, "VIP 4"),
-    VIP_5(5, "VIP 5"),
-    VIP_6(6, "VIP 6"),
-    VIP_7(7, "VIP 7"),
-    VIP_8(8, "VIP 8"),
-    VIP_9(9, "VIP 9"),
-    VIP_10(10, "VIP 10"),
+    TRADE(1, "交易"),
     ;
     /**
      * 编码
@@ -44,10 +35,10 @@ public enum VipLevelEnum implements IBaseEnum {
      * @param code 编码
      * @return java.util.Optional<com.easy.cloud.web.service.mj.biz.enums.HuCardRuleEnum>
      */
-    public static Optional<VipLevelEnum> getInstanceByCode(int code) {
-        for (VipLevelEnum goodsTypeEnum : VipLevelEnum.values()) {
-            if (code == goodsTypeEnum.code) {
-                return Optional.of(goodsTypeEnum);
+    public static Optional<PointsBizTypeEnum> getInstanceByCode(int code) {
+        for (PointsBizTypeEnum pointsBizTypeEnum : PointsBizTypeEnum.values()) {
+            if (code == pointsBizTypeEnum.code) {
+                return Optional.of(pointsBizTypeEnum);
             }
         }
         return Optional.empty();

@@ -30,11 +30,6 @@ import javax.persistence.*;
 public class OrderRecordDO extends BaseEntity {
 
     /**
-     * 订单ID
-     */
-    @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '订单编号'")
-    private String orderId;
-    /**
      * 订单编号
      */
     @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '订单编号'")
@@ -45,11 +40,6 @@ public class OrderRecordDO extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(32) DEFAULT 'NEW' COMMENT '订单状态'")
     private OrderStatusEnum orderStatus;
-    /**
-     * 订单内容
-     */
-    @Column(columnDefinition = "VARCHAR(255) COMMENT '订单内容'")
-    private String content;
     /**
      * 订单备注
      */

@@ -20,10 +20,6 @@ import lombok.experimental.Accessors;
 public class OrderRecordQueryDTO {
 
     /**
-     * 订单ID
-     */
-    private String orderId;
-    /**
      * 订单编号
      */
     private String orderNo;
