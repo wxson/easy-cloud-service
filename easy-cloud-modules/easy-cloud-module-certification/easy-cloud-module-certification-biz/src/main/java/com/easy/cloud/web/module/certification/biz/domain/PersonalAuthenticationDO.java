@@ -58,14 +58,14 @@ public class PersonalAuthenticationDO extends BaseEntity {
      */
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(64) NOT NULL  DEFAULT 'WAIT' COMMENT '认证状态'")
-    private AuthenticationStatusEnum status;
+    private AuthenticationStatusEnum authenticationStatus;
     /**
      * 审核备注
      */
     @Column(columnDefinition = "VARCHAR(255) COMMENT '审核备注'")
     private String remark;
     /**
-     * 已认证
+     * 已认证成功
      */
     @Column(columnDefinition = "TINYINT(1) NOT NULL DEFAULT '0' COMMENT '已认证'")
     private Boolean authenticated;
