@@ -2,6 +2,7 @@ package com.easy.cloud.web.module.certification.biz.service.certification;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
 import com.easy.cloud.web.module.certification.api.enums.CertificationClientEnum;
+import com.easy.cloud.web.module.certification.biz.service.certification.entity.CertificationBody;
 
 /**
  * @author GR
@@ -19,9 +20,8 @@ public interface ICertificationClient {
     /**
      * 认证
      *
-     * @param userName     用户名
-     * @param identityCard 身份证
+     * @param certificationBody 认证信息
      * @return
      */
-    HttpResult<Object> certification(String userName, String identityCard);
+    HttpResult<Object> certification(CertificationBody certificationBody);
 }

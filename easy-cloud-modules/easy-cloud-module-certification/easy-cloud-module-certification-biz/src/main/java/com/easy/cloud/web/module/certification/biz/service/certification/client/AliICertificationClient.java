@@ -1,7 +1,10 @@
-package com.easy.cloud.web.module.certification.biz.service.certification;
+package com.easy.cloud.web.module.certification.biz.service.certification.client;
 
 import com.easy.cloud.web.component.core.response.HttpResult;
 import com.easy.cloud.web.module.certification.api.enums.CertificationClientEnum;
+import com.easy.cloud.web.module.certification.biz.service.certification.CertificationProperties;
+import com.easy.cloud.web.module.certification.biz.service.certification.ICertificationClient;
+import com.easy.cloud.web.module.certification.biz.service.certification.entity.CertificationBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +28,7 @@ public class AliICertificationClient implements ICertificationClient {
     }
 
     @Override
-    public HttpResult<Object> certification(String userName, String identityCard) {
+    public HttpResult<Object> certification(CertificationBody certificationBody) {
         return HttpResult.ok();
     }
 }
