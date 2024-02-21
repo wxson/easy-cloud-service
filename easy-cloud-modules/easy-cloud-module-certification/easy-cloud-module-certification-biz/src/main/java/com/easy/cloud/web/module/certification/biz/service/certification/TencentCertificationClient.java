@@ -22,14 +22,14 @@ import java.util.*;
 
 /**
  * 腾讯云认证
- * <p>文档：https://market.cloud.tencent.com/products/33468</p>
+ * <p>文档：https://cloud.tencent.com/document/product/1007/39765</p>
  *
  * @author GR
  * @date 2024/2/19 19:38
  */
 @Slf4j
 @Service
-public class TencentICertificationClient implements ICertificationClient {
+public class TencentCertificationClient implements ICertificationClient {
 
     @Autowired
     private CertificationProperties certificationProperties;
