@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(value = "record")
-@Tag(name = "OrderRecord", description = "订单操作记录管理")
+@Tag(name = "订单操作记录管理", description = "订单操作记录管理")
 public class OrderRecordController {
 
     @Autowired

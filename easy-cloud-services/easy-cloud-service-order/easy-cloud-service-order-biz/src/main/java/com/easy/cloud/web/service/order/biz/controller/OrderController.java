@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
  */
 @Slf4j
 @RestController
-@Tag(name = "Order", description = "订单管理")
+@Tag(name = "订单管理", description = "订单管理")
 public class OrderController {
 
     @Autowired

@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 @RestController
 @RequestMapping(value = "invoice")
-@Tag(name = "Invoice", description = "发票抬头管理")
+@Tag(name = "发票抬头管理", description = "发票抬头管理")
 public class InvoiceController {
 
     @Autowired
