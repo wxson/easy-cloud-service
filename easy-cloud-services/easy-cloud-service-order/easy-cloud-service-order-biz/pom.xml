@@ -41,11 +41,11 @@
     </dependency>
 
     <!-- Job组件 -->
-    <dependency>
-      <groupId>com.easy.cloud.web</groupId>
-      <artifactId>easy-cloud-component-job</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.easy.cloud.web</groupId>-->
+<!--      <artifactId>easy-cloud-component-job</artifactId>-->
+<!--      <version>${project.parent.version}</version>-->
+<!--    </dependency>-->
 
     <!-- mysql组件 -->
     <dependency>
