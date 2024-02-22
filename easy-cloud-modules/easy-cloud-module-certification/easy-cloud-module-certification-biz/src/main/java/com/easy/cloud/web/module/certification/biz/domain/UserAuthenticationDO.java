@@ -2,6 +2,7 @@ package com.easy.cloud.web.module.certification.biz.domain;
 
 import com.easy.cloud.web.component.mysql.domain.BaseEntity;
 import com.easy.cloud.web.module.certification.api.enums.AuthenticationStatusEnum;
+import com.easy.cloud.web.module.certification.api.enums.AuthenticationTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 /**
- * CompanyAuthentication 持久类
+ * UserAuthenticationDO 持久类
  *
  * @author Fast Java
  * @date 2024-02-18 11:58:57
@@ -26,48 +27,24 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "db_company_authentication")
-public class CompanyAuthenticationDO extends BaseEntity {
+@Table(name = "db_user_authentication")
+public class UserAuthenticationDO extends BaseEntity {
     /**
      * 用户ID/账号ID
      */
     @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '用户ID/账号ID'")
     private String userId;
     /**
-     * 公司名称
+     * 认证ID
      */
-    @Column(columnDefinition = "VARCHAR(125) NOT NULL COMMENT '公司名称'")
-    private String companyName;
+    @Column(columnDefinition = "VARCHAR(32) NOT NULL COMMENT '认证ID'")
+    private String authenticationId;
     /**
-     * 公司地址
+     * 认证状态
      */
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL COMMENT '公司地址'")
-    private String companyAddress;
-    /**
-     * 公司许可证文件地址
-     */
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL COMMENT '公司许可证文件地址'")
-    private String companyLicense;
-    /**
-     * 法人
-     */
-    @Column(columnDefinition = "VARCHAR(64) NOT NULL COMMENT '法人'")
-    private String legalPerson;
-    /**
-     * 法人身份证
-     */
-    @Column(columnDefinition = "VARCHAR(18) NOT NULL COMMENT '法人身份证'")
-    private String legalPersonIdentityCard;
-    /**
-     * 联系电话
-     */
-    @Column(columnDefinition = "VARCHAR(11) NOT NULL COMMENT '联系电话'")
-    private String tel;
-    /**
-     * 联系邮件
-     */
-    @Column(columnDefinition = "VARCHAR(32) COMMENT '联系邮件'")
-    private String email;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(64) NOT NULL COMMENT '认证类型'")
+    private AuthenticationTypeEnum authenticationType;
     /**
      * 认证状态
      */

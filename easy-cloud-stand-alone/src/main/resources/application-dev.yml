@@ -34,7 +34,7 @@ spring:
     #配置数据库类型
     database: mysql
     #配置是否打印sql
-    show-sql: false
+    show-sql: true
     generate-ddl: false
     #Hibernate相关配置
     hibernate:
@@ -44,14 +44,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    open-in-view: false
+    open-in-view: true
   #MySQL数据源配置
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL-USER:root}
     password: ${MYSQL-PWD:wangguiren}
-    url: jdbc:mysql://${MYSQL-HOST:easy-cloud-mysql}:${MYSQL-PORT:3306}/${MYSQL-DB:ec_upms}?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${MYSQL-HOST:easy-cloud-mysql}:${MYSQL-PORT:3306}/${MYSQL-DB:ec_stand_alone}?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true
     ### Hkari数据库连接池配置
     hikari:
       maximum-pool-size: 15
@@ -65,6 +65,12 @@ spring:
       validation-timeout: 30000
       max-lifetime: 1800000
 
+
+
   #bean会覆盖之前定义的相同名称的bean
   main:
     allow-bean-definition-overriding: true
+
+# easy-cloud-config
+easy-cloud:
+  multi-tenant: true

@@ -45,7 +45,7 @@ public class AuthenticationRecordDO extends BaseEntity {
      */
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(64) NOT NULL  DEFAULT 'WAIT' COMMENT '认证状态'")
-    private AuthenticationStatusEnum status;
+    private AuthenticationStatusEnum authenticationStatus;
     /**
      * 审核备注
      */

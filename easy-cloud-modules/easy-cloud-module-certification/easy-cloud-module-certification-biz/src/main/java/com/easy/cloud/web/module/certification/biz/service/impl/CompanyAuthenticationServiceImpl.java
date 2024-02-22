@@ -4,13 +4,16 @@ import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
+import com.easy.cloud.web.component.core.enums.HttpResultEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
+import com.easy.cloud.web.component.core.response.HttpResult;
 import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.component.core.util.SpringContextHolder;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.module.certification.api.dto.AuditDTO;
 import com.easy.cloud.web.module.certification.api.dto.AuthenticationRecordDTO;
 import com.easy.cloud.web.module.certification.api.dto.CompanyAuthenticationDTO;
+import com.easy.cloud.web.module.certification.api.dto.UserAuthenticationDTO;
 import com.easy.cloud.web.module.certification.api.enums.AuthenticationStatusEnum;
 import com.easy.cloud.web.module.certification.api.enums.AuthenticationTypeEnum;
 import com.easy.cloud.web.module.certification.api.vo.CompanyAuthenticationVO;
@@ -19,7 +22,10 @@ import com.easy.cloud.web.module.certification.biz.converter.CompanyAuthenticati
 import com.easy.cloud.web.module.certification.biz.domain.CompanyAuthenticationDO;
 import com.easy.cloud.web.module.certification.biz.repository.CompanyAuthenticationRepository;
 import com.easy.cloud.web.module.certification.biz.service.IAuthenticationRecordService;
+import com.easy.cloud.web.module.certification.biz.service.ICertificationService;
 import com.easy.cloud.web.module.certification.biz.service.ICompanyAuthenticationService;
+import com.easy.cloud.web.module.certification.biz.service.IUserAuthenticationService;
+import com.easy.cloud.web.module.certification.biz.service.certification.entity.CertificationBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,6 +52,12 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
 
     @Autowired
     private IAuthenticationRecordService authenticationRecordService;
+
+    @Autowired
+    private ICertificationService certificationService;
+
+    @Autowired
+    private IUserAuthenticationService userAuthenticationService;
 
     /**
      * 认证之前校验
@@ -76,8 +88,12 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
         CompanyAuthenticationDO companyAuthentication = CompanyAuthenticationConverter.convertTo(companyAuthenticationDTO);
         // TODO 校验逻辑
 
+        // 设置账号ID
+        companyAuthentication.setUserId(SecurityUtils.getAuthenticationUser().getId());
         // 存储
         companyAuthenticationRepository.save(companyAuthentication);
+        // 更新审核信息
+        this.updateAuthenticationStatus(companyAuthentication);
         // 转换对象
         return CompanyAuthenticationConverter.convertTo(companyAuthentication);
     }
@@ -85,13 +101,13 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
     @Override
     @Transactional(rollbackOn = Exception.class)
     public CompanyAuthenticationVO update(CompanyAuthenticationDTO companyAuthenticationDTO) {
-        // 校验
-        this.authenticationBeforeValid(companyAuthenticationDTO);
-
         // 转换成DO对象
         if (Objects.isNull(companyAuthenticationDTO.getId())) {
             throw new RuntimeException("当前更新对象ID为空");
         }
+
+        // 校验
+        this.authenticationBeforeValid(companyAuthenticationDTO);
 
         CompanyAuthenticationDO companyAuthentication = companyAuthenticationRepository.findById(companyAuthenticationDTO.getId())
                 .orElseThrow(() -> new BusinessException("当前信息不存在"));
@@ -99,8 +115,10 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
         BeanUtils.copyProperties(companyAuthenticationDTO, companyAuthentication, true);
         // TODO 业务逻辑校验
 
-        // 更新
-        companyAuthenticationRepository.save(companyAuthentication);
+        // 设置账号ID
+        companyAuthentication.setUserId(SecurityUtils.getAuthenticationUser().getId());
+        // 更新审核信息
+        this.updateAuthenticationStatus(companyAuthentication);
         // 转换对象
         return CompanyAuthenticationConverter.convertTo(companyAuthentication);
     }
@@ -120,27 +138,78 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
         CompanyAuthenticationDO companyAuthentication = companyAuthenticationRepository.findById(auditDTO.getId())
                 .orElseThrow(() -> new BusinessException("当前信息不存在"));
         // 设置审核状态
-        companyAuthentication.setStatus(auditDTO.getStatus());
+        companyAuthentication.setAuthenticationStatus(auditDTO.getStatus());
         companyAuthentication.setRemark(auditDTO.getRemark());
+        // 更新审核信息
+        this.updateAuthenticationStatus(companyAuthentication);
+        return CompanyAuthenticationConverter.convertTo(companyAuthentication);
+    }
+
+
+    /**
+     * 进行企业认证
+     *
+     * @param companyAuthentication 认证信息
+     * @return
+     */
+    private void updateAuthenticationStatus(CompanyAuthenticationDO companyAuthentication) {
+        // 尝试校验用户实名信息
+        HttpResult<Object> certificationResult = certificationService.certification(CertificationBody.builder()
+                .userName(companyAuthentication.getLegalPerson())
+                .idCard(companyAuthentication.getLegalPersonIdentityCard())
+                .tel(companyAuthentication.getTel())
+                .build());
+        // 认证成功
+        if (HttpResultEnum.SUCCESS.getCode() == Integer.valueOf(certificationResult.getCode().toString())) {
+            // 认证通过
+            companyAuthentication.setAuthenticationStatus(AuthenticationStatusEnum.SUCCESS);
+            // 标记已认证
+            companyAuthentication.setAuthenticated(true);
+            // 认证成功，则加入用户认证信息
+            userAuthenticationService.addOrUpdate(UserAuthenticationDTO.builder()
+                    .authenticationId(companyAuthentication.getId())
+                    .authenticationType(AuthenticationTypeEnum.Company)
+                    .authenticationStatus(AuthenticationStatusEnum.SUCCESS)
+                    .build());
+        } else {
+            // 认证失败
+            companyAuthentication.setAuthenticationStatus(AuthenticationStatusEnum.FAIL);
+            // 标记认证失败理由
+            companyAuthentication.setRemark(certificationResult.getMessage());
+        }
         // 添加审核记录
         authenticationRecordService.save(AuthenticationRecordDTO.builder()
                 .authenticationId(companyAuthentication.getId())
                 .type(AuthenticationTypeEnum.Company)
-                .status(auditDTO.getStatus())
-                .remark(auditDTO.getRemark())
+                .status(companyAuthentication.getAuthenticationStatus())
+                .remark(companyAuthentication.getRemark())
                 .build());
+        // 再次存储
+        companyAuthenticationRepository.save(companyAuthentication);
+
+        // 实名认证通知
+        this.companyAuthenticationNotice(companyAuthentication);
+    }
+
+    /**
+     * 企业认证通知 TODO 是否启用异步通知 @Async
+     * <p>认证成功可操作逻辑：修改当前用户真实名字、注册会员等等</p>
+     *
+     * @param companyAuthentication
+     */
+    public void companyAuthenticationNotice(CompanyAuthenticationDO companyAuthentication) {
         // 审核回调
         try {
             // 尝试获取企业审核Bean
             ICompanyAuthenticationAdapter companyAuthenticationAdapter = SpringContextHolder.getBean(ICompanyAuthenticationAdapter.class);
             if (Objects.nonNull(companyAuthenticationAdapter)) {
                 // 审核成功
-                if (AuthenticationStatusEnum.SUCCESS == auditDTO.getStatus()) {
+                if (AuthenticationStatusEnum.SUCCESS == companyAuthentication.getAuthenticationStatus()) {
                     companyAuthenticationAdapter.authenticationSuccess(SecurityUtils.getAuthenticationUser().getId());
                 }
                 // 审核失败
-                if (AuthenticationStatusEnum.FAIL == auditDTO.getStatus()) {
-                    companyAuthenticationAdapter.authenticationFail(SecurityUtils.getAuthenticationUser().getId());
+                if (AuthenticationStatusEnum.FAIL == companyAuthentication.getAuthenticationStatus()) {
+                    companyAuthenticationAdapter.authenticationFail(SecurityUtils.getAuthenticationUser().getId(), companyAuthentication.getRemark());
                 }
             } else {
                 log.info("当前未配置企业审核回调适配器");
@@ -148,8 +217,6 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
         } catch (Exception exception) {
             log.warn("企业资质审核回调异常：{}", exception.getMessage());
         }
-
-        return CompanyAuthenticationConverter.convertTo(companyAuthentication);
     }
 
     @Override

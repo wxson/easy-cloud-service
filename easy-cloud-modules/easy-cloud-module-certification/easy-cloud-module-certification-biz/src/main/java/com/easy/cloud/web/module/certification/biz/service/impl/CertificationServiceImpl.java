@@ -7,6 +7,7 @@ import com.easy.cloud.web.module.certification.api.enums.CertificationClientEnum
 import com.easy.cloud.web.module.certification.biz.service.ICertificationService;
 import com.easy.cloud.web.module.certification.biz.service.certification.CertificationProperties;
 import com.easy.cloud.web.module.certification.biz.service.certification.ICertificationClient;
+import com.easy.cloud.web.module.certification.biz.service.certification.entity.CertificationBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class CertificationServiceImpl implements ICertificationService, Applicat
     }
 
     @Override
-    public HttpResult<Object> certification(String userName, String identityCard) {
+    public HttpResult<Object> certification(CertificationBody certificationBody) {
         if (Objects.isNull(certificationProperties)) {
             log.info("当前项目未配置第三方实名认证信息，默认使用身份证格式校验。");
             return HttpResult.ok();
@@ -58,6 +59,6 @@ public class CertificationServiceImpl implements ICertificationService, Applicat
         // 获取渠道实现对象
         ICertificationClient certificationClient = Optional.ofNullable(certificationClients.get(client))
                 .orElseThrow(() -> new BusinessException(StrUtil.format("当前认证渠道不支持：%s", client)));
-        return certificationClient.certification(userName, identityCard);
+        return certificationClient.certification(certificationBody);
     }
 }

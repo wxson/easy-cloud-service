@@ -16,7 +16,8 @@ public interface IPersonalAuthenticationAdapter {
     /**
      * 认证失败
      *
-     * @param userId 认证用户
+     * @param userId     认证用户
+     * @param failReason 认证失败原因
      */
-    void authenticationFail(String userId);
+    void authenticationFail(String userId, String failReason);
 }
