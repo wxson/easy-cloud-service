@@ -105,13 +105,6 @@
     <!--      <version>${project.version}</version>-->
     <!--    </dependency>-->
 
-    <!-- 加载hutool -->
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-all</artifactId>
-      <version>5.4.4</version>
-    </dependency>
-
     <dependency>
       <groupId>com.auth0</groupId>
       <artifactId>java-jwt</artifactId>
