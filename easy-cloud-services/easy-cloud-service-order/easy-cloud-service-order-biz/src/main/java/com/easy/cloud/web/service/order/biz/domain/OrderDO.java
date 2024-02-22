@@ -13,7 +13,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.lang.Integer;
 
 /**
  * Order 持久类
@@ -76,30 +76,30 @@ public class OrderDO extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(32) DEFAULT 'APP' COMMENT '订单来源：1：APP；2：PC；3：小程序'")
     private SourceTypeEnum sourceType;
     /**
-     * 支付金额
+     * 支付金额/分
      */
-    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0.00' COMMENT '支付金额'")
-    private BigDecimal amount;
+    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0' COMMENT '支付金额/分'")
+    private Integer amount;
     /**
-     * 优惠金额
+     * 优惠金额/分
      */
-    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0.00' COMMENT '优惠金额'")
-    private BigDecimal discountsAmount;
+    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0' COMMENT '优惠金额/分'")
+    private Integer discountsAmount;
     /**
-     * 售价
+     * 售价/分
      */
-    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0.00' COMMENT '售价'")
-    private BigDecimal salesPrice;
+    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0' COMMENT '售价/分'")
+    private Integer salesPrice;
     /**
-     * 采购价
+     * 采购价/分
      */
-    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0.00' COMMENT '采购价'")
-    private BigDecimal purchasePrice;
+    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0' COMMENT '采购价/分'")
+    private Integer purchasePrice;
     /**
-     * 原价
+     * 原价/分
      */
-    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0.00' COMMENT '原价'")
-    private BigDecimal originalPrice;
+    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT '0' COMMENT '原价/分'")
+    private Integer originalPrice;
     /**
      * 售后状态
      */

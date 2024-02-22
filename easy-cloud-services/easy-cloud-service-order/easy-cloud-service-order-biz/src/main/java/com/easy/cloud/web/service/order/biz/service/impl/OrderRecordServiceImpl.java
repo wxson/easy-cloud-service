@@ -2,7 +2,6 @@ package com.easy.cloud.web.service.order.biz.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.easy.cloud.web.component.mysql.query.SpecificationWrapper;
-import com.easy.cloud.web.component.security.util.SecurityUtils;
 import com.easy.cloud.web.service.order.api.dto.OrderRecordDTO;
 import com.easy.cloud.web.service.order.api.dto.OrderRecordQueryDTO;
 import com.easy.cloud.web.service.order.api.vo.OrderRecordVO;
@@ -37,8 +36,6 @@ public class OrderRecordServiceImpl implements IOrderRecordService {
         OrderRecordDO orderRecord = OrderRecordConverter.convertTo(orderRecordDTO);
         // TODO 校验逻辑
 
-        // 设置当前订单用户名称
-        orderRecord.setOperator(SecurityUtils.getAuthenticationUser().getUsername());
         // 存储
         orderRecordRepository.save(orderRecord);
         // 转换对象

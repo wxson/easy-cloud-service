@@ -45,9 +45,4 @@ public class OrderRecordDO extends BaseEntity {
      */
     @Column(columnDefinition = "VARCHAR(255) COMMENT '订单备注'")
     private String remark;
-    /**
-     * 订单操作员
-     */
-    @Column(columnDefinition = "VARCHAR(32) COMMENT '订单操作员'")
-    private String operator;
 }

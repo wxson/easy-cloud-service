@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
+import java.lang.Integer;
 
 /**
  * Order展示数据
@@ -58,23 +58,23 @@ public class OrderVO {
     /**
      * 支付金额
      */
-    private BigDecimal amount;
+    private Integer amount;
     /**
      * 优惠金额
      */
-    private BigDecimal discountsAmount;
+    private Integer discountsAmount;
     /**
      * 售价
      */
-    private BigDecimal salesPrice;
+    private Integer salesPrice;
     /**
      * 采购价
      */
-    private BigDecimal purchasePrice;
+    private Integer purchasePrice;
     /**
      * 原价
      */
-    private BigDecimal originalPrice;
+    private Integer originalPrice;
     /**
      * 售后状态
      */

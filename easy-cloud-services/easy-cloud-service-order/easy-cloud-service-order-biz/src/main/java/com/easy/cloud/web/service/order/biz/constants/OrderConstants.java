@@ -21,4 +21,9 @@ public class OrderConstants {
      * %s:%s  orderNo:true
      */
     public static final String ORDER_NO_INCR_ID_KEY = ORDER_REDIS_PREFIX + "no:incr:{}";
+    /**
+     * 订单回调通知
+     * %s:%s  orderNo:true
+     */
+    public static final String ORDER_PAY_EXPIRED_KEY = ORDER_REDIS_PREFIX + "pay:expired:";
 }

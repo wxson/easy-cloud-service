@@ -1,9 +1,11 @@
 package com.easy.cloud.web.service.order.biz.service.impl;
 
+import com.easy.cloud.web.component.core.exception.BusinessException;
 import com.easy.cloud.web.component.pay.domain.PayRequestBody;
 import com.easy.cloud.web.component.pay.domain.PayResponseBody;
 import com.easy.cloud.web.component.pay.service.IPayClientService;
 import com.easy.cloud.web.component.pay.service.IPayFactory;
+import com.easy.cloud.web.service.order.api.enums.OrderStatusEnum;
 import com.easy.cloud.web.service.order.api.vo.OrderVO;
 import com.easy.cloud.web.service.order.biz.service.IOrderPayService;
 import com.easy.cloud.web.service.order.biz.service.IOrderService;
@@ -31,6 +33,10 @@ public class OrderPayServiceImpl implements IOrderPayService {
     public PayResponseBody pay(PayRequestBody payRequestBody) {
         // 1、根据订单编号获取订单详情
         OrderVO orderVO = orderService.detailByNo(payRequestBody.getOrderNo());
+        // 订单已失效，禁止支付
+        if (OrderStatusEnum.INVALID == orderVO.getOrderStatus()) {
+            throw new BusinessException("当前订单已失效，请重新下单");
+        }
         // 设置订单支付数据
         payRequestBody.setGoodsName(orderVO.getGoodsName());
         payRequestBody.setAmount(orderVO.getAmount());

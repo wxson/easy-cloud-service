@@ -9,6 +9,7 @@ import com.easy.cloud.web.service.order.api.dto.OrderQueryDTO;
 import com.easy.cloud.web.service.order.api.dto.OrderRecordDTO;
 import com.easy.cloud.web.service.order.api.enums.OrderStatusEnum;
 import com.easy.cloud.web.service.order.api.vo.OrderVO;
+import com.easy.cloud.web.service.order.biz.constants.OrderConstants;
 import com.easy.cloud.web.service.order.biz.converter.OrderConverter;
 import com.easy.cloud.web.service.order.biz.domain.OrderDO;
 import com.easy.cloud.web.service.order.biz.repository.OrderRepository;
@@ -19,10 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Order 业务逻辑
@@ -47,6 +50,9 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private IOrderRecordService orderRecordService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public OrderVO createOrder(OrderCreateDTO orderCreateDTO) {
@@ -67,9 +73,14 @@ public class OrderServiceImpl implements IOrderService {
         // 存储订单记录
         orderRecordService.save(OrderRecordDTO.builder()
                 .orderNo(orderDO.getNo())
+                .orderNo(orderDO.getNo())
                 .orderStatus(orderDO.getOrderStatus())
                 .remark(JSONUtil.toJsonStr(orderCreateDTO))
                 .build());
+
+        // 开启订单支付倒计时，默认30分钟自动过期
+        String orderPayExpiredKey = OrderConstants.ORDER_PAY_EXPIRED_KEY + orderDO.getNo();
+        redisTemplate.opsForValue().set(orderPayExpiredKey, "0", 30, TimeUnit.MINUTES);
 
         // 转换订单数据
         OrderVO orderVO = OrderConverter.convertTo(orderDO);
