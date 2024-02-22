@@ -30,7 +30,7 @@ public class OrderCreateDTO {
     /**
      * 订单来源
      */
-    private SourceTypeEnum SourceType;
+    private SourceTypeEnum sourceType;
     /**
      * 商品唯一编码
      */
