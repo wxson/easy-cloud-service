@@ -33,8 +33,6 @@ public class UserAuthenticationServiceImpl implements IUserAuthenticationService
         UserAuthenticationDO newUserAuthenticationDO = UserAuthenticationConverter.convertTo(userAuthenticationDTO);
         // 获取登录用户ID
         String userId = SecurityUtils.getAuthenticationUser().getId();
-        // 设置认证账号
-        newUserAuthenticationDO.setUserId(userId);
         // 查询当前是否存在认证信息
         Optional<UserAuthenticationDO> userAuthenticationOptional = userAuthenticationRepository.findById(userId);
         // 不存在认证信息，则新增认证信息

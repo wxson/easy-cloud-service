@@ -1,5 +1,6 @@
 package com.easy.cloud.web.module.certification.biz.service.impl;
 
+import cn.hutool.core.util.CreditCodeUtil;
 import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
@@ -76,6 +77,12 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
                 && !IdcardUtil.isValidCard18(companyAuthenticationDTO.getLegalPersonIdentityCard())) {
             throw new BusinessException("当前身份证格式不正确");
         }
+
+        // 校验统一社会信用代码格式
+        if (StrUtil.isNotBlank(companyAuthenticationDTO.getUsci())
+                && !CreditCodeUtil.isCreditCode(companyAuthenticationDTO.getUsci())) {
+            throw new BusinessException("当前社会信用代码格式不正确");
+        }
     }
 
     @Override
@@ -115,6 +122,9 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
         BeanUtils.copyProperties(companyAuthenticationDTO, companyAuthentication, true);
         // TODO 业务逻辑校验
 
+        // 认证信息一旦更新，则重置当前认证信息为待审核、未认证
+        companyAuthentication.setAuthenticationStatus(AuthenticationStatusEnum.WAIT);
+        companyAuthentication.setAuthenticated(false);
         // 设置账号ID
         companyAuthentication.setUserId(SecurityUtils.getAuthenticationUser().getId());
         // 更新审核信息
@@ -124,6 +134,7 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public CompanyAuthenticationVO updateAuthenticationStatus(AuditDTO auditDTO) {
         // ID不能为空
         if (Objects.isNull(auditDTO.getId())) {
@@ -135,13 +146,23 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
             throw new BusinessException("审核失败必须说明原因");
         }
 
+        // 获取企业审核认证
         CompanyAuthenticationDO companyAuthentication = companyAuthenticationRepository.findById(auditDTO.getId())
                 .orElseThrow(() -> new BusinessException("当前信息不存在"));
         // 设置审核状态
         companyAuthentication.setAuthenticationStatus(auditDTO.getStatus());
         companyAuthentication.setRemark(auditDTO.getRemark());
-        // 更新审核信息
-        this.updateAuthenticationStatus(companyAuthentication);
+        companyAuthenticationRepository.save(companyAuthentication);
+
+        // 添加企业认证信息
+        userAuthenticationService.addOrUpdate(UserAuthenticationDTO.builder()
+                // 必填
+                .userId(companyAuthentication.getUserId())
+                .authenticationId(companyAuthentication.getId())
+                .authenticationType(AuthenticationTypeEnum.Company)
+                .authenticationStatus(auditDTO.getStatus())
+                .remark(auditDTO.getRemark())
+                .build());
         return CompanyAuthenticationConverter.convertTo(companyAuthentication);
     }
 
@@ -161,22 +182,15 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
                 .build());
         // 认证成功
         if (HttpResultEnum.SUCCESS.getCode() == Integer.valueOf(certificationResult.getCode().toString())) {
-            // 认证通过
-            companyAuthentication.setAuthenticationStatus(AuthenticationStatusEnum.SUCCESS);
-            // 标记已认证
+            // 标记已认证，企业审核需人工二次审核方可完成
             companyAuthentication.setAuthenticated(true);
-            // 认证成功，则加入用户认证信息
-            userAuthenticationService.addOrUpdate(UserAuthenticationDTO.builder()
-                    .authenticationId(companyAuthentication.getId())
-                    .authenticationType(AuthenticationTypeEnum.Company)
-                    .authenticationStatus(AuthenticationStatusEnum.SUCCESS)
-                    .build());
         } else {
             // 认证失败
             companyAuthentication.setAuthenticationStatus(AuthenticationStatusEnum.FAIL);
             // 标记认证失败理由
             companyAuthentication.setRemark(certificationResult.getMessage());
         }
+        
         // 添加审核记录
         authenticationRecordService.save(AuthenticationRecordDTO.builder()
                 .authenticationId(companyAuthentication.getId())

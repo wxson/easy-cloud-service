@@ -39,6 +39,11 @@ public class CompanyAuthenticationDO extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(125) NOT NULL COMMENT '公司名称'")
     private String companyName;
     /**
+     * 统一社会信用代码：Unified Social Credit Identifier
+     */
+    @Column(columnDefinition = "VARCHAR(18) NOT NULL COMMENT '统一社会信用代码'")
+    private String usci;
+    /**
      * 公司地址
      */
     @Column(columnDefinition = "VARCHAR(255) NOT NULL COMMENT '公司地址'")

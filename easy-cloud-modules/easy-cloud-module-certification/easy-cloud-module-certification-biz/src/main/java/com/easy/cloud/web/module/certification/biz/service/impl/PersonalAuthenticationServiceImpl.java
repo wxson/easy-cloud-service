@@ -172,6 +172,8 @@ public class PersonalAuthenticationServiceImpl implements IPersonalAuthenticatio
             personalAuthentication.setAuthenticated(true);
             // 认证成功，则加入用户认证信息
             userAuthenticationService.addOrUpdate(UserAuthenticationDTO.builder()
+                    // 必填
+                    .userId(SecurityUtils.getAuthenticationUser().getId())
                     .authenticationId(personalAuthentication.getId())
                     .authenticationType(AuthenticationTypeEnum.Personal)
                     .authenticationStatus(AuthenticationStatusEnum.SUCCESS)

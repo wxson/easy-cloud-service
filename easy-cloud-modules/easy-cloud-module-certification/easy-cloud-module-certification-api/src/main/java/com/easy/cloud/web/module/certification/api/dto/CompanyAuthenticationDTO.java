@@ -35,6 +35,11 @@ public class CompanyAuthenticationDTO {
     @NotBlank(message = "企业名称不能为空")
     private String companyName;
     /**
+     * 统一社会信用代码：Unified Social Credit Identifier
+     */
+    @NotBlank(message = "企业统一社会信用代码不能为空")
+    private String usci;
+    /**
      * 公司地址
      */
     @NotBlank(message = "企业地址不能为空")

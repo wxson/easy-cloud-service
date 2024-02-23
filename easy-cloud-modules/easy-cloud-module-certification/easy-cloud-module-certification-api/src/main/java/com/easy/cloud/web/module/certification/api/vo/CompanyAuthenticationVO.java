@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * CompanyAuthentication展示数据
  *
@@ -32,6 +34,10 @@ public class CompanyAuthenticationVO {
      * 公司名称
      */
     private String companyName;
+    /**
+     * 统一社会信用代码：Unified Social Credit Identifier
+     */
+    private String usci;
     /**
      * 公司地址
      */

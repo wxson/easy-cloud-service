@@ -12,6 +12,12 @@
     <name>easy-cloud-module-certification</name>
     <description>Demo project for Spring Boot</description>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>easy-cloud-module-certification-api</module>
+        <module>easy-cloud-module-certification-biz</module>
+    </modules>
+
     <dependencies>
 
     </dependencies>
