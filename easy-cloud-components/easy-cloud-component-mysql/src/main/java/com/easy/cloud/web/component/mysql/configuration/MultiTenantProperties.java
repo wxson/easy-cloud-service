@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 @RefreshScope
-@ConditionalOnProperty(value = "easy-cloud.multi-tenant")
+@ConditionalOnProperty(value = "easy-cloud.multi-tenant.enabled")
 public class MultiTenantProperties {
     /**
      * 是否启用：默认启用

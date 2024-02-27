@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Slf4j
 @Configuration
-@ConditionalOnProperty(value = "easy-cloud.multi-tenant")
+@ConditionalOnProperty(value = "easy-cloud.multi-tenant.enabled")
 public class MultiTenantConfiguration {
 
     /**
