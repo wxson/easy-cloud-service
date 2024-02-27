@@ -71,7 +71,7 @@ public class JpaStatementInspector implements StatementInspector {
      *
      * @param statementList 执行SQL
      */
-    private String logicEnhancements(List<SQLStatement> statementList) {
+    private void logicEnhancements(List<SQLStatement> statementList) {
         // 重构SQL包装类
         SqlConditionWrapper sqlConditionWrapper = new SqlConditionWrapper(new SqlConditionWrapper.ITableFieldConditionDecision() {
             @Override
@@ -86,6 +86,5 @@ public class JpaStatementInspector implements StatementInspector {
         });
 
         sqlConditionWrapper.addStatementCondition(statementList.get(0), MysqlConstant.LOGIC_DELETED, DeletedEnum.UN_DELETED.name());
-        return SQLUtils.toSQLString(statementList, JdbcConstants.MYSQL);
     }
 }
