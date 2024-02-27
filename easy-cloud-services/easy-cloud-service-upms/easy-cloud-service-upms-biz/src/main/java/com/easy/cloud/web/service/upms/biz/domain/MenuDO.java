@@ -1,5 +1,7 @@
 package com.easy.cloud.web.service.upms.biz.domain;
 
+import com.easy.cloud.web.component.mysql.annotation.EnableLogic;
+import com.easy.cloud.web.component.mysql.annotation.EnableTenant;
 import com.easy.cloud.web.component.mysql.domain.BaseEntity;
 import com.easy.cloud.web.service.upms.api.enums.MenuTypeEnum;
 import javax.persistence.Column;
@@ -29,6 +31,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
+@EnableLogic
 @Table(name = "db_menu")
 public class MenuDO extends BaseEntity {
 

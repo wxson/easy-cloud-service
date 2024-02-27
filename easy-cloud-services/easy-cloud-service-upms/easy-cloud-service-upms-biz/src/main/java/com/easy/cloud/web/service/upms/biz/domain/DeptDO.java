@@ -1,5 +1,7 @@
 package com.easy.cloud.web.service.upms.biz.domain;
 
+import com.easy.cloud.web.component.mysql.annotation.EnableLogic;
+import com.easy.cloud.web.component.mysql.annotation.EnableTenant;
 import com.easy.cloud.web.component.mysql.domain.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +28,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
+@EnableTenant
+@EnableLogic
 @Table(name = "db_dept")
 public class DeptDO extends BaseEntity {
 

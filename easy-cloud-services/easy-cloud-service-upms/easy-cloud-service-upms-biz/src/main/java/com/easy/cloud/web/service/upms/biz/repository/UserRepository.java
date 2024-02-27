@@ -1,7 +1,5 @@
 package com.easy.cloud.web.service.upms.biz.repository;
 
-import com.easy.cloud.web.component.mysql.annotation.EnableLogic;
-import com.easy.cloud.web.component.mysql.annotation.EnableTenant;
 import com.easy.cloud.web.component.mysql.repository.JpaLogicRepository;
 import com.easy.cloud.web.service.upms.biz.domain.UserDO;
 import org.springframework.stereotype.Repository;
@@ -14,8 +12,6 @@ import java.util.Optional;
  * @author Fast Java
  * @date 2023-08-03 14:25:41
  */
-@EnableLogic
-@EnableTenant
 @Repository
 public interface UserRepository extends JpaLogicRepository<UserDO, String> {
 

@@ -1,7 +1,5 @@
 package com.easy.cloud.web.service.upms.biz.repository;
 
-import com.easy.cloud.web.component.mysql.annotation.EnableLogic;
-import com.easy.cloud.web.component.mysql.annotation.EnableTenant;
 import com.easy.cloud.web.component.mysql.repository.JpaLogicRepository;
 import com.easy.cloud.web.service.upms.biz.domain.DeptDO;
 import org.springframework.stereotype.Repository;
@@ -12,16 +10,14 @@ import org.springframework.stereotype.Repository;
  * @author Fast Java
  * @date 2023-08-03 15:00:02
  */
-@EnableLogic
-@EnableTenant
 @Repository
 public interface DeptRepository extends JpaLogicRepository<DeptDO, String> {
 
-  /**
-   * 统计当前部门下是否存在子部门
-   *
-   * @param parentId 父级部门
-   * @return
-   */
-  long countByParentId(String parentId);
+    /**
+     * 统计当前部门下是否存在子部门
+     *
+     * @param parentId 父级部门
+     * @return
+     */
+    long countByParentId(String parentId);
 }

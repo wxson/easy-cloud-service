@@ -1,6 +1,8 @@
 package com.easy.cloud.web.service.upms.biz.domain;
 
 import com.easy.cloud.web.component.core.constants.DateTimeConstants;
+import com.easy.cloud.web.component.mysql.annotation.EnableLogic;
+import com.easy.cloud.web.component.mysql.annotation.EnableTenant;
 import com.easy.cloud.web.component.mysql.domain.BaseEntity;
 import com.easy.cloud.web.service.upms.api.enums.TenantTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,6 +35,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
+@EnableTenant
+@EnableLogic
 @Table(name = "db_tenant")
 public class TenantDO extends BaseEntity {
 
