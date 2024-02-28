@@ -73,6 +73,26 @@ public class TenantBroker {
     /**
      * 以某个租户的身份运行
      *
+     * @param func
+     */
+    public void runAsNoTenant(RunAs<String> func) {
+        final String pre = TenantContextHolder.getTenantId();
+        final String tenant = "";
+        try {
+            log.trace("TenantBroker 切换租户{} -> {}", pre, tenant);
+            TenantContextHolder.setTenantId(tenant);
+            func.run(tenant);
+        } catch (Exception e) {
+            throw new TenantBrokerExceptionWrapper(e.getMessage(), e);
+        } finally {
+            log.trace("TenantBroker 还原租户{} <- {}", pre, tenant);
+            TenantContextHolder.setTenantId(pre);
+        }
+    }
+
+    /**
+     * 以某个租户的身份运行
+     *
      * @param tenant 租户ID
      * @param func
      */
@@ -82,6 +102,28 @@ public class TenantBroker {
             log.trace("TenantBroker 切换租户{} -> {}", pre, tenant);
             TenantContextHolder.setTenantId(tenant);
             func.run(tenant);
+        } catch (Exception e) {
+            throw new TenantBrokerExceptionWrapper(e.getMessage(), e);
+        } finally {
+            log.trace("TenantBroker 还原租户{} <- {}", pre, tenant);
+            TenantContextHolder.setTenantId(pre);
+        }
+    }
+
+    /**
+     * 以某个租户的身份运行
+     *
+     * @param func
+     * @param <T>  返回数据类型
+     * @return
+     */
+    public <T> T applyAsNoTenant(ApplyAs<String, T> func) {
+        final String pre = TenantContextHolder.getTenantId();
+        final String tenant = "";
+        try {
+            log.trace("TenantBroker 切换租户{} -> {}", pre, tenant);
+            TenantContextHolder.setTenantId(tenant);
+            return func.apply(tenant);
         } catch (Exception e) {
             throw new TenantBrokerExceptionWrapper(e.getMessage(), e);
         } finally {
