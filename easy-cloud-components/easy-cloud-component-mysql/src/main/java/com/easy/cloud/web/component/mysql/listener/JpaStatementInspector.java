@@ -57,8 +57,8 @@ public class JpaStatementInspector implements StatementInspector {
             }
 
             @Override
-            public boolean isAllowNullValue() {
-                return false;
+            public boolean isNull() {
+                return StringUtils.isBlank(TenantContextHolder.getTenantId());
             }
         });
 
@@ -80,7 +80,7 @@ public class JpaStatementInspector implements StatementInspector {
             }
 
             @Override
-            public boolean isAllowNullValue() {
+            public boolean isNull() {
                 return false;
             }
         });

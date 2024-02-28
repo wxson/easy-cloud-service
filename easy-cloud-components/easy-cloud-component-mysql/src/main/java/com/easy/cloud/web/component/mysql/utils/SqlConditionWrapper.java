@@ -239,7 +239,7 @@ public class SqlConditionWrapper {
             return originCondition;
         }
         //如果条件字段允许为空
-        if (fieldValue == null && !conditionDecision.isAllowNullValue()) {
+        if (fieldValue == null && conditionDecision.isNull()) {
             return originCondition;
         }
         String filedName = StringUtils.isBlank(tableAlias) ? fieldName : tableAlias + "." + fieldName;
@@ -266,7 +266,7 @@ public class SqlConditionWrapper {
     public interface ITableFieldConditionDecision {
         boolean adjudge(String tableName, String fieldName);
 
-        boolean isAllowNullValue();
+        boolean isNull();
     }
 
     public static void main(String[] args) {
@@ -295,7 +295,7 @@ public class SqlConditionWrapper {
             }
 
             @Override
-            public boolean isAllowNullValue() {
+            public boolean isNull() {
                 return true;
             }
         });
