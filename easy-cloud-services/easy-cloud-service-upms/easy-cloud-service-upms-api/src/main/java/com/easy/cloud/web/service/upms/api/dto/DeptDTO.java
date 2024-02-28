@@ -1,8 +1,8 @@
 package com.easy.cloud.web.service.upms.api.dto;
 
-import com.easy.cloud.web.component.core.enums.DeletedEnum;
-import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.service.IConverter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,50 +20,47 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(value = "DeptDTO", description = "部门入参")
 public class DeptDTO implements IConverter {
 
-  /**
-   * 文档ID
-   */
-  private String id;
-  /**
-   * 租户ID
-   */
-  private String tenantId;
-  /**
-   * 部门名称
-   */
-  private String name;
-  /**
-   * 上级部门
-   */
-  private String parentId;
-  /**
-   * 负责人
-   */
-  private String leader;
-  /**
-   * 联系电话
-   */
-  private String tel;
-  /**
-   * 邮箱
-   */
-  private String email;
-  /**
-   * 描述
-   */
-  private String remark;
-  /**
-   * 排序
-   */
-  private Integer sort;
-  /**
-   * 状态 0 启用 1 禁用
-   */
-  private StatusEnum status;
-  /**
-   * 是否删除 0 未删除 1 已删除
-   */
-  private DeletedEnum deleted;
+    /**
+     * 文档ID
+     */
+    @ApiModelProperty(value = "文档ID", required = false)
+    private String id;
+    /**
+     * 部门名称
+     */
+    @ApiModelProperty(value = "部门名称", required = false)
+    private String name;
+    /**
+     * 上级部门
+     */
+    @ApiModelProperty(value = "上级部门", required = false)
+    private String parentId;
+    /**
+     * 负责人
+     */
+    @ApiModelProperty(value = "负责人", required = false)
+    private String leader;
+    /**
+     * 联系电话
+     */
+    @ApiModelProperty(value = "", required = false)
+    private String tel;
+    /**
+     * 邮箱
+     */
+    @ApiModelProperty(value = "邮箱", required = false)
+    private String email;
+    /**
+     * 描述
+     */
+    @ApiModelProperty(value = "描述", required = false)
+    private String remark;
+    /**
+     * 排序
+     */
+    @ApiModelProperty(value = "排序", required = false)
+    private Integer sort;
 }

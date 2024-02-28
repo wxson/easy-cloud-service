@@ -2,12 +2,15 @@ package com.easy.cloud.web.service.upms.api.vo;
 
 import com.easy.cloud.web.component.core.enums.DeletedEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
-import java.util.List;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.Set;
 
 /**
  * Role展示数据
@@ -20,60 +23,47 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(value = "RoleVO", description = "角色回参")
 public class RoleVO {
 
-  /**
-   * 文档ID，必须保证角色ID的全局唯一性
-   */
-  private String id;
-  /**
-   * 租户ID
-   */
-  private String tenantId;
-  /**
-   * 角色编码
-   */
-  private String code;
-  /**
-   * 角色名称
-   */
-  private String name;
-  /**
-   * 描述
-   */
-  private String remark;
-  /**
-   * 排序
-   */
-  private Integer sort;
-
-  /**
-   * 状态 0 启用 1 禁用
-   */
-  private StatusEnum status;
-  /**
-   * 是否删除 0 未删除 1 已删除
-   */
-  private DeletedEnum deleted;
-  /**
-   * 创建用户
-   */
-  private String createBy;
-  /**
-   * 创建时间
-   */
-  private String createAt;
-  /**
-   * 更新用户
-   */
-  private String updateBy;
-  /**
-   * 更新时间
-   */
-  private String updateAt;
-
-  /**
-   * 菜单集合
-   */
-  private List<String> menuIds;
+    /**
+     * 文档ID，必须保证角色ID的全局唯一性
+     */
+    @ApiModelProperty(value = "文档ID", required = false)
+    private String id;
+    /**
+     * 角色编码
+     */
+    @ApiModelProperty(value = "角色编码", required = true)
+    private String code;
+    /**
+     * 角色名称
+     */
+    @ApiModelProperty(value = "角色名称", required = true)
+    private String name;
+    /**
+     * 描述
+     */
+    @ApiModelProperty(value = "描述", required = false)
+    private String remark;
+    /**
+     * 排序
+     */
+    @ApiModelProperty(value = "排序", required = false)
+    private Integer sort;
+    /**
+     * 状态 0 启用 1 禁用
+     */
+    @ApiModelProperty(value = "状态 0 启用 1 禁用", required = false)
+    private StatusEnum status;
+    /**
+     * 是否删除 0 未删除 1 已删除
+     */
+    @ApiModelProperty(value = "是否删除 0 未删除 1 已删除", required = false)
+    private DeletedEnum deleted;
+    /**
+     * 权限列表
+     */
+    @ApiModelProperty(value = "权限列表", required = false)
+    private Set<String> menuIds;
 }
