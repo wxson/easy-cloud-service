@@ -39,8 +39,6 @@ public class RoleConverter {
   public static RoleVO convertTo(RoleDO role) {
     RoleVO roleVO = RoleVO.builder().build();
     BeanUtils.copyProperties(role, roleVO, true);
-    roleVO.setCreateAt(DateUtil.format(role.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
-    roleVO.setUpdateAt(DateUtil.format(role.getUpdateAt(), DateTimeConstants.DEFAULT_FORMAT));
     return roleVO;
   }
 

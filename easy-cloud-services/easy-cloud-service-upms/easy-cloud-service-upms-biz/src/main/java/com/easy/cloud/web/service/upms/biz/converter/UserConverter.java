@@ -39,8 +39,6 @@ public class UserConverter {
   public static UserVO convertTo(UserDO user) {
     UserVO userVO = UserVO.builder().build();
     BeanUtils.copyProperties(user, userVO, true);
-    userVO.setCreateAt(DateUtil.format(user.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
-    userVO.setUpdateAt(DateUtil.format(user.getUpdateAt(), DateTimeConstants.DEFAULT_FORMAT));
     return userVO;
   }
 

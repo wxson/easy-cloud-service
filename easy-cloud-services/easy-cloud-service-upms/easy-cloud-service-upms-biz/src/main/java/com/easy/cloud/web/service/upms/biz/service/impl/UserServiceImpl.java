@@ -623,7 +623,7 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
         // 设置姓名
         userDO.setUserName(userBindDTO.getUserName());
         // 设置身份证
-        userDO.setIdentity(userBindDTO.getIdentity());
+        userDO.setIdCard(userBindDTO.getIdentity());
         userRepository.save(userDO);
     }
 
