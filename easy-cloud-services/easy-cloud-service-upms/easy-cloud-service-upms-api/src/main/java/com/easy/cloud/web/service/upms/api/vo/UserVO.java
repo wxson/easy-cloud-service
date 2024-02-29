@@ -33,6 +33,11 @@ public class UserVO {
     @ApiModelProperty(value = "文档ID", required = false)
     private String id;
     /**
+     * 租户ID,超管、管理、租户三个角色的租户ID都是自己本身 一个企业、一个单位或一所学校只能有一个租户
+     */
+    @ApiModelProperty(value = "租户ID", required = false)
+    private String tenantId;
+    /**
      * 微信union Id
      */
     @ApiModelProperty(value = "微信union_id", required = false)
