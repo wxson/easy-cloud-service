@@ -1,6 +1,8 @@
 package com.easy.cloud.web.configuration;
 
+import feign.Feign;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration
+@ConditionalOnClass(Feign.class)
 @ComponentScan(basePackages = {"com.easy.cloud.web"})
 public class StandAloneAutoConfiguration {
 

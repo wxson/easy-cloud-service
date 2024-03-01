@@ -90,21 +90,21 @@
     </dependency>
 
     <!-- 认证服务 -->
-    <dependency>
-      <groupId>com.easy.cloud.web</groupId>
-      <artifactId>easy-cloud-oauth</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.alibaba.cloud</groupId>
-          <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.alibaba.cloud</groupId>
-          <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.easy.cloud.web</groupId>-->
+<!--      <artifactId>easy-cloud-oauth</artifactId>-->
+<!--      <version>0.0.1-SNAPSHOT</version>-->
+<!--      <exclusions>-->
+<!--        <exclusion>-->
+<!--          <groupId>com.alibaba.cloud</groupId>-->
+<!--          <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
+<!--        </exclusion>-->
+<!--        <exclusion>-->
+<!--          <groupId>com.alibaba.cloud</groupId>-->
+<!--          <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
+<!--        </exclusion>-->
+<!--      </exclusions>-->
+<!--    </dependency>-->
 
     <!-- 基础服务 -->
     <dependency>
@@ -138,6 +138,13 @@
           <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!-- 内容管理服务 -->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-module-log-biz</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
