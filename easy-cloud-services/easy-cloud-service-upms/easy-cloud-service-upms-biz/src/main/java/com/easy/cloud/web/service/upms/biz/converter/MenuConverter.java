@@ -39,8 +39,6 @@ public class MenuConverter {
   public static MenuVO convertTo(MenuDO menu) {
     MenuVO menuVO = MenuVO.builder().build();
     BeanUtils.copyProperties(menu, menuVO, true);
-    menuVO.setCreateAt(DateUtil.format(menu.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
-    menuVO.setUpdateAt(DateUtil.format(menu.getUpdateAt(), DateTimeConstants.DEFAULT_FORMAT));
     return menuVO;
   }
 

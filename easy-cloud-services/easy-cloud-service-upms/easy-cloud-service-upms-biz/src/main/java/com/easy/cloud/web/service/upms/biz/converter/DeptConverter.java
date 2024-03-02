@@ -39,8 +39,6 @@ public class DeptConverter {
   public static DeptVO convertTo(DeptDO dept) {
     DeptVO deptVO = DeptVO.builder().build();
     BeanUtils.copyProperties(dept, deptVO, true);
-    deptVO.setCreateAt(DateUtil.format(dept.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
-    deptVO.setUpdateAt(DateUtil.format(dept.getUpdateAt(), DateTimeConstants.DEFAULT_FORMAT));
     return deptVO;
   }
 

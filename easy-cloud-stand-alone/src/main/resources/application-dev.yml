@@ -74,3 +74,4 @@ spring:
 # easy-cloud-config
 easy-cloud:
   multi-tenant: true
+  stand-alone: true

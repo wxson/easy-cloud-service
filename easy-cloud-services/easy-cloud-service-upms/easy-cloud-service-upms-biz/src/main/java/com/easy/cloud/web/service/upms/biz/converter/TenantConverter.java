@@ -39,8 +39,6 @@ public class TenantConverter {
   public static TenantVO convertTo(TenantDO tenant) {
     TenantVO tenantVO = TenantVO.builder().build();
     BeanUtils.copyProperties(tenant, tenantVO, true);
-    tenantVO.setCreateAt(DateUtil.format(tenant.getCreateAt(), DateTimeConstants.DEFAULT_FORMAT));
-    tenantVO.setUpdateAt(DateUtil.format(tenant.getUpdateAt(), DateTimeConstants.DEFAULT_FORMAT));
     return tenantVO;
   }
 
