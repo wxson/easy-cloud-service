@@ -50,6 +50,6 @@ public class SecurityWebResponseExceptionTranslator implements WebResponseExcept
             headers.set(HttpHeaders.WWW_AUTHENTICATE, String.format("%s %s", OAuth2AccessToken.BEARER_TYPE, exception.getSummary()));
         }
 
-        return new ResponseEntity<>(exception, headers, HttpStatus.valueOf(status));
+        return new ResponseEntity<>(exception, headers, HttpStatus.OK);
     }
 }
