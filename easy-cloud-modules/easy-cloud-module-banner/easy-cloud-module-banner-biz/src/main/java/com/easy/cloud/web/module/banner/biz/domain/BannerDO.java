@@ -58,6 +58,11 @@ public class BannerDO extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(255) COMMENT '链接'")
     private String link;
     /**
+     * 广告编号
+     */
+    @Column(columnDefinition = "INT NOT NULL DEFAULT '0' COMMENT '广告编号'")
+    private Integer slotNumber;
+    /**
      * 排序
      */
     @Column(columnDefinition = "INT NOT NULL DEFAULT '0' COMMENT '排序'")

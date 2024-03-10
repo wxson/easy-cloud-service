@@ -58,6 +58,11 @@ public class BannerDTO {
     @ApiModelProperty(value = "链接", required = false)
     private String link;
     /**
+     * 广告编号
+     */
+    @ApiModelProperty(value = "广告编号", required = false)
+    private Integer slotNumber;
+    /**
      * 排序
      */
     @ApiModelProperty(value = "排序", required = false)
