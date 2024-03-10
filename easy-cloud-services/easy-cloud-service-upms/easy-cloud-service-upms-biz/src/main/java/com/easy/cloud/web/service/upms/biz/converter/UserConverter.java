@@ -39,6 +39,7 @@ public class UserConverter {
   public static UserVO convertTo(UserDO user) {
     UserVO userVO = UserVO.builder().build();
     BeanUtils.copyProperties(user, userVO, true);
+    userVO.setPassword("N/A");
     return userVO;
   }
 
