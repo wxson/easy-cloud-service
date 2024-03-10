@@ -1,13 +1,14 @@
 package com.easy.cloud.web.component.security.configuration;
 
 import com.easy.cloud.web.component.core.constants.SwaggerApiConstants;
-import com.easy.cloud.web.component.security.exception.SecurityResourceAuthExceptionEntryPoint;
+import com.easy.cloud.web.component.security.exception.SecurityWebResponseExceptionTranslator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
@@ -53,8 +54,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         // 配置JwtTokenStore
         this.setJwtTokenStore(resources);
+        // OAuth2AuthenticationEntryPoint
+        OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
+        oAuth2AuthenticationEntryPoint.setExceptionTranslator(new SecurityWebResponseExceptionTranslator());
         // 配置资源服务器认证异常返回结果
-        resources.authenticationEntryPoint(new SecurityResourceAuthExceptionEntryPoint());
+        resources.authenticationEntryPoint(oAuth2AuthenticationEntryPoint);
     }
 
     /**
