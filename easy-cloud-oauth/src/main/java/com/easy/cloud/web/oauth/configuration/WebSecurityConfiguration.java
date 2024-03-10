@@ -1,6 +1,7 @@
 package com.easy.cloud.web.oauth.configuration;
 
 import com.easy.cloud.web.component.security.configuration.MobileSecurityConfigurer;
+import com.easy.cloud.web.component.security.configuration.SimpleAuthenticationProvider;
 import com.easy.cloud.web.component.security.service.ISecurityUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +48,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         // 指派账号详情对象以及密码加密对象，方便Security自动校验
-        authenticationManagerBuilder.userDetailsService(securityUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
+        authenticationManagerBuilder
+                .authenticationProvider(new SimpleAuthenticationProvider(securityUserDetailsService, bCryptPasswordEncoder))
+                .userDetailsService(securityUserDetailsService)
+                .passwordEncoder(bCryptPasswordEncoder);
     }
 
     @Bean
