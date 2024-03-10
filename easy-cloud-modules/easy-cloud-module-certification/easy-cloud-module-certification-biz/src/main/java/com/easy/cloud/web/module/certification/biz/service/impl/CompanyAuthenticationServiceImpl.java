@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * CompanyAuthentication 业务逻辑
@@ -90,6 +91,19 @@ public class CompanyAuthenticationServiceImpl implements ICompanyAuthenticationS
     public CompanyAuthenticationVO submit(CompanyAuthenticationDTO companyAuthenticationDTO) {
         // 校验
         this.authenticationBeforeValid(companyAuthenticationDTO);
+
+        // 校验是否重复认证
+        Optional<CompanyAuthenticationDO> companyAuthenticationOptional = companyAuthenticationRepository.findByUsci(companyAuthenticationDTO.getUsci());
+        // 如果存在，则禁止二次提交，可直接修改上一次提交的类容
+        if (companyAuthenticationOptional.isPresent()) {
+            CompanyAuthenticationDO companyAuthenticationDO = companyAuthenticationOptional.get();
+            // 认证失败，不得再次提交认证，认证表中必须唯一
+            if (AuthenticationStatusEnum.FAIL == companyAuthenticationDO.getAuthenticationStatus()) {
+                throw new BusinessException("当前企业认证资料已存在，请前往认证详情进行修改");
+            }
+
+            throw new BusinessException("当前企业已认证，请勿重复认证");
+        }
 
         // 转换成DO对象
         CompanyAuthenticationDO companyAuthentication = CompanyAuthenticationConverter.convertTo(companyAuthenticationDTO);
