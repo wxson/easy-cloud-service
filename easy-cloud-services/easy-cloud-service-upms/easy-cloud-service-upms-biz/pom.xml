@@ -57,6 +57,13 @@
       <version>${project.parent.version}</version>
     </dependency>
 
+    <!--Local Sms-->
+    <dependency>
+      <groupId>com.easy.cloud.web</groupId>
+      <artifactId>easy-cloud-module-protocol-biz</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
     <!--Local Route-->
     <dependency>
       <groupId>com.easy.cloud.web</groupId>
