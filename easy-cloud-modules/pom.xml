@@ -20,6 +20,7 @@
         <module>easy-cloud-module-log</module>
         <module>easy-cloud-module-netty</module>
         <module>easy-cloud-module-online</module>
+        <module>easy-cloud-module-protocol</module>
         <module>easy-cloud-module-route</module>
         <module>easy-cloud-module-sms</module>
     </modules>
