@@ -34,6 +34,11 @@ public class BannerQueryDTO {
     @ApiModelProperty(value = "轮播图终端", required = false)
     private BannerDeviceEnum device;
     /**
+     * 广告位编号
+     */
+    @ApiModelProperty(value = "广告位编号", required = false)
+    private Integer slotNumber;
+    /**
      * 标题
      */
     @ApiModelProperty(value = "标题", required = false)

@@ -19,8 +19,11 @@ public enum HttpResultEnum implements IBaseEnum {
      */
     SUCCESS(0, "请求成功"),
     FAIL(1, "请求失败"),
-    REPEAT_SUBMIT(2, "系统正在处理、请勿重复提交!"),
-    REQUEST_LIMIT(3, "你的操作过于频繁,请休息一下吧!"),
+    USER_PASSWORD(2001, "用户名或密码错误！"),
+    TOKEN_EXPIRED(2002, "登录凭证已过期！"),
+    REPEAT_SUBMIT(2003, "系统正在处理、请勿重复提交!"),
+    REQUEST_LIMIT(2004, "你的操作过于频繁,请休息一下吧!"),
+    MULTI_ROLE(2005, "请选择角色登录"),
     ;
     private final int code;
     private final String desc;

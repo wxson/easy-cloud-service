@@ -12,20 +12,20 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 @JsonSerialize(using = SecurityOauthExceptionSerializer.class)
 public class SecurityOauthException extends OAuth2Exception {
     private int code;
-    private String describe;
+    private String msg;
     private Object data;
 
-    public SecurityOauthException(String describe, Throwable t) {
-        super(describe, t);
+    public SecurityOauthException(String msg, Throwable t) {
+        super(msg, t);
     }
 
-    public SecurityOauthException(int code, String describe) {
-        super(describe);
+    public SecurityOauthException(int code, String msg) {
+        super(msg);
         this.code = code;
     }
 
-    public SecurityOauthException(int code, String describe, Object data) {
-        super(describe);
+    public SecurityOauthException(int code, String msg, Object data) {
+        super(msg);
         this.code = code;
         this.data = data;
     }

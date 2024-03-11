@@ -6,8 +6,10 @@ import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.easy.cloud.web.component.core.constants.GlobalCommonConstants;
+import com.easy.cloud.web.component.core.enums.HttpResultEnum;
 import com.easy.cloud.web.component.core.enums.StatusEnum;
 import com.easy.cloud.web.component.core.exception.BusinessException;
+import com.easy.cloud.web.component.core.tenant.TenantBroker;
 import com.easy.cloud.web.component.core.util.BeanUtils;
 import com.easy.cloud.web.component.security.domain.AuthenticationUser;
 import com.easy.cloud.web.component.security.util.SecurityUtils;
@@ -434,9 +436,17 @@ public class UserServiceImpl implements IUserService, ApplicationContextAware {
         if (StrUtil.isBlank(userName)) {
             throw new BusinessException("登录名不能为空");
         }
-        // 用户名
-        UserDO userDO = loginUserRepository.findByUserName(userName)
-                .orElseThrow(() -> new BusinessException("当前用户不存在"));
+        // 此时查询用户信息不需要租户
+        Optional<UserDO> userOptional = TenantBroker.applyAsNoTenant(tenantId -> loginUserRepository.findByUserName(userName));
+        if (!userOptional.isPresent()) {
+            throw new BusinessException(HttpResultEnum.USER_PASSWORD.getCode(), HttpResultEnum.USER_PASSWORD.getDesc());
+        }
+
+        UserDO userDO = userOptional.get();
+        // 获取详情，走缓存
+        UserVO userVO = this.findLoginUserInfo(userDO);
+        // 认证需密码进行认证
+        userVO.setPassword(userDO.getPassword());
         // 获取详情，走缓存
         return this.findLoginUserInfo(userDO);
     }

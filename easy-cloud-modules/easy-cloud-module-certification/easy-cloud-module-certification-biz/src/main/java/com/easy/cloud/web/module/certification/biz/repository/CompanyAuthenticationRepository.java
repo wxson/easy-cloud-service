@@ -4,6 +4,8 @@ import com.easy.cloud.web.module.certification.biz.domain.CompanyAuthenticationD
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * CompanyAuthentication持久化
  *
@@ -13,4 +15,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompanyAuthenticationRepository extends JpaRepository<CompanyAuthenticationDO, String> {
 
+    /**
+     * 根据统一社会信用代码获取企业认证信息
+     * @param usci 统一社会信用代码
+     * @return java.util.Optional<com.easy.cloud.web.module.certification.biz.domain.CompanyAuthenticationDO>
+     */
+    Optional<CompanyAuthenticationDO> findByUsci(String usci);
 }

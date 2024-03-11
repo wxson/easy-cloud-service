@@ -95,6 +95,8 @@ public class BannerServiceImpl implements IBannerService {
                 .like(StringUtils.isNoneBlank(bannerQuery.getTitle()), BannerDO::getTitle, bannerQuery.getTitle())
                 .eq(Objects.nonNull(bannerQuery.getType()), BannerDO::getType, bannerQuery.getType())
                 .eq(Objects.nonNull(bannerQuery.getDevice()), BannerDO::getDevice, bannerQuery.getDevice())
+                .eq(Objects.nonNull(bannerQuery.getSlotNumber()), BannerDO::getSlotNumber, bannerQuery.getSlotNumber())
+
         );
         return BannerConverter.convertTo(banners);
     }
